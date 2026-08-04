@@ -12,7 +12,7 @@ license = "Apache-2.0"
 authors = [{name = "Tom", email = "tom@example.com"}, {name = "Tom Sapletta",email = "tom@sapletta.com"}]
 
 [project.urls]
-Homepage = "https://github.com/wellmanifest/well"
+Homepage = "https://github.com/wellmanifest/wellm"
 
 [project.optional-dependencies]
 test = ["pytest>=8.0"]
