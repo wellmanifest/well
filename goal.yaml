@@ -13,7 +13,7 @@
 
 version: '1.0'
 project:
-  name: well
+  name: wellmanifest-well
   type:
   - python
   description: Minimal package
@@ -238,7 +238,7 @@ strategies:
   python:
     test: pytest tests/ -v
     build: python -m build
-    publish: twine upload dist/well-{version}*
+    publish: twine upload dist/wellmanifest-well-{version}*
     publish_enabled: true
     dependencies:
       file: requirements.txt
@@ -246,7 +246,7 @@ strategies:
   nodejs:
     test: npm test
     build: npm run build
-    publish: npm publish
+    publish: twine upload dist/wellmanifest-well-{version}*
     publish_enabled: true
     dependencies:
       file: package-lock.json
@@ -254,7 +254,7 @@ strategies:
   rust:
     test: cargo test
     build: cargo build --release
-    publish: cargo publish
+    publish: twine upload dist/wellmanifest-well-{version}*
     publish_enabled: true
     dependencies:
       file: Cargo.lock
