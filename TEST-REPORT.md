@@ -1,14 +1,14 @@
-# WellManifest 0.1.0 test report
+# wellm / WellManifest 0.2.0rc2 test report
 
-Generated: 2026-08-04T16:28:12Z
+Generated: 2026-08-04T18:16:16Z
 
 | Suite | Result |
 |---|---|
-| Python reference tests | PASS — 23/23 tests (Python 3.13.5) |
-| JavaScript SDK tests | PASS — 4/4 tests (Node 22.16.0) |
-| Local HTTP/Node/RPi E2E | PASS — HTTP conversion/validation, Node SDK, URI Process, RPi thin client, CQRS/ES events |
-| Docker Compose E2E | NOT RUN — Docker CLI/engine unavailable in packaging environment; Compose matrix included |
-| Rust/WASM/PyO3/N-API | NOT RUN — cargo/rustc unavailable in packaging environment; source and Docker CI targets included |
+| Python reference tests | 38/38 PASS (Python 3.13.5) |
+| JavaScript SDK tests | 7/7 PASS (Node.js 22.16.0) |
+| Local HTTP/Node/RPi E2E | PASS (HTTP, Node, Python/JS Plesk parity, RPi, Plesk plan, offline LLM benchmark, events) |
+| Docker Compose E2E | NOT RUN — Docker CLI/engine unavailable in this environment |
+| Rust/WASM/PyO3/N-API | NOT RUN — cargo/rustc unavailable in this environment |
 
 Verification commands:
 

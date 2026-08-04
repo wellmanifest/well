@@ -1,7 +1,7 @@
 name: wellmanifest
 
 x-runtime: &runtime
-  image: wellmanifest/runtime:0.1.0-dev
+  image: wellmanifest/wellm:0.2.0rc2-dev
   build:
     context: .
     dockerfile: Dockerfile
@@ -10,6 +10,7 @@ x-runtime: &runtime
     WELLMANIFEST_CONTRACTS: /app/config/contracts.json
     WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
     WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+    WELLMANIFEST_ENABLE_PLESK_EXECUTION: "0"
   volumes:
     - wellmanifest-data:/data
     - ./config/contracts.json:/app/config/contracts.json:ro
@@ -71,7 +72,7 @@ services:
     build:
       context: .
       dockerfile: docker/www.Dockerfile
-    image: wellmanifest/www:0.1.0-dev
+    image: wellmanifest/wellm-www:0.2.0rc2-dev
     ports:
       - "8088:8080"
     depends_on:

@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc2/schemas/llm-benchmark.schema.json",
+  "title": "WellManifest LLM benchmark configuration",
+  "$defs": {
+    "ModelCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "api_base": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Api Base"
+        },
+        "api_key_env": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Api Key Env"
+        },
+        "temperature": {
+          "default": 0.0,
+          "title": "Temperature",
+          "type": "number"
+        },
+        "max_tokens": {
+          "default": 4096,
+          "title": "Max Tokens",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "default": 60.0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "model"
+      ],
+      "title": "ModelCandidate",
+      "type": "object"
+    },
+    "SelectionPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_total_score": {
+          "default": 0.9,
+          "title": "Minimum Total Score",
+          "type": "number"
+        },
+        "minimum_format_score": {
+          "default": 0.75,
+          "title": "Minimum Format Score",
+          "type": "number"
+        },
+        "prefer": {
+          "default": "lowest_cost",
+          "enum": [
+            "lowest_cost",
+            "highest_score",
+            "lowest_latency"
+          ],
+          "title": "Prefer",
+          "type": "string"
+        },
+        "preferred_operational_formats": {
+          "items": {
+            "enum": [
+              "json",
+              "yaml",
+              "typed",
+              "hcl",
+              "typescript"
+            ],
+            "type": "string"
+          },
+          "title": "Preferred Operational Formats",
+          "type": "array"
+        },
+        "cache_ttl_seconds": {
+          "default": 3600,
+          "title": "Cache Ttl Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "SelectionPolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "wellmanifest.llm-benchmark/v1",
+      "default": "wellmanifest.llm-benchmark/v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "id": {
+      "default": "default-format-capability",
+      "title": "Id",
+      "type": "string"
+    },
+    "models": {
+      "items": {
+        "$ref": "#/$defs/ModelCandidate"
+      },
+      "title": "Models",
+      "type": "array"
+    },
+    "formats": {
+      "items": {
+        "enum": [
+          "json",
+          "yaml",
+          "typed",
+          "hcl",
+          "typescript"
+        ],
+        "type": "string"
+      },
+      "title": "Formats",
+      "type": "array"
+    },
+    "repetitions": {
+      "default": 1,
+      "title": "Repetitions",
+      "type": "integer"
+    },
+    "selection": {
+      "$ref": "#/$defs/SelectionPolicy"
+    },
+    "fixture_file": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fixture File"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "models"
+  ],
+  "type": "object"
+}

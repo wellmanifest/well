@@ -1,0 +1,1402 @@
+{
+  "schema": "wellmanifest.llm-benchmark-report/v1",
+  "benchmark_id": "plesk-project-format-selection",
+  "created_at": "2026-08-04T18:05:27.025412Z",
+  "fingerprint": "dfebb43c31f249f8c745b698cc66e87267ebb542fce75944be57343e38805f4d",
+  "selected_model_id": "typed-efficient",
+  "selected_model": "mock/typed-efficient",
+  "selected_format": "typed",
+  "summaries": [
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "total_score": 1.0,
+      "format_scores": {
+        "json": 1.0,
+        "typed": 1.0,
+        "typescript": 1.0,
+        "yaml": 1.0
+      },
+      "format_costs_usd": {
+        "json": 1.2e-05,
+        "typed": 1.2e-05,
+        "typescript": 1.2e-05,
+        "yaml": 1.2e-05
+      },
+      "format_latencies_ms": {
+        "json": 7.0,
+        "typed": 7.0,
+        "typescript": 7.0,
+        "yaml": 7.0
+      },
+      "total_cost_usd": 4.8e-05,
+      "average_latency_ms": 7.0,
+      "attempts": 12,
+      "failures": 0,
+      "capable": true,
+      "rank": 1
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "total_score": 1.0,
+      "format_scores": {
+        "json": 1.0,
+        "typed": 1.0,
+        "typescript": 1.0,
+        "yaml": 1.0
+      },
+      "format_costs_usd": {
+        "json": 6e-05,
+        "typed": 6e-05,
+        "typescript": 6e-05,
+        "yaml": 6e-05
+      },
+      "format_latencies_ms": {
+        "json": 15.0,
+        "typed": 15.0,
+        "typescript": 15.0,
+        "yaml": 15.0
+      },
+      "total_cost_usd": 0.00024,
+      "average_latency_ms": 15.0,
+      "attempts": 12,
+      "failures": 0,
+      "capable": true,
+      "rank": 2
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "total_score": 0.5,
+      "format_scores": {
+        "json": 1.0,
+        "typed": 0.0,
+        "typescript": 0.0,
+        "yaml": 1.0
+      },
+      "format_costs_usd": {
+        "json": 3e-06,
+        "typed": 3e-06,
+        "typescript": 3e-06,
+        "yaml": 3e-06
+      },
+      "format_latencies_ms": {
+        "json": 3.0,
+        "typed": 3.0,
+        "typescript": 3.0,
+        "yaml": 3.0
+      },
+      "total_cost_usd": 1.2e-05,
+      "average_latency_ms": 3.0,
+      "attempts": 12,
+      "failures": 6,
+      "capable": false,
+      "rank": 3
+    }
+  ],
+  "attempts": [
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "project-roundtrip:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 1136,
+      "completion_tokens": 267,
+      "output": "{\n  \"schema\": \"subactor.projects/v1\",\n  \"projects\": [\n    {\n      \"id\": \"obslugabiurowa-pl\",\n      \"company\": \"ObsługaBiurowa.pl\",\n      \"domain\": \"obslugabiurowa.pl\",\n      \"subscription\": \"prototypowanie.pl\",\n      \"dns_zone\": \"obslugabiurowa.pl\",\n      \"dns_provider\": \"cloudflare\",\n      \"dns_management_plane\": \"plesk\",\n      \"dns_sync_extension\": \"cloudflaredns\",\n      \"public_ingress_mode\": \"plesk_public_origin\",\n      \"tunnel_mode\": \"none\",\n      \"origin_ip\": \"217.160.250.222\",\n      \"source\": \"site\",\n      \"entrypoint\": \"index.html\",\n      \"publication\": {\n        \"mode\": \"static_httpdocs\",\n        \"publish_uri\": \"plesk://host/site/command/sync\",\n        \"verify_uri\": \"plesk://host/site/command/publish-verify\",\n        \"source_ref\": \"workspace:obslugabiurowa-pl\",\n        \"deployment_ref\": \"deployment:obslugabiurowa-pl:production\",\n        \"verification\": {\n          \"mode\": \"content_hash\",\n          \"path\": \"/\"\n        }\n      },\n      \"gates\": [\n        \"subscription_can_create_domain\",\n        \"dns_ready\",\n        \"tls_ready\"\n      ]\n    }\n  ]\n}\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "uri-scope-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 330,
+      "completion_tokens": 45,
+      "output": "{\n  \"decision\": {\n    \"allowed\": true,\n    \"executable_uri\": \"plesk://host/site/command/sync\",\n    \"matched_scope\": \"plesk://host/site/*\",\n    \"wildcard_is_executable\": false\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "publication-gate-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 395,
+      "completion_tokens": 58,
+      "output": "{\n  \"decision\": {\n    \"ready\": false,\n    \"mutation_allowed\": false,\n    \"blocked_gates\": [\n      \"tls_ready\",\n      \"plan_hash_match\",\n      \"signed_apply_grant\"\n    ],\n    \"next_action\": \"plesk://host/site/command/ssl-ensure\"\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "project-roundtrip:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 1138,
+      "completion_tokens": 197,
+      "output": "schema: subactor.projects/v1\nprojects:\n- id: obslugabiurowa-pl\n  company: ObsługaBiurowa.pl\n  domain: obslugabiurowa.pl\n  subscription: prototypowanie.pl\n  dns_zone: obslugabiurowa.pl\n  dns_provider: cloudflare\n  dns_management_plane: plesk\n  dns_sync_extension: cloudflaredns\n  public_ingress_mode: plesk_public_origin\n  tunnel_mode: none\n  origin_ip: 217.160.250.222\n  source: site\n  entrypoint: index.html\n  publication:\n    mode: static_httpdocs\n    publish_uri: plesk://host/site/command/sync\n    verify_uri: plesk://host/site/command/publish-verify\n    source_ref: workspace:obslugabiurowa-pl\n    deployment_ref: deployment:obslugabiurowa-pl:production\n    verification:\n      mode: content_hash\n      path: /\n  gates:\n  - subscription_can_create_domain\n  - dns_ready\n  - tls_ready\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "uri-scope-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 333,
+      "completion_tokens": 36,
+      "output": "decision:\n  allowed: true\n  executable_uri: plesk://host/site/command/sync\n  matched_scope: plesk://host/site/*\n  wildcard_is_executable: false\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "publication-gate-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 398,
+      "completion_tokens": 44,
+      "output": "decision:\n  ready: false\n  mutation_allowed: false\n  blocked_gates:\n  - tls_ready\n  - plan_hash_match\n  - signed_apply_grant\n  next_action: plesk://host/site/command/ssl-ensure\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "project-roundtrip:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 1143,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected '{', ':', or '=' after 'not'"
+      ]
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "uri-scope-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 337,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected '{', ':', or '=' after 'not'"
+      ]
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "publication-gate-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 402,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected '{', ':', or '=' after 'not'"
+      ]
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "project-roundtrip:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 1164,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected `export default` in the TypeScript data module"
+      ]
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "uri-scope-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 358,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected `export default` in the TypeScript data module"
+      ]
+    },
+    {
+      "model_id": "cheap-json-only",
+      "model": "mock/cheap-json-only",
+      "case_id": "publication-gate-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": false,
+      "schema_valid": false,
+      "semantic_valid": false,
+      "score": 0.0,
+      "cost_usd": 1e-06,
+      "latency_ms": 3.0,
+      "prompt_tokens": 423,
+      "completion_tokens": 4,
+      "output": "not valid output",
+      "normalized": null,
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": [
+        "parse: Expected `export default` in the TypeScript data module"
+      ]
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "project-roundtrip:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 1136,
+      "completion_tokens": 267,
+      "output": "{\n  \"schema\": \"subactor.projects/v1\",\n  \"projects\": [\n    {\n      \"id\": \"obslugabiurowa-pl\",\n      \"company\": \"ObsługaBiurowa.pl\",\n      \"domain\": \"obslugabiurowa.pl\",\n      \"subscription\": \"prototypowanie.pl\",\n      \"dns_zone\": \"obslugabiurowa.pl\",\n      \"dns_provider\": \"cloudflare\",\n      \"dns_management_plane\": \"plesk\",\n      \"dns_sync_extension\": \"cloudflaredns\",\n      \"public_ingress_mode\": \"plesk_public_origin\",\n      \"tunnel_mode\": \"none\",\n      \"origin_ip\": \"217.160.250.222\",\n      \"source\": \"site\",\n      \"entrypoint\": \"index.html\",\n      \"publication\": {\n        \"mode\": \"static_httpdocs\",\n        \"publish_uri\": \"plesk://host/site/command/sync\",\n        \"verify_uri\": \"plesk://host/site/command/publish-verify\",\n        \"source_ref\": \"workspace:obslugabiurowa-pl\",\n        \"deployment_ref\": \"deployment:obslugabiurowa-pl:production\",\n        \"verification\": {\n          \"mode\": \"content_hash\",\n          \"path\": \"/\"\n        }\n      },\n      \"gates\": [\n        \"subscription_can_create_domain\",\n        \"dns_ready\",\n        \"tls_ready\"\n      ]\n    }\n  ]\n}\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "uri-scope-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 330,
+      "completion_tokens": 45,
+      "output": "{\n  \"decision\": {\n    \"allowed\": true,\n    \"executable_uri\": \"plesk://host/site/command/sync\",\n    \"matched_scope\": \"plesk://host/site/*\",\n    \"wildcard_is_executable\": false\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "publication-gate-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 395,
+      "completion_tokens": 58,
+      "output": "{\n  \"decision\": {\n    \"ready\": false,\n    \"mutation_allowed\": false,\n    \"blocked_gates\": [\n      \"tls_ready\",\n      \"plan_hash_match\",\n      \"signed_apply_grant\"\n    ],\n    \"next_action\": \"plesk://host/site/command/ssl-ensure\"\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "project-roundtrip:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 1138,
+      "completion_tokens": 197,
+      "output": "schema: subactor.projects/v1\nprojects:\n- id: obslugabiurowa-pl\n  company: ObsługaBiurowa.pl\n  domain: obslugabiurowa.pl\n  subscription: prototypowanie.pl\n  dns_zone: obslugabiurowa.pl\n  dns_provider: cloudflare\n  dns_management_plane: plesk\n  dns_sync_extension: cloudflaredns\n  public_ingress_mode: plesk_public_origin\n  tunnel_mode: none\n  origin_ip: 217.160.250.222\n  source: site\n  entrypoint: index.html\n  publication:\n    mode: static_httpdocs\n    publish_uri: plesk://host/site/command/sync\n    verify_uri: plesk://host/site/command/publish-verify\n    source_ref: workspace:obslugabiurowa-pl\n    deployment_ref: deployment:obslugabiurowa-pl:production\n    verification:\n      mode: content_hash\n      path: /\n  gates:\n  - subscription_can_create_domain\n  - dns_ready\n  - tls_ready\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "uri-scope-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 333,
+      "completion_tokens": 36,
+      "output": "decision:\n  allowed: true\n  executable_uri: plesk://host/site/command/sync\n  matched_scope: plesk://host/site/*\n  wildcard_is_executable: false\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "publication-gate-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 398,
+      "completion_tokens": 44,
+      "output": "decision:\n  ready: false\n  mutation_allowed: false\n  blocked_gates:\n  - tls_ready\n  - plan_hash_match\n  - signed_apply_grant\n  next_action: plesk://host/site/command/ssl-ensure\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "project-roundtrip:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 1143,
+      "completion_tokens": 232,
+      "output": "schema = \"subactor.projects/v1\"\n\nprojects = [\n  {\n    id = \"obslugabiurowa-pl\"\n    company = \"ObsługaBiurowa.pl\"\n    domain = \"obslugabiurowa.pl\"\n    subscription = \"prototypowanie.pl\"\n    dns_zone = \"obslugabiurowa.pl\"\n    dns_provider = \"cloudflare\"\n    dns_management_plane = \"plesk\"\n    dns_sync_extension = \"cloudflaredns\"\n    public_ingress_mode = \"plesk_public_origin\"\n    tunnel_mode = \"none\"\n    origin_ip = \"217.160.250.222\"\n    source = \"site\"\n    entrypoint = \"index.html\"\n    publication = {\n      mode = \"static_httpdocs\"\n      publish_uri = \"plesk://host/site/command/sync\"\n      verify_uri = \"plesk://host/site/command/publish-verify\"\n      source_ref = \"workspace:obslugabiurowa-pl\"\n      deployment_ref = \"deployment:obslugabiurowa-pl:production\"\n      verification = {\n        mode = \"content_hash\"\n        path = \"/\"\n      }\n    }\n    gates = [\"subscription_can_create_domain\", \"dns_ready\", \"tls_ready\"]\n  },\n]\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "uri-scope-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 337,
+      "completion_tokens": 38,
+      "output": "decision {\n  allowed = true\n  executable_uri = \"plesk://host/site/command/sync\"\n  matched_scope = \"plesk://host/site/*\"\n  wildcard_is_executable = false\n}\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "publication-gate-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 402,
+      "completion_tokens": 46,
+      "output": "decision {\n  ready = false\n  mutation_allowed = false\n  blocked_gates = [\"tls_ready\", \"plan_hash_match\", \"signed_apply_grant\"]\n  next_action = \"plesk://host/site/command/ssl-ensure\"\n}\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "project-roundtrip:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 1164,
+      "completion_tokens": 325,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"schema\": \"subactor.projects/v1\",\n  \"projects\": [\n    {\n      \"id\": \"obslugabiurowa-pl\",\n      \"company\": \"ObsługaBiurowa.pl\",\n      \"domain\": \"obslugabiurowa.pl\",\n      \"subscription\": \"prototypowanie.pl\",\n      \"dns_zone\": \"obslugabiurowa.pl\",\n      \"dns_provider\": \"cloudflare\",\n      \"dns_management_plane\": \"plesk\",\n      \"dns_sync_extension\": \"cloudflaredns\",\n      \"public_ingress_mode\": \"plesk_public_origin\",\n      \"tunnel_mode\": \"none\",\n      \"origin_ip\": \"217.160.250.222\",\n      \"source\": \"site\",\n      \"entrypoint\": \"index.html\",\n      \"publication\": {\n        \"mode\": \"static_httpdocs\",\n        \"publish_uri\": \"plesk://host/site/command/sync\",\n        \"verify_uri\": \"plesk://host/site/command/publish-verify\",\n        \"source_ref\": \"workspace:obslugabiurowa-pl\",\n        \"deployment_ref\": \"deployment:obslugabiurowa-pl:production\",\n        \"verification\": {\n          \"mode\": \"content_hash\",\n          \"path\": \"/\"\n        }\n      },\n      \"gates\": [\n        \"subscription_can_create_domain\",\n        \"dns_ready\",\n        \"tls_ready\"\n      ]\n    }\n  ]\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "uri-scope-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 358,
+      "completion_tokens": 102,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"decision\": {\n    \"allowed\": true,\n    \"executable_uri\": \"plesk://host/site/command/sync\",\n    \"matched_scope\": \"plesk://host/site/*\",\n    \"wildcard_is_executable\": false\n  }\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "typed-efficient",
+      "model": "mock/typed-efficient",
+      "case_id": "publication-gate-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 4e-06,
+      "latency_ms": 7.0,
+      "prompt_tokens": 423,
+      "completion_tokens": 116,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"decision\": {\n    \"ready\": false,\n    \"mutation_allowed\": false,\n    \"blocked_gates\": [\n      \"tls_ready\",\n      \"plan_hash_match\",\n      \"signed_apply_grant\"\n    ],\n    \"next_action\": \"plesk://host/site/command/ssl-ensure\"\n  }\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "project-roundtrip:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 1136,
+      "completion_tokens": 267,
+      "output": "{\n  \"schema\": \"subactor.projects/v1\",\n  \"projects\": [\n    {\n      \"id\": \"obslugabiurowa-pl\",\n      \"company\": \"ObsługaBiurowa.pl\",\n      \"domain\": \"obslugabiurowa.pl\",\n      \"subscription\": \"prototypowanie.pl\",\n      \"dns_zone\": \"obslugabiurowa.pl\",\n      \"dns_provider\": \"cloudflare\",\n      \"dns_management_plane\": \"plesk\",\n      \"dns_sync_extension\": \"cloudflaredns\",\n      \"public_ingress_mode\": \"plesk_public_origin\",\n      \"tunnel_mode\": \"none\",\n      \"origin_ip\": \"217.160.250.222\",\n      \"source\": \"site\",\n      \"entrypoint\": \"index.html\",\n      \"publication\": {\n        \"mode\": \"static_httpdocs\",\n        \"publish_uri\": \"plesk://host/site/command/sync\",\n        \"verify_uri\": \"plesk://host/site/command/publish-verify\",\n        \"source_ref\": \"workspace:obslugabiurowa-pl\",\n        \"deployment_ref\": \"deployment:obslugabiurowa-pl:production\",\n        \"verification\": {\n          \"mode\": \"content_hash\",\n          \"path\": \"/\"\n        }\n      },\n      \"gates\": [\n        \"subscription_can_create_domain\",\n        \"dns_ready\",\n        \"tls_ready\"\n      ]\n    }\n  ]\n}\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "uri-scope-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 330,
+      "completion_tokens": 45,
+      "output": "{\n  \"decision\": {\n    \"allowed\": true,\n    \"executable_uri\": \"plesk://host/site/command/sync\",\n    \"matched_scope\": \"plesk://host/site/*\",\n    \"wildcard_is_executable\": false\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "publication-gate-logic:json",
+      "target_format": "json",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 395,
+      "completion_tokens": 58,
+      "output": "{\n  \"decision\": {\n    \"ready\": false,\n    \"mutation_allowed\": false,\n    \"blocked_gates\": [\n      \"tls_ready\",\n      \"plan_hash_match\",\n      \"signed_apply_grant\"\n    ],\n    \"next_action\": \"plesk://host/site/command/ssl-ensure\"\n  }\n}\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "project-roundtrip:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 1138,
+      "completion_tokens": 197,
+      "output": "schema: subactor.projects/v1\nprojects:\n- id: obslugabiurowa-pl\n  company: ObsługaBiurowa.pl\n  domain: obslugabiurowa.pl\n  subscription: prototypowanie.pl\n  dns_zone: obslugabiurowa.pl\n  dns_provider: cloudflare\n  dns_management_plane: plesk\n  dns_sync_extension: cloudflaredns\n  public_ingress_mode: plesk_public_origin\n  tunnel_mode: none\n  origin_ip: 217.160.250.222\n  source: site\n  entrypoint: index.html\n  publication:\n    mode: static_httpdocs\n    publish_uri: plesk://host/site/command/sync\n    verify_uri: plesk://host/site/command/publish-verify\n    source_ref: workspace:obslugabiurowa-pl\n    deployment_ref: deployment:obslugabiurowa-pl:production\n    verification:\n      mode: content_hash\n      path: /\n  gates:\n  - subscription_can_create_domain\n  - dns_ready\n  - tls_ready\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "uri-scope-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 333,
+      "completion_tokens": 36,
+      "output": "decision:\n  allowed: true\n  executable_uri: plesk://host/site/command/sync\n  matched_scope: plesk://host/site/*\n  wildcard_is_executable: false\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "publication-gate-logic:yaml",
+      "target_format": "yaml",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 398,
+      "completion_tokens": 44,
+      "output": "decision:\n  ready: false\n  mutation_allowed: false\n  blocked_gates:\n  - tls_ready\n  - plan_hash_match\n  - signed_apply_grant\n  next_action: plesk://host/site/command/ssl-ensure\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "project-roundtrip:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 1143,
+      "completion_tokens": 232,
+      "output": "schema = \"subactor.projects/v1\"\n\nprojects = [\n  {\n    id = \"obslugabiurowa-pl\"\n    company = \"ObsługaBiurowa.pl\"\n    domain = \"obslugabiurowa.pl\"\n    subscription = \"prototypowanie.pl\"\n    dns_zone = \"obslugabiurowa.pl\"\n    dns_provider = \"cloudflare\"\n    dns_management_plane = \"plesk\"\n    dns_sync_extension = \"cloudflaredns\"\n    public_ingress_mode = \"plesk_public_origin\"\n    tunnel_mode = \"none\"\n    origin_ip = \"217.160.250.222\"\n    source = \"site\"\n    entrypoint = \"index.html\"\n    publication = {\n      mode = \"static_httpdocs\"\n      publish_uri = \"plesk://host/site/command/sync\"\n      verify_uri = \"plesk://host/site/command/publish-verify\"\n      source_ref = \"workspace:obslugabiurowa-pl\"\n      deployment_ref = \"deployment:obslugabiurowa-pl:production\"\n      verification = {\n        mode = \"content_hash\"\n        path = \"/\"\n      }\n    }\n    gates = [\"subscription_can_create_domain\", \"dns_ready\", \"tls_ready\"]\n  },\n]\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "uri-scope-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 337,
+      "completion_tokens": 38,
+      "output": "decision {\n  allowed = true\n  executable_uri = \"plesk://host/site/command/sync\"\n  matched_scope = \"plesk://host/site/*\"\n  wildcard_is_executable = false\n}\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "publication-gate-logic:typed",
+      "target_format": "typed",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 402,
+      "completion_tokens": 46,
+      "output": "decision {\n  ready = false\n  mutation_allowed = false\n  blocked_gates = [\"tls_ready\", \"plan_hash_match\", \"signed_apply_grant\"]\n  next_action = \"plesk://host/site/command/ssl-ensure\"\n}\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "project-roundtrip:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 1164,
+      "completion_tokens": 325,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"schema\": \"subactor.projects/v1\",\n  \"projects\": [\n    {\n      \"id\": \"obslugabiurowa-pl\",\n      \"company\": \"ObsługaBiurowa.pl\",\n      \"domain\": \"obslugabiurowa.pl\",\n      \"subscription\": \"prototypowanie.pl\",\n      \"dns_zone\": \"obslugabiurowa.pl\",\n      \"dns_provider\": \"cloudflare\",\n      \"dns_management_plane\": \"plesk\",\n      \"dns_sync_extension\": \"cloudflaredns\",\n      \"public_ingress_mode\": \"plesk_public_origin\",\n      \"tunnel_mode\": \"none\",\n      \"origin_ip\": \"217.160.250.222\",\n      \"source\": \"site\",\n      \"entrypoint\": \"index.html\",\n      \"publication\": {\n        \"mode\": \"static_httpdocs\",\n        \"publish_uri\": \"plesk://host/site/command/sync\",\n        \"verify_uri\": \"plesk://host/site/command/publish-verify\",\n        \"source_ref\": \"workspace:obslugabiurowa-pl\",\n        \"deployment_ref\": \"deployment:obslugabiurowa-pl:production\",\n        \"verification\": {\n          \"mode\": \"content_hash\",\n          \"path\": \"/\"\n        }\n      },\n      \"gates\": [\n        \"subscription_can_create_domain\",\n        \"dns_ready\",\n        \"tls_ready\"\n      ]\n    }\n  ]\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "schema": "subactor.projects/v1",
+        "projects": [
+          {
+            "id": "obslugabiurowa-pl",
+            "company": "ObsługaBiurowa.pl",
+            "domain": "obslugabiurowa.pl",
+            "subscription": "prototypowanie.pl",
+            "dns_zone": "obslugabiurowa.pl",
+            "dns_provider": "cloudflare",
+            "dns_management_plane": "plesk",
+            "dns_sync_extension": "cloudflaredns",
+            "public_ingress_mode": "plesk_public_origin",
+            "tunnel_mode": "none",
+            "origin_ip": "217.160.250.222",
+            "source": "site",
+            "entrypoint": "index.html",
+            "publication": {
+              "mode": "static_httpdocs",
+              "publish_uri": "plesk://host/site/command/sync",
+              "verify_uri": "plesk://host/site/command/publish-verify",
+              "source_ref": "workspace:obslugabiurowa-pl",
+              "deployment_ref": "deployment:obslugabiurowa-pl:production",
+              "verification": {
+                "mode": "content_hash",
+                "path": "/"
+              }
+            },
+            "gates": [
+              "subscription_can_create_domain",
+              "dns_ready",
+              "tls_ready"
+            ]
+          }
+        ]
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "uri-scope-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 358,
+      "completion_tokens": 102,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"decision\": {\n    \"allowed\": true,\n    \"executable_uri\": \"plesk://host/site/command/sync\",\n    \"matched_scope\": \"plesk://host/site/*\",\n    \"wildcard_is_executable\": false\n  }\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "decision": {
+          "allowed": true,
+          "executable_uri": "plesk://host/site/command/sync",
+          "matched_scope": "plesk://host/site/*",
+          "wildcard_is_executable": false
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    },
+    {
+      "model_id": "premium-general",
+      "model": "mock/premium-general",
+      "case_id": "publication-gate-logic:typescript",
+      "target_format": "typescript",
+      "repetition": 1,
+      "syntax_valid": true,
+      "schema_valid": true,
+      "semantic_valid": true,
+      "score": 1.0,
+      "cost_usd": 2e-05,
+      "latency_ms": 15.0,
+      "prompt_tokens": 423,
+      "completion_tokens": 116,
+      "output": "// Generated by wellm. This is a data module, not executable configuration logic.\nexport type WellManifestDocument = Readonly<Record<string, unknown>> | readonly unknown[];\n\nexport default {\n  \"decision\": {\n    \"ready\": false,\n    \"mutation_allowed\": false,\n    \"blocked_gates\": [\n      \"tls_ready\",\n      \"plan_hash_match\",\n      \"signed_apply_grant\"\n    ],\n    \"next_action\": \"plesk://host/site/command/ssl-ensure\"\n  }\n} as const satisfies WellManifestDocument;\n",
+      "normalized": {
+        "decision": {
+          "ready": false,
+          "mutation_allowed": false,
+          "blocked_gates": [
+            "tls_ready",
+            "plan_hash_match",
+            "signed_apply_grant"
+          ],
+          "next_action": "plesk://host/site/command/ssl-ensure"
+        }
+      },
+      "provider_metadata": {
+        "mock": true
+      },
+      "errors": []
+    }
+  ],
+  "notes": [
+    "Selection is based on deterministic parsing, JSON Schema validation and exact semantic comparison; no judge LLM is used.",
+    "A model with unknown price remains measurable but is ranked after equally capable models with measured cost when cost is preferred."
+  ]
+}

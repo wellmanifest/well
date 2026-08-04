@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc2/schemas/llm-benchmark-report.schema.json",
+  "title": "WellManifest LLM benchmark report",
+  "$defs": {
+    "BenchmarkAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "target_format": {
+          "title": "Target Format",
+          "type": "string"
+        },
+        "repetition": {
+          "title": "Repetition",
+          "type": "integer"
+        },
+        "syntax_valid": {
+          "title": "Syntax Valid",
+          "type": "boolean"
+        },
+        "schema_valid": {
+          "title": "Schema Valid",
+          "type": "boolean"
+        },
+        "semantic_valid": {
+          "title": "Semantic Valid",
+          "type": "boolean"
+        },
+        "score": {
+          "title": "Score",
+          "type": "number"
+        },
+        "cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Usd"
+        },
+        "latency_ms": {
+          "title": "Latency Ms",
+          "type": "number"
+        },
+        "prompt_tokens": {
+          "default": 0,
+          "title": "Prompt Tokens",
+          "type": "integer"
+        },
+        "completion_tokens": {
+          "default": 0,
+          "title": "Completion Tokens",
+          "type": "integer"
+        },
+        "output": {
+          "title": "Output",
+          "type": "string"
+        },
+        "normalized": {
+          "default": null,
+          "title": "Normalized"
+        },
+        "provider_metadata": {
+          "additionalProperties": true,
+          "title": "Provider Metadata",
+          "type": "object"
+        },
+        "errors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Errors",
+          "type": "array"
+        }
+      },
+      "required": [
+        "model_id",
+        "model",
+        "case_id",
+        "target_format",
+        "repetition",
+        "syntax_valid",
+        "schema_valid",
+        "semantic_valid",
+        "score",
+        "latency_ms",
+        "output"
+      ],
+      "title": "BenchmarkAttempt",
+      "type": "object"
+    },
+    "ModelSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "total_score": {
+          "title": "Total Score",
+          "type": "number"
+        },
+        "format_scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Format Scores",
+          "type": "object"
+        },
+        "format_costs_usd": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Format Costs Usd",
+          "type": "object"
+        },
+        "format_latencies_ms": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Format Latencies Ms",
+          "type": "object"
+        },
+        "total_cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Total Cost Usd"
+        },
+        "average_latency_ms": {
+          "title": "Average Latency Ms",
+          "type": "number"
+        },
+        "attempts": {
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "failures": {
+          "title": "Failures",
+          "type": "integer"
+        },
+        "capable": {
+          "title": "Capable",
+          "type": "boolean"
+        },
+        "rank": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rank"
+        }
+      },
+      "required": [
+        "model_id",
+        "model",
+        "total_score",
+        "format_scores",
+        "total_cost_usd",
+        "average_latency_ms",
+        "attempts",
+        "failures",
+        "capable"
+      ],
+      "title": "ModelSummary",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "wellmanifest.llm-benchmark-report/v1",
+      "default": "wellmanifest.llm-benchmark-report/v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "benchmark_id": {
+      "title": "Benchmark Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "fingerprint": {
+      "title": "Fingerprint",
+      "type": "string"
+    },
+    "selected_model_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Model Id"
+    },
+    "selected_model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Model"
+    },
+    "selected_format": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Format"
+    },
+    "summaries": {
+      "items": {
+        "$ref": "#/$defs/ModelSummary"
+      },
+      "title": "Summaries",
+      "type": "array"
+    },
+    "attempts": {
+      "items": {
+        "$ref": "#/$defs/BenchmarkAttempt"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "benchmark_id",
+    "fingerprint",
+    "summaries",
+    "attempts"
+  ],
+  "type": "object"
+}

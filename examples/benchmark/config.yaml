@@ -1,0 +1,35 @@
+schema: wellmanifest.llm-benchmark/v1
+id: plesk-project-format-selection
+fixture_file: ../plesk/projects.json
+formats: [json, yaml, typed, typescript]
+repetitions: 1
+selection:
+  minimum_total_score: 0.90
+  minimum_format_score: 0.75
+  prefer: lowest_cost
+  preferred_operational_formats: [typed, typescript, json, yaml]
+  cache_ttl_seconds: 3600
+models:
+  - id: cheap-json-only
+    model: mock/cheap-json-only
+    tags: [offline, weak-format]
+  - id: typed-efficient
+    model: mock/typed-efficient
+    tags: [offline, typed]
+  - id: premium-general
+    model: mock/premium-general
+    tags: [offline, premium]
+metadata:
+  mock_behaviors:
+    cheap-json-only:
+      fail_formats: [typed, typescript]
+      cost_per_call: 0.000001
+      latency_ms: 3
+    typed-efficient:
+      fail_formats: []
+      cost_per_call: 0.000004
+      latency_ms: 7
+    premium-general:
+      fail_formats: []
+      cost_per_call: 0.000020
+      latency_ms: 15

@@ -1,23 +1,30 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wellmanifest"
-version = "0.1.7"
-description = "Polyglot manifest protocol, dialect runtime and remote execution gateway"
+name = "wellm"
+version = "0.2.1"
+description = "WellManifest polyglot protocol, typed DSL runtime, URI Process planner and adaptive LLM format benchmark"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{name = "WellManifest contributors"}, {name = "Tom Sapletta",email = "tom@sapletta.com"}]
-keywords = ["dsl", "manifest", "json-schema", "hcl", "mqtt", "grpc", "digital-twin", "iot"]
+keywords = [
+  "dsl", "manifest", "json-schema", "hcl", "yaml", "typescript",
+  "mqtt", "grpc", "digital-twin", "iot", "plesk", "urirun", "litellm",
+]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Libraries",
+  "Topic :: System :: Systems Administration",
 ]
 dependencies = [
-  "pydantic>=2.7",
+  "pydantic>=2.7,<3",
   "PyYAML>=6.0",
   "jsonschema>=4.18",
   "fastapi>=0.115",
@@ -27,21 +34,40 @@ dependencies = [
   "protobuf>=5",
 ]
 
+[project.urls]
+Homepage = "https://github.com/wellmanifest/wellm"
+Repository = "https://github.com/wellmanifest/wellm"
+Issues = "https://github.com/wellmanifest/wellm/issues"
+
 [project.optional-dependencies]
 mqtt = ["paho-mqtt>=2.1"]
 grpc = ["grpcio>=1.60", "grpcio-tools>=1.60"]
-dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.8",
+benchmark = ["litellm>=1.95,<2"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.8", "build>=1.2",
     "goal>=2.1.0",
     "costs>=0.1.53",
     "pfix>=0.1.60",
 ]
-all = ["paho-mqtt>=2.1", "grpcio>=1.60", "grpcio-tools>=1.60"]
+all = [
+  "paho-mqtt>=2.1",
+  "grpcio>=1.60",
+  "grpcio-tools>=1.60",
+  "litellm>=1.95,<2",
+]
 
 [project.scripts]
+wellm = "wellmanifest.cli:main"
+wellm-server = "wellmanifest.server:main"
+wellm-mqtt = "wellmanifest.mqtt_bridge:main"
+wellm-grpc = "wellmanifest.grpc_server:main"
+wellm-hcl = "wellmanifest.entrypoints:hcl"
+wellm-typed = "wellmanifest.entrypoints:typed"
+wellm-policy = "wellmanifest.entrypoints:policy"
+wellm-yaml = "wellmanifest.entrypoints:yaml"
+wellm-proto3 = "wellmanifest.entrypoints:proto3"
+wellm-typescript = "wellmanifest.entrypoints:typescript"
 wellmanifest = "wellmanifest.cli:main"
 wellmanifest-server = "wellmanifest.server:main"
-wellmanifest-mqtt = "wellmanifest.mqtt_bridge:main"
-wellmanifest-grpc = "wellmanifest.grpc_server:main"
 wellmanifest-hcl = "wellmanifest.entrypoints:hcl"
 wellmanifest-typed = "wellmanifest.entrypoints:typed"
 wellmanifest-policy = "wellmanifest.entrypoints:policy"

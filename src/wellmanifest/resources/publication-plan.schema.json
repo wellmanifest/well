@@ -1,0 +1,396 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc2/schemas/publication-plan.schema.json",
+  "title": "WellManifest Plesk publication plan",
+  "$defs": {
+    "ConnectorBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "default": "urirun-connector-plesk",
+          "title": "Package",
+          "type": "string"
+        },
+        "repository": {
+          "default": "https://github.com/urirun-connectors/urirun-connector-plesk",
+          "title": "Repository",
+          "type": "string"
+        },
+        "contract_ref": {
+          "default": "contract:plesk-publication",
+          "title": "Contract Ref",
+          "type": "string"
+        },
+        "node_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Url"
+        }
+      },
+      "title": "ConnectorBinding",
+      "type": "object"
+    },
+    "Diagnostic": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "phase": {
+          "default": "runtime",
+          "title": "Phase",
+          "type": "string"
+        },
+        "dialect": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dialect"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "schema_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Path"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hint"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "title": "Diagnostic",
+      "type": "object"
+    },
+    "PublicationStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "uri": {
+          "title": "Uri",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "query",
+            "dry-run",
+            "command"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "phase": {
+          "enum": [
+            "preflight",
+            "plan",
+            "apply",
+            "verify"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "gate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gate"
+        },
+        "mutation": {
+          "default": false,
+          "title": "Mutation",
+          "type": "boolean"
+        },
+        "human_approval": {
+          "default": false,
+          "title": "Human Approval",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "uri",
+        "mode",
+        "phase"
+      ],
+      "title": "PublicationStep",
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "ERROR",
+        "WARNING",
+        "INFO"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "SourcePosition": {
+      "properties": {
+        "line": {
+          "default": 1,
+          "title": "Line",
+          "type": "integer"
+        },
+        "column": {
+          "default": 1,
+          "title": "Column",
+          "type": "integer"
+        }
+      },
+      "title": "SourcePosition",
+      "type": "object"
+    },
+    "SourceRange": {
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/SourcePosition"
+        },
+        "end": {
+          "$ref": "#/$defs/SourcePosition"
+        }
+      },
+      "title": "SourceRange",
+      "type": "object"
+    },
+    "TwinBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "default": "@uri-twin/plesk",
+          "title": "Package",
+          "type": "string"
+        },
+        "repository": {
+          "default": "https://github.com/uri-twin/uri-twin-plesk",
+          "title": "Repository",
+          "type": "string"
+        },
+        "mode": {
+          "const": "read-only",
+          "default": "read-only",
+          "title": "Mode",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "attestation_required": {
+          "default": true,
+          "title": "Attestation Required",
+          "type": "boolean"
+        }
+      },
+      "title": "TwinBinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "wellmanifest.plesk-publication-plan/v1",
+      "default": "wellmanifest.plesk-publication-plan/v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "deployment_ref": {
+      "title": "Deployment Ref",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "source_ref": {
+      "title": "Source Ref",
+      "type": "string"
+    },
+    "source_dir": {
+      "title": "Source Dir",
+      "type": "string"
+    },
+    "entrypoint": {
+      "title": "Entrypoint",
+      "type": "string"
+    },
+    "contract_ref": {
+      "title": "Contract Ref",
+      "type": "string"
+    },
+    "connector": {
+      "$ref": "#/$defs/ConnectorBinding"
+    },
+    "twin": {
+      "$ref": "#/$defs/TwinBinding"
+    },
+    "allowed_uri_processes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Uri Processes",
+      "type": "array"
+    },
+    "required_gates": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Gates",
+      "type": "array"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/PublicationStep"
+      },
+      "title": "Steps",
+      "type": "array"
+    },
+    "manifest_hash": {
+      "default": "",
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "diagnostics": {
+      "items": {
+        "$ref": "#/$defs/Diagnostic"
+      },
+      "title": "Diagnostics",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "project_id",
+    "deployment_ref",
+    "source_ref",
+    "source_dir",
+    "entrypoint",
+    "contract_ref",
+    "connector",
+    "twin",
+    "allowed_uri_processes",
+    "required_gates",
+    "steps"
+  ],
+  "type": "object"
+}

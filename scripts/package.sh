@@ -3,7 +3,7 @@ set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 VERSION=$(cat "$ROOT/VERSION")
 DIST="$ROOT/dist"
-NAME="wellmanifest-project-$VERSION"
+NAME="wellm-project-$VERSION"
 PYTHON_RESULT=${WELLMANIFEST_PYTHON_TEST_RESULT:-"not recorded by package command"}
 NODE_RESULT=${WELLMANIFEST_NODE_TEST_RESULT:-"not recorded by package command"}
 E2E_RESULT=${WELLMANIFEST_E2E_RESULT:-"not recorded by package command"}
@@ -17,6 +17,7 @@ tar -C "$ROOT" \
   --exclude='./dist' \
   --exclude='./.git' \
   --exclude='./.pytest_cache' \
+  --exclude='./.wellm' \
   --exclude='./build' \
   --exclude='*.egg-info' \
   --exclude='*/__pycache__' \
@@ -26,7 +27,7 @@ tar -C "$ROOT" \
   -cf - . | tar -C "$DIST/$NAME" -xf -
 
 cat > "$DIST/TEST-REPORT.md" <<EOF
-# WellManifest $VERSION test report
+# wellm / WellManifest $VERSION test report
 
 Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 
@@ -63,16 +64,31 @@ PY
 # Build the pure-Python wheel without network/build isolation when setuptools is
 # already present. The project source archives remain available if this fails.
 if python -m pip wheel --no-build-isolation --no-deps "$ROOT" -w "$DIST/python" >/dev/null 2>&1; then
-  cp "$DIST"/python/wellmanifest-*.whl "$DIST/"
+  cp "$DIST"/python/wellm-*.whl "$DIST/"
 else
   printf '%s\n' 'WARNING: Python wheel was not built; use the source archive.' >&2
 fi
 
+# Build the dependency-free JavaScript/TypeScript SDK package when npm is
+# available. npm pack does not contact the registry.
+if command -v npm >/dev/null 2>&1; then
+  mkdir -p "$DIST/npm"
+  if (cd "$ROOT/packages/js" && npm pack --pack-destination "$DIST/npm" >/dev/null); then
+    cp "$DIST"/npm/*.tgz "$DIST/"
+  else
+    printf '%s\n' 'WARNING: npm SDK package was not built.' >&2
+  fi
+fi
+
 (
   cd "$DIST"
-  sha256sum "$NAME.tar.gz" "$NAME.zip" wellmanifest-*.whl 2>/dev/null > SHA256SUMS || \
-    sha256sum "$NAME.tar.gz" "$NAME.zip" > SHA256SUMS
+  files="$NAME.tar.gz $NAME.zip"
+  for candidate in wellm-*.whl wellmanifest-*.tgz; do
+    [ -f "$candidate" ] && files="$files $candidate"
+  done
+  # shellcheck disable=SC2086
+  sha256sum $files > SHA256SUMS
 )
 printf 'Created %s\n' "$DIST/$NAME.zip"
 printf 'Created %s\n' "$DIST/$NAME.tar.gz"
-ls "$DIST"/wellmanifest-*.whl 2>/dev/null || true
+ls "$DIST"/wellm-*.whl 2>/dev/null || true

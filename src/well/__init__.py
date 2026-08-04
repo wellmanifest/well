@@ -1,8 +1,8 @@
-"""Public API for the `well` package."""
+"""Compatibility module for the original ``wellm`` 0.1.x package API."""
 
 from __future__ import annotations
 
-__all__ = ["greet", "hello"]
+from wellmanifest import WellManifestRuntime, __version__
 
 
 def hello() -> str:
@@ -10,6 +10,9 @@ def hello() -> str:
 
 
 def greet(name: str = "world") -> str:
-    """Return a friendly greeting."""
     return f"Hello, {name}!"
 
+
+Runtime = WellManifestRuntime
+
+__all__ = ["hello", "greet", "Runtime", "WellManifestRuntime", "__version__"]

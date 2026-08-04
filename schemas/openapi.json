@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "WellManifest Runtime Gateway",
+    "title": "wellm — WellManifest Runtime Gateway",
     "description": "Polyglot dialect conversion, schema validation and capability-scoped URI Process execution.",
-    "version": "0.1.0"
+    "version": "0.2.0rc2"
   },
   "paths": {
     "/healthz": {
@@ -45,6 +45,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -93,6 +109,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -145,6 +177,22 @@
               ],
               "title": "X-Wellmanifest-Token"
             }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
           }
         ],
         "responses": {
@@ -195,6 +243,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -254,6 +318,22 @@
               ],
               "title": "X-Wellmanifest-Token"
             }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
           }
         ],
         "requestBody": {
@@ -311,6 +391,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -371,6 +467,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -462,6 +574,22 @@
               ],
               "title": "X-Wellmanifest-Token"
             }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
           }
         ],
         "requestBody": {
@@ -502,6 +630,170 @@
         }
       }
     },
+    "/v1/plesk/plan": {
+      "post": {
+        "summary": "Plesk Plan",
+        "operationId": "plesk_plan_v1_plesk_plan_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PleskPlanApiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Plesk Plan V1 Plesk Plan Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plesk/publish": {
+      "post": {
+        "summary": "Plesk Publish",
+        "operationId": "plesk_publish_v1_plesk_publish_post",
+        "parameters": [
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          },
+          {
+            "name": "x-urirun-apply-grant",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Apply-Grant"
+            }
+          },
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PleskPublishApiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Plesk Publish V1 Plesk Publish Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/envelopes": {
       "post": {
         "summary": "Exchange",
@@ -521,6 +813,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -615,6 +923,22 @@
                 }
               ],
               "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
             }
           }
         ],
@@ -1012,12 +1336,98 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "PleskPlanApiRequest": {
+        "properties": {
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config"
+          },
+          "project_id": {
+            "type": "string",
+            "title": "Project Id"
+          },
+          "source_refs": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Source Refs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "config",
+          "project_id"
+        ],
+        "title": "PleskPlanApiRequest"
+      },
+      "PleskPublishApiRequest": {
+        "properties": {
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config"
+          },
+          "project_id": {
+            "type": "string",
+            "title": "Project Id"
+          },
+          "source_refs": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Source Refs"
+          },
+          "node_url": {
+            "type": "string",
+            "title": "Node Url"
+          },
+          "contract_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Ref"
+          },
+          "apply": {
+            "type": "boolean",
+            "title": "Apply",
+            "default": false
+          },
+          "plan_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "config",
+          "project_id",
+          "node_url"
+        ],
+        "title": "PleskPublishApiRequest"
+      },
       "RuntimeTarget": {
         "properties": {
           "runtime_ref": {
             "type": "string",
             "title": "Runtime Ref",
-            "default": "backend-python"
+            "default": "runtime:backend-python@1"
           },
           "environment": {
             "type": "string",

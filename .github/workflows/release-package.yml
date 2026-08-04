@@ -23,7 +23,7 @@ jobs:
       - run: ./scripts/package.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: wellmanifest-source
+          name: wellm-source
           path: |
             dist/*.zip
             dist/*.tar.gz

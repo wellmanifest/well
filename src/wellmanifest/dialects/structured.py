@@ -544,10 +544,12 @@ class StructuredEmitter:
                 lines.extend(self._emit_object(value, document, path, indent=1))
                 lines.append("}")
             elif isinstance(value, list) and value and all(isinstance(item, dict) for item in value):
-                for item in value:
-                    lines.append(f"{self._key(key)} {{")
-                    lines.extend(self._emit_object(item, document, path, indent=1))
-                    lines.append("}")
+                # Repeated HCL blocks cannot distinguish a singleton object from a
+                # singleton list after parsing.  The canonical data projection
+                # therefore emits an explicit list expression for both HCL and
+                # typed WellManifest.  External idiomatic repeated blocks remain
+                # accepted by the parser.
+                lines.append(f"{self._key(key)} = {self._format_value(value, document, path, 0)}")
             else:
                 prefix = f"{self._key(key)}"
                 if self.typed and type_name:
@@ -583,7 +585,11 @@ class StructuredEmitter:
             if self.typed and type_name:
                 prefix += f": {type_name}"
             if isinstance(value, dict):
-                lines.append(f"{prefix} = {{" if self.typed else f"{prefix} {{")
+                # Nested mappings are emitted as object-valued attributes in
+                # both dialects.  This is valid HCL inside ordinary blocks and,
+                # unlike a nested block, is also valid inside list/object
+                # expressions used for lossless JSON-compatible round-trips.
+                lines.append(f"{prefix} = {{")
                 lines.extend(self._emit_object(value, document, path, indent=indent + 1))
                 lines.append(f"{pad}}}")
             else:

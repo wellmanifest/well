@@ -4,6 +4,7 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 PORT=${WELLMANIFEST_E2E_PORT:-18080}
 EVENTS=$(mktemp "${TMPDIR:-/tmp}/wellmanifest-events.XXXXXX")
 LOG=$(mktemp "${TMPDIR:-/tmp}/wellmanifest-server.XXXXXX")
+EXTRA=$(mktemp -d "${TMPDIR:-/tmp}/wellm-e2e.XXXXXX")
 export PYTHONPATH="$ROOT/src"
 export WELLMANIFEST_EVENT_STORE="$EVENTS"
 export WELLMANIFEST_URL="http://127.0.0.1:$PORT"
@@ -13,6 +14,7 @@ cleanup() {
   kill "$PID" 2>/dev/null || true
   wait "$PID" 2>/dev/null || true
   rm -f "$EVENTS" "$LOG"
+  rm -rf "$EXTRA"
 }
 trap cleanup EXIT INT TERM
 
@@ -31,7 +33,17 @@ python "$ROOT/scripts/e2e-python.py"
   cd "$ROOT"
   node scripts/e2e-node.mjs
 )
+PYTHONPATH="$ROOT/src" python "$ROOT/scripts/e2e-plesk-plan-parity.py"
 WELLMANIFEST_URL="$WELLMANIFEST_URL" python "$ROOT/examples/firmware/rpi_client.py"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli plesk-plan "$ROOT/examples/plesk/projects.json" \
+  --project obslugabiurowa-pl \
+  --source-ref "workspace:obslugabiurowa-pl=$ROOT/examples/plesk/site/www" \
+  --workspace-root "$ROOT" --to json --output "$EXTRA/plan.json"
+test -s "$EXTRA/plan.json"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli benchmark-llm "$ROOT/examples/benchmark/config.yaml" \
+  --mock --output-dir "$EXTRA/benchmark" >/dev/null
+test -s "$EXTRA/benchmark/benchmark-report.json"
+printf '%s\n' 'plesk/benchmark local e2e: PASS'
 python - <<'PY'
 import json, os, urllib.request
 base=os.environ['WELLMANIFEST_URL']

@@ -1,7 +1,7 @@
 asyncapi: 3.0.0
 info:
   title: WellManifest real-time protocol
-  version: 0.1.0
+  version: 0.2.0-rc.2
   description: MQTT v5 and WebSocket exchange of WellManifest envelopes.
 servers:
   mqtt:

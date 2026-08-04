@@ -46,7 +46,7 @@ class RuntimeExecutionError(RuntimeError):
 
 
 class WellManifestRuntime:
-    version = "0.1.0"
+    version = "0.2.0rc2"
 
     def __init__(
         self,
@@ -330,6 +330,19 @@ class WellManifestRuntime:
             "runtimes": self.runtime_descriptors(),
             "diagnosticSeverities": ["ERROR", "WARNING", "INFO"],
             "projections": ["data", "ir"],
+            "extensions": {
+                "pleskPublication": {
+                    "schema": "subactor.projects/v1",
+                    "contract": "contract:plesk-publication",
+                    "modes": ["plan", "dry-run", "apply", "verify"],
+                    "defaultMutationMode": "dry-run",
+                },
+                "llmBenchmark": {
+                    "schema": "wellmanifest.llm-benchmark/v1",
+                    "formats": ["json", "yaml", "typed", "hcl", "typescript"],
+                    "selection": ["lowest_cost", "lowest_latency", "highest_score"],
+                },
+            },
             "security": {
                 "concreteUriRequired": True,
                 "wildcardsOnlyInContracts": True,
@@ -344,14 +357,14 @@ class WellManifestRuntime:
                 "id": "runtime:frontend-wasm@1",
                 "environment": "frontend",
                 "mode": "local-or-remote",
-                "artifacts": ["wellmanifest-wasm", "@wellmanifest/sdk"],
+                "artifacts": ["wellmanifest-wasm", "@wellmanifest/wellm-sdk"],
                 "features": ["json", "yaml", "schema", "ws"],
             },
             {
                 "id": "runtime:backend-python@1",
                 "environment": "backend",
                 "mode": "local-or-service",
-                "artifacts": ["wellmanifest", "wellmanifest-server"],
+                "artifacts": ["wellm", "wellm-server", "wellmanifest compatibility alias"],
                 "features": ["all-reference-dialects", "http", "ws", "mqtt", "grpc", "cqrs-es"],
             },
             {

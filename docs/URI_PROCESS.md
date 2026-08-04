@@ -70,7 +70,7 @@ MVP exists for development and must be protected by deployment configuration.
 ## JavaScript client
 
 ```js
-import {UrirunProcessClient} from "@wellmanifest/sdk";
+import {UrirunProcessClient} from "@wellmanifest/wellm-sdk";
 
 const client = new UrirunProcessClient({
   nodeUrl: "http://localhost:8080",

@@ -39,6 +39,21 @@
         "situation://profile/evaluate/query",
         "wellmanifest://events/stream/query"
       ]
+    },
+    "contract:plesk-publication": {
+      "status": "active",
+      "description": "Least-privilege Plesk publication plan: read-only preflight, dry-run, signed apply and verification.",
+      "allowedUriProcesses": [
+        "plesk://host/doctor/query/report",
+        "plesk://host/site/query/docroot",
+        "plesk://host/subscription/query/snapshot",
+        "plesk://host/subscription/query/capabilities",
+        "plesk://host/dns/query/authority",
+        "plesk://host/dns/query/propagation",
+        "plesk://host/site/command/ssl-ensure",
+        "plesk://host/site/command/sync",
+        "plesk://host/site/command/publish-verify"
+      ]
     }
   }
 }

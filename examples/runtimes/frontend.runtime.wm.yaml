@@ -4,7 +4,7 @@ environment: frontend
 execution: auto
 artifacts:
   local: wellmanifest-wasm
-  client: '@wellmanifest/sdk'
+  client: '@wellmanifest/wellm-sdk'
   fallback: runtime:remote-gateway@1
 features: [json, yaml, websocket, schema]
 resources:

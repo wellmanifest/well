@@ -1,7 +1,7 @@
 name: wellmanifest-e2e
 
 x-runtime: &runtime
-  image: wellmanifest/runtime:e2e
+  image: wellmanifest/wellm:e2e
   build:
     context: .
     dockerfile: Dockerfile
@@ -9,6 +9,7 @@ x-runtime: &runtime
     WELLMANIFEST_CONTRACTS: /app/config/contracts.json
     WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
     WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+    WELLMANIFEST_ENABLE_PLESK_EXECUTION: "0"
   networks: [e2e]
 
 services:
@@ -138,6 +139,12 @@ services:
     command: ["cargo", "test", "-p", "wellmanifest-core", "-p", "wellmanifest-cli"]
     networks: [e2e]
 
+  plesk-benchmark-e2e:
+    build:
+      context: .
+      dockerfile: docker/plesk-benchmark-e2e.Dockerfile
+    networks: [e2e]
+
   www-e2e:
     image: curlimages/curl:8.12.1
     command: ["sh", "-ec", "curl -fsS http://www:8080/ | grep -q 'One manifest' && curl -fsS http://www:8080/v1/capabilities | grep -q 'wellmanifest.protocol/v1'"]
@@ -156,6 +163,7 @@ services:
       mqtt-e2e: {condition: service_completed_successfully}
       grpc-e2e: {condition: service_completed_successfully}
       rust-e2e: {condition: service_completed_successfully}
+      plesk-benchmark-e2e: {condition: service_completed_successfully}
       www-e2e: {condition: service_completed_successfully}
     networks: [e2e]
 

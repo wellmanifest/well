@@ -1,0 +1,26 @@
+name: wellm-plesk-publication
+
+services:
+  wellm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wellmanifest/wellm:0.2.0rc2
+    command: ["wellm", "serve", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      WELLMANIFEST_WORKSPACE_ROOT: /workspace
+      WELLMANIFEST_ENABLE_PLESK_EXECUTION: "0"
+      WELLMANIFEST_DEFAULT_CONTRACT: contract:plesk-publication
+    volumes:
+      - ./examples/plesk/site:/workspace/obslugabiurowa-pl:ro
+    ports:
+      - "8080:8080"
+    networks: [control]
+
+  # Deploy the official urirun node/connector stack separately and attach it to
+  # this network. Do not place Plesk, SFTP or Cloudflare secrets in this file.
+  # Set WELLMANIFEST_ENABLE_PLESK_EXECUTION=1 only after the node, Contract AQL,
+  # vault and signed apply-grant boundary are configured.
+
+networks:
+  control: {}

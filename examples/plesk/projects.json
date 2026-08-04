@@ -1,0 +1,27 @@
+{
+  "schema": "subactor.projects/v1",
+  "projects": [{
+    "id": "obslugabiurowa-pl",
+    "company": "ObsługaBiurowa.pl",
+    "domain": "obslugabiurowa.pl",
+    "subscription": "prototypowanie.pl",
+    "dns_zone": "obslugabiurowa.pl",
+    "dns_provider": "cloudflare",
+    "dns_management_plane": "plesk",
+    "dns_sync_extension": "cloudflaredns",
+    "public_ingress_mode": "plesk_public_origin",
+    "tunnel_mode": "none",
+    "origin_ip": "217.160.250.222",
+    "source": "site",
+    "entrypoint": "index.html",
+    "publication": {
+      "mode": "static_httpdocs",
+      "publish_uri": "plesk://host/site/command/sync",
+      "verify_uri": "plesk://host/site/command/publish-verify",
+      "source_ref": "workspace:obslugabiurowa-pl",
+      "deployment_ref": "deployment:obslugabiurowa-pl:production",
+      "verification": {"mode": "content_hash", "path": "/"}
+    },
+    "gates": ["subscription_can_create_domain", "dns_ready", "tls_ready"]
+  }]
+}

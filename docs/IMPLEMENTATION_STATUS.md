@@ -1,84 +1,87 @@
-# Implementation status and limitations
+# Implementation status — 0.2.0rc2
 
-## Implemented and locally exercised
+## Working reference implementation
 
-- Python 3 reference package and CLI;
-- JSON, JSON-compatible YAML and TOML import/export;
-- HCL-like data blocks and all four requested status forms;
-- typed hints/declarations represented in document IR;
-- procedural policy parser, including extraction from Markdown `dsl` blocks;
-- basic proto3 message/service IR parser;
+The following components are implemented in Python/JavaScript and covered by
+local tests:
+
+- JSON, YAML, TOML, HCL-shaped, typed and restricted TypeScript data parsing;
+- procedural policy import to structured IR;
+- four requested status syntaxes;
 - JSON Schema Draft 2020-12 validation;
-- standardized `ERROR`, `WARNING`, `INFO` diagnostics;
-- concrete URI validation and server-side contract scopes;
-- idempotent URI Process execution and JSONL events;
-- situation-profile metrics/assessments used by the supplied example;
-- read-only digital-twin routing demo;
-- FastAPI HTTP and WebSocket endpoints;
-- dependency-free browser/Node client and URI Process client;
-- static landing page source;
-- local Python and Node test suites (23 Python tests and 4 Node tests);
-- local HTTP/Node/RPi/event-log E2E workflow.
+- stable `ERROR`, `WARNING` and `INFO` diagnostics;
+- HTTP/WebSocket gateway, content negotiation and JSONL event store;
+- concrete URI Process validation, contract scopes and idempotent execution;
+- `subactor.projects/v1` project registry validation;
+- deterministic Plesk publication plans;
+- Plesk dry-run/apply/verify executor with exact plan hash and signed grant;
+- read-only URI Twin binding in publication plans;
+- JavaScript Plesk plan helper and canonical urirun header handling;
+- canonical Plesk plan/hash parity between Python and JavaScript;
+- offline LLM format/logic benchmark;
+- cheapest-capable / lowest-latency / highest-score selection;
+- fingerprinted first-request model selection cache;
+- situation metrics, assessments and digital-twin routing demo.
 
-## Supplied as build/integration source
+## Tested without external infrastructure
 
-- MQTT v5 bridge using Paho MQTT;
-- protobuf/gRPC service and generated-stub workflow;
-- Rust core/CLI;
-- WASM, PyO3 and N-API crates;
-- multi-service Docker and E2E environments;
-- RPi/MicroPython/C thin clients;
-- CI matrices.
+Plesk tests use a deterministic fake connector that returns representative
+preflight, dry-run, apply and verification receipts. These tests prove local
+orchestration behavior and fail-closed guards. They do **not** prove access to a
+real Plesk server, DNS provider, vault, signed-grant authority or deployed
+`urirun-connector-plesk` instance.
 
-These components require their toolchains/containers and are not claimed as
-locally executed in the generated package environment.
+The LLM tests use a deterministic mock adapter. They prove case generation,
+format parsing, schema/semantic scoring, cost-aware selection and caching. They
+do **not** prove the behavior or current price of a live provider/model.
 
-## Deliberate limits
+## Source/build targets not verified in this environment
 
-### No arbitrary remote code execution
+The repository includes:
 
-A runtime profile selects an installed implementation. It does not accept
-arbitrary source archives, shell fragments or binaries. New application logic
-is installed as a reviewed adapter/container and invoked by a concrete URI.
+- Rust core/CLI scaffold;
+- WASM crate;
+- PyO3 and N-API crates;
+- MQTT v5 bridge;
+- protobuf/gRPC service;
+- Docker and Compose E2E definitions;
+- firmware and Raspberry Pi clients.
 
-### HCL subset
+These targets require Docker and/or Rust toolchains and are tested by the
+provided CI/Compose definitions. A release report must distinguish source
+presence from an actually executed build.
 
-The Python parser handles the examples and data subset but does not evaluate the
-full HCL expression language. Use existing HCL tools for authoritative
-application semantics and treat WellManifest as an import/export/schema layer.
+## Deliberate limitations
 
-### Proto3 subset
+- HCL support is a data-oriented compatibility frontend, not a guarantee of all
+  application-specific HashiCorp decoding semantics.
+- The TypeScript dialect is a non-executing data subset, not a JavaScript/TS
+  runtime or general parser.
+- Proto3 support is descriptor/IR oriented; `protoc` remains authoritative for
+  complete proto semantics.
+- YAML export follows a JSON-compatible profile; comments, anchors and custom
+  tags are not a lossless data projection.
+- Unknown project gates fail closed.
+- Remote Plesk execution is disabled by default in the HTTP service.
+- The Plesk planner does not create secrets and does not substitute for the
+  connector's own vault, grant and mutation gates.
+- URI Twin is read-only and cannot execute a publication.
+- Benchmark scores apply only to the configured fixtures, prompts, model route
+  and time of execution.
+- Unknown LLM cost is not treated as free.
 
-The basic parser extracts common messages, fields, services and RPCs. Production
-builds generate a `FileDescriptorSet` with `protoc`; descriptors are the
-lossless proto IR.
+## Release readiness checklist
 
-### YAML profile
+Before publishing a stable `0.2.0`:
 
-Only JSON-compatible maps/lists/scalars are portable across all target formats.
-Custom tags, cyclic aliases and non-string map keys require a specialized
-plugin and IR representation.
-
-### Distributed events
-
-The JSONL store is a transparent demonstration, not a clustered event store.
-Production deployments need transactional idempotency, stream concurrency,
-retention and access control.
-
-### LLM
-
-The bundled planner is deterministic/mock. Provider credentials and APIs are
-not included. Any provider output remains untrusted until parsed, validated and
-authorized.
-
-## Definition of stable 1.0
-
-- published protocol/IR conformance vectors;
-- differential HCL and proto tests;
-- Rust feature parity for the stable data/schema subset;
-- reproducible multi-architecture images and signed packages;
-- durable event/idempotency adapter contract;
-- authenticated contract/schema registry;
-- MQTT/gRPC interoperability suites;
-- security review and threat-model verification;
-- explicit compatibility and deprecation policy.
+- run Python and Node suites on supported versions;
+- run `compose.e2e.yml` with Docker Engine;
+- compile/test Rust, WASM, PyO3 and N-API targets;
+- run MQTT and gRPC container E2E;
+- execute a dry-run against a pinned connector/twin revision;
+- validate a controlled Plesk publication with a disposable test domain;
+- run a live LiteLLM benchmark with pinned model identifiers and retained cost
+  provenance;
+- generate and review SBOM, dependency audit and container scan;
+- publish versioned JSON Schemas and documentation;
+- pin connector, twin and runtime revisions in production configuration.

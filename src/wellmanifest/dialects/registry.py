@@ -9,6 +9,7 @@ from .policy import PolicyDialect
 from .proto import Proto3Dialect
 from .structured import HclDialect, TypedDialect
 from .toml_dialect import TomlDialect
+from .typescript import TypeScriptDialect
 from .yaml_dialect import YamlDialect
 
 
@@ -20,7 +21,7 @@ class DialectRegistry:
 
     @staticmethod
     def default_dialects() -> list[Dialect]:
-        return [JsonDialect(), YamlDialect(), TomlDialect(), HclDialect(), TypedDialect(), PolicyDialect(), Proto3Dialect()]
+        return [JsonDialect(), YamlDialect(), TomlDialect(), TypeScriptDialect(), HclDialect(), TypedDialect(), PolicyDialect(), Proto3Dialect()]
 
     def register(self, dialect: Dialect) -> None:
         for name in (dialect.name, *dialect.aliases, *dialect.media_types):

@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 from typing import Annotated, Any
 
+from pydantic import BaseModel, ConfigDict, Field
+
 import uvicorn
 from fastapi import Depends, FastAPI, Header, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
@@ -14,10 +16,25 @@ from .models import ConversionRequest, Envelope, ExecuteRequest, ValidationReque
 from .runtime import WellManifestRuntime
 
 
+class PleskPlanApiRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    config: dict[str, Any]
+    project_id: str
+    source_refs: dict[str, str] = Field(default_factory=dict)
+
+
+class PleskPublishApiRequest(PleskPlanApiRequest):
+    node_url: str
+    contract_ref: str | None = None
+    apply: bool = False
+    plan_hash: str | None = None
+
+
 def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
     runtime = runtime or WellManifestRuntime()
     app = FastAPI(
-        title="WellManifest Runtime Gateway",
+        title="wellm — WellManifest Runtime Gateway",
         version=runtime.version,
         description="Polyglot dialect conversion, schema validation and capability-scoped URI Process execution.",
     )
@@ -25,13 +42,17 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
     expected_token = os.getenv("WELLMANIFEST_TOKEN", "")
     default_contract = os.getenv("WELLMANIFEST_DEFAULT_CONTRACT", "contract:dev")
 
-    def authorize(x_wellmanifest_token: Annotated[str | None, Header()] = None) -> None:
-        if expected_token and x_wellmanifest_token != expected_token:
+    def authorize(
+        x_wellmanifest_token: Annotated[str | None, Header()] = None,
+        x_urirun_token: Annotated[str | None, Header()] = None,
+    ) -> None:
+        supplied = x_wellmanifest_token or x_urirun_token
+        if expected_token and supplied != expected_token:
             raise HTTPException(status_code=401, detail={"code": "WM-AUTH-HTTP-001", "message": "invalid token"})
 
     @app.get("/healthz")
     def health() -> dict[str, Any]:
-        return {"status": "ok", "runtime": "wellmanifest", "version": runtime.version}
+        return {"status": "ok", "runtime": "wellm", "version": runtime.version}
 
     @app.get("/v1/capabilities", dependencies=[Depends(authorize)])
     def capabilities() -> dict[str, Any]:
@@ -94,6 +115,87 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
                 status = int(response.diagnostics[0].details.get("status", status))
             raise HTTPException(status_code=status, detail=response.model_dump(mode="json"))
         return response.model_dump(mode="json")
+
+    @app.post("/v1/plesk/plan", dependencies=[Depends(authorize)])
+    def plesk_plan(request: PleskPlanApiRequest) -> dict[str, Any]:
+        from .plesk import PleskPublicationPlanner, ProjectRegistry, WorkspaceResolver
+
+        workspace_root_raw = os.getenv("WELLMANIFEST_WORKSPACE_ROOT", "")
+        if not workspace_root_raw:
+            raise HTTPException(
+                status_code=503,
+                detail={"code": "WM-PLESK-HTTP-001", "message": "WELLMANIFEST_WORKSPACE_ROOT is not configured"},
+            )
+        workspace_root = Path(workspace_root_raw).resolve()
+        mappings = {
+            key: (Path(value) if Path(value).is_absolute() else workspace_root / value)
+            for key, value in request.source_refs.items()
+        }
+        try:
+            registry = ProjectRegistry.model_validate(request.config)
+            plan = PleskPublicationPlanner(
+                registry,
+                WorkspaceResolver(mappings=mappings, workspace_root=workspace_root),
+            ).build(request.project_id)
+        except (ValueError, KeyError) as exc:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "WM-PLESK-HTTP-002", "message": str(exc)},
+            ) from exc
+        return plan.model_dump(mode="json", by_alias=True)
+
+    @app.post("/v1/plesk/publish", dependencies=[Depends(authorize)])
+    def plesk_publish(
+        request: PleskPublishApiRequest,
+        x_urirun_token: Annotated[str | None, Header()] = None,
+        x_urirun_apply_grant: Annotated[str | None, Header()] = None,
+    ) -> dict[str, Any]:
+        if os.getenv("WELLMANIFEST_ENABLE_PLESK_EXECUTION", "0") != "1":
+            raise HTTPException(
+                status_code=403,
+                detail={"code": "WM-PLESK-HTTP-003", "message": "Remote Plesk execution is disabled"},
+            )
+        from .plesk import PleskPublicationExecutor, PleskPublicationPlanner, ProjectRegistry, WorkspaceResolver
+        from .urirun import UrirunProcessClient
+
+        workspace_root_raw = os.getenv("WELLMANIFEST_WORKSPACE_ROOT", "")
+        if not workspace_root_raw:
+            raise HTTPException(
+                status_code=503,
+                detail={"code": "WM-PLESK-HTTP-001", "message": "WELLMANIFEST_WORKSPACE_ROOT is not configured"},
+            )
+        workspace_root = Path(workspace_root_raw).resolve()
+        mappings = {
+            key: (Path(value) if Path(value).is_absolute() else workspace_root / value)
+            for key, value in request.source_refs.items()
+        }
+        try:
+            registry = ProjectRegistry.model_validate(request.config)
+            plan = PleskPublicationPlanner(
+                registry,
+                WorkspaceResolver(mappings=mappings, workspace_root=workspace_root),
+            ).build(request.project_id)
+            client = UrirunProcessClient(
+                node_url=request.node_url,
+                token=x_urirun_token or "",
+                contract_ref=request.contract_ref or registry.connector.contract_ref,
+            )
+            executor = PleskPublicationExecutor(client)
+            dry = executor.dry_run(plan)
+            receipt = dry
+            if request.apply:
+                receipt = executor.apply(
+                    plan,
+                    plan_hash=request.plan_hash or "",
+                    apply_grant=x_urirun_apply_grant or "",
+                    dry_run_receipt=dry,
+                )
+        except (ValueError, KeyError) as exc:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "WM-PLESK-HTTP-004", "message": str(exc)},
+            ) from exc
+        return receipt.model_dump(mode="json", by_alias=True)
 
     @app.post("/v1/envelopes", dependencies=[Depends(authorize)])
     def exchange(envelope: Envelope) -> dict[str, Any]:

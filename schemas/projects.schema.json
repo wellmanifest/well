@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc2/schemas/projects.schema.json",
+  "title": "WellManifest Subactor project registry",
+  "$defs": {
+    "ConnectorBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "default": "urirun-connector-plesk",
+          "title": "Package",
+          "type": "string"
+        },
+        "repository": {
+          "default": "https://github.com/urirun-connectors/urirun-connector-plesk",
+          "title": "Repository",
+          "type": "string"
+        },
+        "contract_ref": {
+          "default": "contract:plesk-publication",
+          "title": "Contract Ref",
+          "type": "string"
+        },
+        "node_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Url"
+        }
+      },
+      "title": "ConnectorBinding",
+      "type": "object"
+    },
+    "ProjectSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "company": {
+          "title": "Company",
+          "type": "string"
+        },
+        "domain": {
+          "title": "Domain",
+          "type": "string"
+        },
+        "subscription": {
+          "title": "Subscription",
+          "type": "string"
+        },
+        "dns_zone": {
+          "title": "Dns Zone",
+          "type": "string"
+        },
+        "dns_provider": {
+          "title": "Dns Provider",
+          "type": "string"
+        },
+        "dns_management_plane": {
+          "title": "Dns Management Plane",
+          "type": "string"
+        },
+        "dns_sync_extension": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dns Sync Extension"
+        },
+        "public_ingress_mode": {
+          "title": "Public Ingress Mode",
+          "type": "string"
+        },
+        "tunnel_mode": {
+          "title": "Tunnel Mode",
+          "type": "string"
+        },
+        "origin_ip": {
+          "title": "Origin Ip",
+          "type": "string"
+        },
+        "source": {
+          "default": "site",
+          "title": "Source",
+          "type": "string"
+        },
+        "entrypoint": {
+          "default": "index.html",
+          "title": "Entrypoint",
+          "type": "string"
+        },
+        "publication": {
+          "$ref": "#/$defs/PublicationConfig"
+        },
+        "gates": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "company",
+        "domain",
+        "subscription",
+        "dns_zone",
+        "dns_provider",
+        "dns_management_plane",
+        "public_ingress_mode",
+        "tunnel_mode",
+        "origin_ip",
+        "publication"
+      ],
+      "title": "ProjectSpec",
+      "type": "object"
+    },
+    "PublicationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "static_httpdocs",
+          "enum": [
+            "static_httpdocs",
+            "release"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "publish_uri": {
+          "default": "plesk://host/site/command/sync",
+          "title": "Publish Uri",
+          "type": "string"
+        },
+        "verify_uri": {
+          "default": "plesk://host/site/command/publish-verify",
+          "title": "Verify Uri",
+          "type": "string"
+        },
+        "source_ref": {
+          "title": "Source Ref",
+          "type": "string"
+        },
+        "deployment_ref": {
+          "title": "Deployment Ref",
+          "type": "string"
+        },
+        "verification": {
+          "$ref": "#/$defs/VerificationConfig"
+        },
+        "remote_path": {
+          "default": "/httpdocs",
+          "title": "Remote Path",
+          "type": "string"
+        },
+        "transport": {
+          "default": "sftp",
+          "enum": [
+            "auto",
+            "sftp",
+            "ftp"
+          ],
+          "title": "Transport",
+          "type": "string"
+        },
+        "sftp_host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sftp Host"
+        },
+        "sftp_port": {
+          "default": 22,
+          "title": "Sftp Port",
+          "type": "integer"
+        },
+        "sftp_vault_entry_id": {
+          "default": "plesk-sftp",
+          "title": "Sftp Vault Entry Id",
+          "type": "string"
+        },
+        "credential_origin": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Credential Origin"
+        },
+        "host_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Host Fingerprint"
+        },
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Url"
+        },
+        "subscription_vault_entry_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subscription Vault Entry Id"
+        },
+        "runtime_vault_entry_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Runtime Vault Entry Id"
+        },
+        "vault_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vault Url"
+        },
+        "actor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor"
+        },
+        "pack_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pack Id"
+        },
+        "pack_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pack Version"
+        }
+      },
+      "required": [
+        "source_ref",
+        "deployment_ref"
+      ],
+      "title": "PublicationConfig",
+      "type": "object"
+    },
+    "TwinBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "default": "@uri-twin/plesk",
+          "title": "Package",
+          "type": "string"
+        },
+        "repository": {
+          "default": "https://github.com/uri-twin/uri-twin-plesk",
+          "title": "Repository",
+          "type": "string"
+        },
+        "mode": {
+          "const": "read-only",
+          "default": "read-only",
+          "title": "Mode",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "attestation_required": {
+          "default": true,
+          "title": "Attestation Required",
+          "type": "boolean"
+        }
+      },
+      "title": "TwinBinding",
+      "type": "object"
+    },
+    "VerificationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "content_hash",
+          "enum": [
+            "content_hash",
+            "http_status",
+            "content_marker"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "path": {
+          "default": "/",
+          "title": "Path",
+          "type": "string"
+        },
+        "content_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Sha256"
+        },
+        "expected_http_status": {
+          "default": 200,
+          "title": "Expected Http Status",
+          "type": "integer"
+        },
+        "marker": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Marker"
+        }
+      },
+      "title": "VerificationConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "subactor.projects/v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "projects": {
+      "items": {
+        "$ref": "#/$defs/ProjectSpec"
+      },
+      "title": "Projects",
+      "type": "array"
+    },
+    "connector": {
+      "$ref": "#/$defs/ConnectorBinding"
+    },
+    "twin": {
+      "$ref": "#/$defs/TwinBinding"
+    }
+  },
+  "required": [
+    "schema",
+    "projects"
+  ],
+  "type": "object"
+}

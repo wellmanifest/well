@@ -5,7 +5,7 @@ execution: local
 artifacts:
   core: wellmanifest-core
   cli: wellmanifest-native
-  service: wellmanifest-server
+  service: wellm-server
 features: [json, yaml, hcl, typed, policy, proto3, grpc, cqrs-es]
 resources:
   timeout_ms: 30000

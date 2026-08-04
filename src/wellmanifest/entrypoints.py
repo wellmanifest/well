@@ -27,3 +27,7 @@ def yaml() -> None:
 
 def proto3() -> None:
     _run("proto3")
+
+
+def typescript() -> None:
+    _run("typescript@wellm-1")

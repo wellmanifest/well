@@ -1,13 +1,13 @@
-# WellManifest
+# wellm — WellManifest protocol and runtime
 
 
 ## AI Cost Tracking
 
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.1.7-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.01-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-1.5h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.2.1rc2-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.97-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-2.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
 
-- 🤖 **LLM usage:** $0.0135 (10 commits)
-- 👤 **Human dev:** ~$145 (1.5h @ $100/h, 30min dedup)
+- 🤖 **LLM usage:** $0.9738 (11 commits)
+- 👤 **Human dev:** ~$272 (2.7h @ $100/h, 30min dedup)
 
 Generated on 2026-08-04 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
 
@@ -15,76 +15,92 @@ Generated on 2026-08-04 using [openrouter/qwen/qwen3-coder-next](https://openrou
 
 
 
-**WellManifest** is an alpha protocol and polyglot runtime for manifests, typed
-configuration, procedural policy, URI Process orchestration and format
-negotiation. One server can receive JSON, YAML, HCL-like data, typed
-WellManifest, policy DSL or proto3 IR and return the representation preferred by
-the receiving side.
+**wellm** is a polyglot manifest protocol, typed DSL runtime and URI Process
+control layer. It normalizes JSON, YAML, TOML, HCL-shaped data, strongly typed
+WellManifest, procedural policy, restricted TypeScript data modules and proto3
+IR into one document/envelope model with schema validation and structured
+`ERROR`, `WARNING` and `INFO` diagnostics.
 
-> Version `0.1.0` is a functional reference implementation and architecture
-> package. The Python HTTP/WebSocket runtime, JSON/YAML/TOML conversion, the
-> four status syntaxes, JSON Schema validation, URI Process authorization,
-> CQRS/ES event log, situation profiles and JavaScript SDK are executable and
-> tested. Rust/WASM/PyO3/N-API, MQTT and gRPC are supplied as buildable contracts
-> and container targets; they are not yet feature-parity implementations of all
-> dialects. The packaged local evidence is 23 Python tests, 4 Node tests and a
-> multi-client HTTP/Node/RPi/event-log E2E run.
+Release candidate `0.2.0rc2` adds a fail-closed Plesk publication workflow based
+on `subactor.projects/v1`, `urirun-connector-plesk` and the read-only
+`@uri-twin/plesk` baseline. It also adds an optional LiteLLM benchmark that
+selects the cheapest candidate able to preserve the required formats and
+publication logic.
 
-## Why
+> This repository is a reference implementation and release candidate, not a
+> hosted production control plane. The Python runtime, CLI, HTTP/WebSocket API,
+> JSON/YAML/TOML conversion, four status forms, project/Plesk planner, offline
+> LLM benchmark and JavaScript SDK are executable. Rust/WASM/PyO3/N-API remain
+> compatibility scaffolds; MQTT/gRPC and Docker E2E have container definitions
+> but require their corresponding toolchains/runtime.
 
-A browser may prefer JSON, an operations service YAML, an existing tool HCL, a
-strongly typed module WellManifest, a microcontroller a compact protobuf
-message, and a governance repository a procedural `RULE/WHEN/DO/FORBID/ASSERT`
-policy. WellManifest separates those surface formats from a common envelope,
-IR, diagnostics and capability contract.
+## Architecture
 
 ```text
-JSON / YAML / TOML / HCL / typed@1 / policy-sh@1 / proto3
-                         │
-                         ▼
-              WellManifest Document + IR
-                         │
-       schema validation │ diagnostics │ authorization
-                         ▼
-              WellManifest Envelope v1
-          HTTP │ WebSocket │ MQTT v5 │ gRPC
-                         │
-                         ▼
- frontend │ backend │ RPi/IoT │ digital twin │ remote runtime
+JSON / YAML / TOML / HCL / typed@1 / TypeScript / policy-sh@1 / proto3
+                                  │
+                                  ▼
+                    WellManifest Document + Core IR
+                                  │
+              schema · types · diagnostics · policy
+                                  ▼
+                       WellManifest Envelope v1
+          HTTP · WebSocket · MQTT v5 · protobuf/gRPC · events
+                                  │
+                                  ▼
+      browser · backend · RPi/IoT · digital twin · remote runtime
+                                  │
+                                  ▼
+       concrete URI Process · Contract AQL · adapter · receipt
 ```
 
-## Fast start
+Different parties may send and receive their preferred representation. The
+runtime negotiates the external format while preserving a canonical data or IR
+projection internally.
 
-### Local reference runtime
+## Install
+
+From a local checkout:
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install -e '.[dev]'
-wellmanifest capabilities
-wellmanifest convert examples/dialects/status.yaml --from yaml --to json
-wellmanifest validate examples/dialects/status.json --schema schemas/status.schema.json
-wellmanifest serve --port 8080
+wellm --version
+wellm capabilities
 ```
 
-### Docker sidecar
+Optional transports and LLM benchmark:
+
+```bash
+python -m pip install -e '.[all]'
+# or only LiteLLM support
+python -m pip install -e '.[benchmark]'
+```
+
+The former `wellmanifest` commands and Python namespace remain compatibility
+aliases. New code should use the `wellm` distribution and CLI.
+ The original
+`from well import hello, greet` API from `wellm` 0.1.x is retained; see
+[docs/MIGRATION_0.1_TO_0.2.md](docs/MIGRATION_0.1_TO_0.2.md).
+
+## Fast start
+
+```bash
+wellm convert examples/dialects/status.yaml --from yaml --to json
+wellm validate examples/dialects/status.json --schema schemas/status.schema.json
+wellm serve --port 8080
+```
+
+```bash
+curl -fsS http://localhost:8080/healthz
+curl -fsS http://localhost:8080/v1/capabilities
+```
+
+Docker sidecar:
 
 ```bash
 docker compose up --build runtime www
-curl http://localhost:8080/healthz
-```
-
-Add the runtime to an existing Compose project:
-
-```yaml
-services:
-  wellmanifest:
-    build:
-      context: ./vendor/wellmanifest
-    environment:
-      WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
-    ports:
-      - "8080:8080"
 ```
 
 Any language can then use HTTP:
@@ -100,10 +116,11 @@ curl -fsS http://localhost:8080/v1/convert \
   }'
 ```
 
-## Four supported status forms
+## Four status forms
 
-All four forms normalize to the same data model. The first and fourth remain
-HCL-shaped; split and inline typing belong to `typed@1`.
+All four requested forms normalize to the same data model.
+
+Strict HCL-shaped data:
 
 ```hcl
 status {
@@ -112,6 +129,8 @@ status {
   errors = []
 }
 ```
+
+Split type declaration and value, accepted for compatibility:
 
 ```wellmanifest
 status {
@@ -123,6 +142,8 @@ status {
 }
 ```
 
+Canonical strongly typed form:
+
 ```wellmanifest
 status {
   operation: FolderOperationId = "002-cv-pdf2md"
@@ -130,6 +151,8 @@ status {
   errors: [OperationError] = []
 }
 ```
+
+Legacy comment hint:
 
 ```hcl
 status {
@@ -139,17 +162,120 @@ status {
 }
 ```
 
-The comment form is accepted as a legacy hint and emits `WARNING
-WM-TYPE-102`; schema or a typed declaration remains the source of truth.
-Canonical typed output is `field: Type = value`.
+The comment form emits `WM-TYPE-102`. A comment is never the normative source of
+a type; the typed declaration or schema is.
 
-## URI Process
+## Plesk publication from `subactor.projects/v1`
+
+The exact project registry in
+[`examples/plesk/projects.json`](examples/plesk/projects.json) can be validated
+and converted into a deterministic publication plan:
+
+```bash
+wellm validate examples/plesk/projects.json \
+  --schema schemas/projects.schema.json
+
+wellm plesk-plan examples/plesk/projects.json \
+  --project obslugabiurowa-pl \
+  --source-ref workspace:obslugabiurowa-pl=examples/plesk/site/www \
+  --workspace-root . \
+  --to yaml
+```
+
+The plan separates read-only twin facts from connector effects and contains:
+
+```text
+connector readiness
+→ read-only subscription and docroot twin facts
+→ subscription capabilities
+→ DNS authority and propagation
+→ non-mutating TLS probe
+→ non-mutating file/hash dry-run
+→ signed exact-hash apply
+→ DNS/TLS/HTTPS/content verification
+```
+
+Remote dry-run:
+
+```bash
+export URIRUN_NODE_URL=http://urirun-bridge:8080
+export URIRUN_TOKEN='from-secret-store'
+
+wellm plesk-publish examples/plesk/projects.extended.yaml \
+  --project obslugabiurowa-pl \
+  --source-ref workspace:obslugabiurowa-pl=examples/plesk/site/www \
+  --workspace-root . \
+  --node-url "$URIRUN_NODE_URL"
+```
+
+Apply is blocked unless the preflight is green and the operator supplies the
+exact connector `plan_hash` plus a signed single-use grant:
+
+```bash
+export URIRUN_APPLY_GRANT='signed-single-use-grant'
+
+wellm plesk-publish examples/plesk/projects.extended.yaml \
+  --project obslugabiurowa-pl \
+  --source-ref workspace:obslugabiurowa-pl=examples/plesk/site/www \
+  --workspace-root . \
+  --node-url "$URIRUN_NODE_URL" \
+  --apply --plan-hash "$CONNECTOR_PLAN_HASH"
+```
+
+No credential belongs in the registry. Only opaque vault references are
+accepted. Production autonomous execution should route through the trusted
+Control/Bridge boundary and server-side Contract AQL, not expose a raw node to a
+browser or device.
+
+Full guide: [docs/PLESK_PUBLICATION.md](docs/PLESK_PUBLICATION.md).
+
+## LiteLLM format and logic benchmark
+
+Run the reproducible offline benchmark:
+
+```bash
+wellm benchmark-llm examples/benchmark/config.yaml \
+  --mock \
+  --output-dir .wellm/benchmark
+```
+
+It generates JSON, YAML, typed WellManifest and restricted TypeScript tasks and
+checks every completion using:
+
+| Check | Weight |
+|---|---:|
+| target parser | 25% |
+| JSON Schema 2020-12 | 25% |
+| exact normalized semantics | 50% |
+
+The default cases measure project round-trip, concrete URI/wildcard permission
+logic and fail-closed publication gates. The selector picks the cheapest model
+that passes all configured thresholds; a cheaper model that cannot handle a
+required format is rejected.
+
+A live benchmark uses LiteLLM:
+
+```bash
+cp examples/benchmark/config.live.example.yaml .wellm/benchmark.live.yaml
+# edit model identifiers and set provider credentials in environment variables
+wellm benchmark-llm .wellm/benchmark.live.yaml \
+  --output-dir .wellm/benchmark/live
+```
+
+`FirstRequestModelSelector` benchmarks fixed synthetic fixtures and caches the
+winner before forwarding the actual application request. The real request is
+not broadcast to every candidate.
+
+Full guide: [docs/LLM_BENCHMARK.md](docs/LLM_BENCHMARK.md).
+
+## URI Process client
 
 ```js
-import {UrirunProcessClient} from "@wellmanifest/sdk";
+import {UrirunProcessClient} from "@wellmanifest/wellm-sdk";
 
 const client = new UrirunProcessClient({
   nodeUrl: "http://localhost:8080",
+  token: process.env.URIRUN_TOKEN,
   contractRef: "contract:dev",
 });
 
@@ -160,100 +286,118 @@ const result = await client.execute(
 );
 ```
 
-`youtube://*` is a permission pattern. It is never an executable URI. The
-server resolves production authority from a Contract AQL reference, checks the
-concrete URI and appends requested/completed/failed events.
+`youtube://*` is a permission pattern and never an executable address. The
+client rejects a wildcard URI before network contact; the trusted server must
+independently resolve authority from the active contract.
 
-## Package and service matrix
+## Package, service and runtime matrix
 
-| Component | Form | Environment | Status in 0.1.0 | Main use |
-|---|---|---|---|---|
-| `wellmanifest` | Python package + CLI | backend, RPi | **working/tested** | parsers, conversion, schema validation, local runtime |
-| `wellmanifest-server` | FastAPI HTTP/WS service | server, edge | **working/tested** | remote runtime for every language |
-| `@wellmanifest/sdk` | dependency-free ES module | browser, Node | **working/tested** | HTTP, WebSocket and URI Process clients |
-| `wellmanifest-core` | Rust crate | backend, edge | build scaffold | deterministic JSON/YAML native core |
-| `wellmanifest-wasm` | WASM crate | frontend | build scaffold | local browser conversion with remote fallback |
-| `wellmanifest-python` | PyO3 crate | Python | build scaffold | native acceleration behind Python API |
-| `wellmanifest-node` | N-API crate | Node | build scaffold | native acceleration behind JS API |
-| MQTT bridge | MQTT v5 adapter | IoT, queues | source + Compose | request/response topics and correlation data |
-| gRPC service | protobuf contract + server | SOA/datacenter | source + Docker generation | unary and bidirectional streaming API |
-| firmware thin client | MicroPython/C envelope | MCU, RPi | examples | remote validation/conversion without full parser |
-| digital twin router | URI query processes | control plane | **working demo** | read-only portraits, authority/fit/workload routing |
-| situation evaluator | DOQL profile adapter | digital twins | **working/tested** | metrics, assessments and decision candidates |
-| CQRS/ES store | JSONL event store | backend, edge | **working/tested** | commands, receipts, replayable process events |
-| landing page | static HTML/CSS/JS | frontend | included | capabilities and live conversion demo |
+| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc2` |
+|---|---|---:|---:|---:|---:|---|---|
+| protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | envelope, negotiation, diagnostics | specified + schemas |
+| Python | `wellm` / `wellmanifest` alias | remote client | local/service | RPi | control | parsers, validation, planner, benchmark | **working/tested** |
+| CLI | `wellm` | dev tooling | ops | Linux RPi | admin | convert, validate, execute, Plesk, benchmark | **working/tested** |
+| HTTP/WS | `wellm-server` | fetch/WS | any language | thin client | queries | shared remote runtime | **working/tested** |
+| JavaScript | `@wellmanifest/wellm-sdk` | local client | Node | gateway | queries | URI client and Plesk plan helper | **working/tested** |
+| Plesk planner | `wellm.plesk` | call service | local/service | remote only | consumes facts | plan, dry-run, guarded apply, verify | **working/tested with fake connector** |
+| LLM benchmark | `wellm.llmbench` | reports | Python | remote | planning | format/logic/cost selection | **offline tested; live optional** |
+| Rust core | `wellmanifest-core` | via WASM | native | ARM Linux | projections | native conversion core | scaffold |
+| WASM | `wellmanifest-wasm` | local | edge | limited | projections | browser conversion | scaffold |
+| PyO3/N-API | native bindings | Node | Python/Node | Linux RPi | control | acceleration | scaffold |
+| MQTT bridge | `wellm-mqtt` | gateway | queue | devices | events | request/response topics | source + Compose |
+| gRPC | `wellm-grpc` | gateway | SOA | edge | streams | protobuf API | source + Compose |
+| firmware thin client | MicroPython/C examples | — | remote | MCU/RPi | — | small envelope and remote runtime | examples |
+| digital twin router | situation/twin URI processes | read | service | telemetry | native | read-only portrait and routing | working demo |
+| CQRS/ES | JSONL event store | read | local | edge buffer | projection | command/receipt replay | working/tested |
+
+More detail: [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Repository map
 
 ```text
-src/wellmanifest/       Python reference runtime
-packages/js/            browser and Node SDK
-crates/                 Rust, CLI, WASM, PyO3 and N-API crates
-proto/                  gRPC/protobuf contract
-schemas/                JSON Schema 2020-12 contracts
-examples/               HCL, typed DSL, policy, SOA, POA, IoT, twins, LLM
-www/                    project landing page
-Dockerfile              HTTP/WebSocket runtime image
-compose.yml             runtime, MQTT, gRPC, site and firmware simulator
-docs/                   architecture and operational documentation
-tests/                  local and source-compatibility tests
+src/wellmanifest/          implementation and compatibility namespace
+src/wellm/                 primary Python namespace aliases
+src/wellmanifest/plesk.py  project registry, planner and guarded executor
+src/wellmanifest/llmbench/ deterministic benchmark and LiteLLM adapter
+packages/js/               browser/Node SDK and TypeScript declarations
+crates/                    Rust, CLI, WASM, PyO3 and N-API scaffolds
+proto/                     protobuf/gRPC contract
+schemas/                   JSON Schema 2020-12 and OpenAPI/AsyncAPI
+examples/plesk/            real project registry and publication examples
+examples/benchmark/        offline/live model selection examples
+www/                       landing page
+compose*.yml               runtime and E2E environments
+docs/                      protocol, deployment and integration guides
+tests/                     parser, schema, Plesk and benchmark tests
 ```
 
-## Commands
+## Development and verification
 
 ```bash
-make test              # Python + Node tests
-make serve             # HTTP/WebSocket gateway
-make proto             # generate Python gRPC stubs
-make e2e               # local multi-client E2E
-make package           # source ZIP and tar.gz
+make test
+python -m pytest -q
+(cd packages/js && npm test)
+python -m compileall -q src
 ```
+
+Docker E2E:
+
+```bash
+docker compose -f compose.e2e.yml up \
+  --build --abort-on-container-exit --exit-code-from e2e
+```
+
+The Plesk connector live path is intentionally not exercised by default. Local
+and CI tests use deterministic fake receipts and do not mutate infrastructure.
 
 ## Security boundary
 
-WellManifest is not a generic remote shell. The reference service:
+wellm is not a generic remote shell. The reference runtime:
 
 - accepts only concrete URI Processes;
 - treats wildcards as contract scopes only;
-- executes registered adapters, never arbitrary source code;
-- supports idempotent run IDs and append-only events;
-- keeps digital twins read-only and unable to expand authority;
-- plans HTTP and GPIO operations without performing mutations by default;
-- returns stable `ERROR`, `WARNING` and `INFO` diagnostics.
+- invokes registered adapters, never arbitrary model-generated code;
+- keeps URI Twin data read-only and unable to expand authority;
+- resolves publication sources under an allowlisted workspace root;
+- defaults Plesk execution to dry-run;
+- requires a connector plan hash and signed grant before apply;
+- keeps secrets outside manifests, benchmark reports and source control;
+- records stable structured diagnostics and receipts;
+- validates LLM output independently of the selected provider.
 
-See [docs/SECURITY.md](docs/SECURITY.md) and
-[docs/URI_PROCESS.md](docs/URI_PROCESS.md).
+See [docs/SECURITY.md](docs/SECURITY.md),
+[docs/URI_PROCESS.md](docs/URI_PROCESS.md) and
+[docs/PLESK_PUBLICATION.md](docs/PLESK_PUBLICATION.md).
 
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Protocol and content negotiation](docs/PROTOCOL.md)
-- [Dialects and four syntaxes](docs/DIALECTS.md)
-- [Transport contracts](docs/TRANSPORTS.md)
-- [Generated HTTP/OpenAPI API](docs/HTTP_API.md)
-- [Plugin and external-language adapter model](docs/PLUGINS.md)
-- [URI Process and Contract AQL](docs/URI_PROCESS.md)
+- [Protocol and negotiation](docs/PROTOCOL.md)
+- [Dialects](docs/DIALECTS.md)
+- [Plesk publication](docs/PLESK_PUBLICATION.md)
+- [LLM benchmark](docs/LLM_BENCHMARK.md)
+- [HTTP API](docs/HTTP_API.md)
+- [Transports](docs/TRANSPORTS.md)
+- [URI Process](docs/URI_PROCESS.md)
 - [SOA, POA, CQRS and Event Sourcing](docs/SOA_POA_CQRS_ES.md)
-- [Digital twins and situation profiles](docs/DIGITAL_TWINS.md)
+- [Digital twins](docs/DIGITAL_TWINS.md)
 - [Firmware and Raspberry Pi](docs/FIRMWARE.md)
-- [LLM integration](docs/LLM.md)
-- [Docker and deployment](docs/DEPLOYMENT.md)
+- [Docker deployment](docs/DEPLOYMENT.md)
 - [E2E testing](docs/E2E.md)
 - [Compatibility matrix](docs/COMPATIBILITY.md)
-- [Implementation status and limitations](docs/IMPLEMENTATION_STATUS.md)
+- [Implementation status](docs/IMPLEMENTATION_STATUS.md)
 - [Roadmap](docs/ROADMAP.md)
 
-## Provenance of the governance examples
+## Governance compatibility
 
-The PyPI distribution name is `wellmanifest`. The external `well` package is
-not a hard dependency: `wellmanifest.integrations.well` detects it only when a
-compatible installation is present, without inventing or binding to an
-undocumented API.
+The supplied `wellmanifest/new-project` manifest, intent, schemas, diagnostics,
+stack profiles and procedural `CONTRIBUTING.md` are retained as regression
+fixtures. JSON Schema remains the deterministic data contract, and policy DSL
+imports remain independent of any LLM provider.
 
-The fixtures under `tests/fixtures/governance/` are copies of the supplied
-`wellmanifest/new-project` manifest, intent, schemas, diagnostics, stack
-profiles and `CONTRIBUTING.md`. Tests prove that the current JSON instances
-remain valid and the normative DSL blocks can be imported into policy IR.
+The external PyPI project named `well` is not a hard dependency. The integration
+adapter only detects it when a compatible installation is present; wellm does
+not invent or bind to an undocumented API.
 
 ## License
 

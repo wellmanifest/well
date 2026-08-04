@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc2/schemas/publication-receipt.schema.json",
+  "title": "WellManifest Plesk publication receipt",
+  "$defs": {
+    "Diagnostic": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "phase": {
+          "default": "runtime",
+          "title": "Phase",
+          "type": "string"
+        },
+        "dialect": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dialect"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "schema_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Path"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hint"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "title": "Diagnostic",
+      "type": "object"
+    },
+    "GateResult": {
+      "properties": {
+        "gate": {
+          "title": "Gate",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "evidence_step": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Step"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "gate",
+        "passed",
+        "message"
+      ],
+      "title": "GateResult",
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "ERROR",
+        "WARNING",
+        "INFO"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "SourcePosition": {
+      "properties": {
+        "line": {
+          "default": 1,
+          "title": "Line",
+          "type": "integer"
+        },
+        "column": {
+          "default": 1,
+          "title": "Column",
+          "type": "integer"
+        }
+      },
+      "title": "SourcePosition",
+      "type": "object"
+    },
+    "SourceRange": {
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/SourcePosition"
+        },
+        "end": {
+          "$ref": "#/$defs/SourcePosition"
+        }
+      },
+      "title": "SourceRange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "wellmanifest.plesk-publication-receipt/v1",
+      "default": "wellmanifest.plesk-publication-receipt/v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "manifest_hash": {
+      "title": "Manifest Hash",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "dry-run",
+        "apply"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    },
+    "connector_plan_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Connector Plan Hash"
+    },
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/GateResult"
+      },
+      "title": "Gates",
+      "type": "array"
+    },
+    "step_results": {
+      "additionalProperties": true,
+      "title": "Step Results",
+      "type": "object"
+    },
+    "diagnostics": {
+      "items": {
+        "$ref": "#/$defs/Diagnostic"
+      },
+      "title": "Diagnostics",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project_id",
+    "manifest_hash",
+    "mode",
+    "ok"
+  ],
+  "type": "object"
+}

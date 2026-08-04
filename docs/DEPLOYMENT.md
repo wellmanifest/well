@@ -28,19 +28,19 @@ services:
   application:
     image: example/application:1.0
     environment:
-      WELLMANIFEST_URL: http://wellmanifest:8080
+      WELLMANIFEST_URL: http://wellm:8080
     depends_on:
-      wellmanifest:
+      wellm:
         condition: service_healthy
 
-  wellmanifest:
+  wellm:
     build:
-      context: ./vendor/wellmanifest
+      context: ./vendor/wellm
     environment:
       WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
       WELLMANIFEST_EVENT_STORE: /data/events.jsonl
     volumes:
-      - wellmanifest-data:/data
+      - wellm-data:/data
       - ./contracts.json:/app/config/contracts.json:ro
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/healthz')"]
@@ -49,18 +49,45 @@ services:
       retries: 20
 
 volumes:
-  wellmanifest-data: {}
+  wellm-data: {}
 ```
+
+
+## Plesk publication sidecar
+
+Use [`compose.plesk.example.yml`](../compose.plesk.example.yml) as a minimal
+starting point:
+
+```bash
+docker compose -f compose.plesk.example.yml up --build wellm
+```
+
+The source workspace is mounted read-only. Keep connector/vault secrets out of
+Compose and attach the trusted Subactor Bridge or urirun node over a private
+network. `WELLMANIFEST_ENABLE_PLESK_EXECUTION` remains `0` until the Contract
+AQL, vault lease, exact plan hash and signed apply-grant boundary are configured.
+
+## LLM benchmark service profile
+
+The offline benchmark requires no provider key and is suitable for CI:
+
+```bash
+docker compose -f compose.e2e.yml run --rm plesk-benchmark-e2e
+```
+
+For a live LiteLLM benchmark, build/install the `benchmark` extra and inject
+provider credentials from the deployment secret manager. Do not place API keys
+in the benchmark YAML, image layer, Compose file or result artifact.
 
 ## Copy a native runtime from a builder image
 
 After publishing images, an application image can copy the Rust CLI:
 
 ```dockerfile
-FROM wellmanifest/runtime-rust:0.1.0 AS wellmanifest
+FROM wellmanifest/wellm-runtime-rust:0.2.0rc2 AS wellm
 FROM gcr.io/distroless/cc-debian12
-COPY --from=wellmanifest /usr/local/bin/wellmanifest /usr/local/bin/wellmanifest
-ENTRYPOINT ["/usr/local/bin/wellmanifest"]
+COPY --from=wellm /usr/local/bin/wellmanifest-native /usr/local/bin/wellm-native
+ENTRYPOINT ["/usr/local/bin/wellm-native"]
 ```
 
 The repository provides `docker/runtime-rust.Dockerfile` to build this target.
@@ -72,7 +99,7 @@ example tag exists in a registry.
 Two modes are supported:
 
 1. dependency-free JS SDK calls the remote runtime;
-2. `wellmanifest-wasm` handles lightweight JSON/YAML operations in the browser
+2. `wellmanifest-wasm` is the planned native browser path and handles lightweight JSON/YAML operations in the browser
    and falls back to the remote server for policy, proto, schemas or privileged
    URI Processes.
 
@@ -94,7 +121,7 @@ act as a thin client. Use Buildx for multi-architecture images:
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   -f Dockerfile \
-  -t registry.example/wellmanifest/runtime:0.1.0 \
+  -t registry.example/wellmanifest/wellm:0.2.0rc2 \
   --push .
 ```
 
@@ -130,6 +157,8 @@ revisions in envelopes/receipts.
 | `WELLMANIFEST_CONTRACTS` | `config/contracts.json` | Server-side contracts file. |
 | `WELLMANIFEST_DEFAULT_CONTRACT` | `contract:dev` | Development default only. |
 | `WELLMANIFEST_EVENT_STORE` | `/data/events.jsonl` | Event log path. |
+| `WELLMANIFEST_WORKSPACE_ROOT` | empty | Trusted root for `workspace:*` publication sources. |
+| `WELLMANIFEST_ENABLE_PLESK_EXECUTION` | `0` | Enable private `/v1/plesk/publish`; plan endpoint remains available. |
 | `WELLMANIFEST_MAX_BODY_BYTES` | deployment-defined | Recommended ingress limit. |
 | `MQTT_HOST` | `mqtt` | Bridge broker host. |
 | `MQTT_TOPIC` | `wellmanifest/v1/+/request/+` | Bridge subscription. |
@@ -147,5 +176,5 @@ A production release should publish:
 - `.proto` and JSON Schemas;
 - SBOM, provenance and conformance report.
 
-Version 0.1.0 packages source and build recipes; registry publication is not
+Version 0.2.0rc2 packages source and build recipes; registry publication is not
 performed by this artifact.

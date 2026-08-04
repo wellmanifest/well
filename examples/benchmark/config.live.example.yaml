@@ -1,0 +1,22 @@
+schema: wellmanifest.llm-benchmark/v1
+id: live-format-selection
+fixture_file: ../plesk/projects.json
+formats: [json, yaml, typed, typescript]
+repetitions: 1
+selection:
+  minimum_total_score: 0.90
+  minimum_format_score: 0.75
+  prefer: lowest_cost
+  preferred_operational_formats: [typed, typescript, json, yaml]
+  cache_ttl_seconds: 86400
+models:
+  - id: provider-a-small
+    model: provider-a/model-small
+    api_key_env: PROVIDER_A_API_KEY
+    temperature: 0
+    max_tokens: 4096
+  - id: provider-b-small
+    model: provider-b/model-small
+    api_key_env: PROVIDER_B_API_KEY
+    temperature: 0
+    max_tokens: 4096

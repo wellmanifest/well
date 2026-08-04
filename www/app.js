@@ -56,7 +56,7 @@ async function convert() {
     outputText.value = data.output ?? JSON.stringify(data, null, 2);
     renderDiagnostics(data.diagnostics, `${data.quality || 'NORMALIZED'} conversion complete.`);
   } catch (error) {
-    outputText.value = 'The static page is available, but the WellManifest API is not reachable.\n\nStart it with:\n  wellmanifest serve\nor:\n  docker compose up --build runtime';
+    outputText.value = 'The static page is available, but the WellManifest API is not reachable.\n\nStart it with:\n  wellm serve\nor:\n  docker compose up --build runtime';
     diagnostics.innerHTML = `<span class="error">ERROR</span> ${String(error.message || error)}`;
   } finally {
     convertButton.disabled = false;

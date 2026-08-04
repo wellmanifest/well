@@ -1,66 +1,101 @@
 # Compatibility and usage matrix
 
-## Packages and runtimes
+## Packages, services and runtimes
 
-| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity 0.1.0 |
+| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity `0.2.0rc2` |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | Protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | yes | yes | specified + schemas |
-| Python | `wellmanifest` | yes | client/server | no | yes | RPi | yes | tested reference |
-| JavaScript | `@wellmanifest/sdk` | client | yes | yes | Node | JS gateway | yes | tested client |
-| Rust | `wellmanifest-core` | yes | via service | WASM | yes | Linux RPi | yes | build scaffold |
-| WASM | `wellmanifest-wasm` | yes | fallback | yes | edge | limited | projections | build scaffold |
-| PyO3 | `wellmanifest-python` | yes | no | no | yes | RPi Linux | yes | build scaffold |
-| N-API | `wellmanifest-node` | yes | no | no | Node | edge | yes | build scaffold |
-| CLI | Python/Rust CLI | yes | calls server | dev tools | ops | RPi Linux | admin | Python tested |
-| HTTP | FastAPI gateway | n/a | yes | fetch | any language | thin client | yes | tested |
-| WebSocket | `/v1/ws` | n/a | yes | live editor | streaming | gateway | live status | implemented |
-| MQTT | bridge | gateway | broker | via broker lib | yes | yes | telemetry | source/Compose |
-| gRPC | RuntimeService | n/a | yes | grpc-web via proxy | yes | capable edge | streaming | contract/source |
-| CQRS/ES | JSONL store | yes | API | query | yes | gateway | receipts | tested demo |
-| URI Process | process router | yes | yes | client | yes | delegated | routing | tested demo |
-| Situation profile | evaluator | yes | URI/API | result only | yes | snapshot sender | primary | tested subset |
-| LLM planner | adapter contract | provider | service | client | yes | remote only | proposals | safe mock |
+| Python distribution | `wellm` | yes | client/server | no | yes | CPython RPi | control | tested reference |
+| Compatibility namespace | `wellmanifest` | yes | client/server | no | yes | CPython RPi | control | retained |
+| CLI | `wellm` | yes | calls service/node | dev tools | ops | Linux RPi | admin | tested |
+| HTTP/WS gateway | `wellm-server` | sidecar | yes | fetch/WS | any language | thin client | query | tested |
+| JavaScript SDK | `@wellmanifest/wellm-sdk` | client/helpers | yes | yes | Node | gateway | query | tested |
+| Plesk publication | `wellm.plesk` | planner/executor | bridge/node | plan only | yes | remote only | consumes read-only facts | fake-connector tested |
+| URI client | `wellm.urirun` | yes | canonical `/run` | JS equivalent | yes | thin client | bridge | tested |
+| LLM benchmark | `wellm.llmbench` | Python | provider APIs | report UI | yes | remote | planner | offline tested, live optional |
+| Rust | `wellmanifest-core` | yes | via service | through WASM | yes | Linux ARM | projection | scaffold |
+| WASM | `wellmanifest-wasm` | yes | fallback | yes | edge | limited | projection | scaffold |
+| PyO3 | `wellmanifest-python` | yes | no | no | yes | Linux RPi | control | scaffold |
+| N-API | `wellmanifest-node` | yes | no | yes/Node | Node | gateway | control | scaffold |
+| MQTT | `wellm-mqtt` | broker/bridge | yes | gateway | queue | device | events | source + Compose |
+| gRPC | `wellm-grpc` | generated | yes | gateway | SOA | edge | streams | source + Compose |
+| firmware client | MicroPython/C examples | yes | server | no | no | yes | telemetry | examples |
+| situation evaluator | Python adapter | yes | service | query | yes | telemetry | native | tested |
+| twin router | URI query process | yes | service | query | yes | telemetry | native | working demo |
+| CQRS/ES | JSONL event store | yes | service | read | yes | edge buffer | projection | tested |
+| Landing page | `www/` | static | CDN/sidecar | yes | no | no | dashboard | included |
 
-## Dialect conversion
+`yes` means the layer is designed for that environment. It does not imply every
+native implementation has feature parity. The Python runtime is the semantic
+reference for this release candidate.
 
-Legend: **L** lossless/semantic, **N** normalized, **I** IR required, **P**
-partial subset, `—` unsupported in 0.1.0.
+## Plesk publication variants
 
-| From / to | JSON | YAML | TOML | HCL | typed | policy | proto3 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| JSON | L | N | N | N | N | — | I/P |
-| YAML JSON profile | N | L | N | N | N | — | I/P |
-| TOML | N | N | L | N | N | — | I/P |
-| HCL data subset | N | N | N | N | N | — | — |
-| typed data | N | N | N | N | N | I | I |
-| policy DSL | I | I | — | — | I | N | — |
-| proto3 | I/P | I/P | — | — | I | — | N/descriptor |
+| Variant | Caller | Execution endpoint | Twin use | Mutation | Recommended use |
+|---|---|---|---|---:|---|
+| local plan | `wellm plesk-plan` | none | pinned read-only metadata | no | CI, review, GitOps artifact generation |
+| trusted dry-run | `wellm plesk-publish` | trusted bridge/node `/run` | readiness context | no | integration and operator preflight |
+| guarded apply | `wellm plesk-publish --apply` | trusted bridge/node | readiness context | yes, exact hash + signed grant | controlled release |
+| HTTP plan service | `/v1/plesk/plan` | wellm server | read-only | no | browser/backend clients |
+| HTTP execution service | `/v1/plesk/publish` | wellm server → bridge/node | read-only | disabled by default | private control plane only |
+| Subactor autonomous path | Control → Bridge → connector | isolated connector node | actor/environment portrait | gated | production autonomy |
 
-## Environment selection
+## Format and projection compatibility
 
-| Environment declaration | Preferred runtime | Fallback | Typical transport |
+| Source / target | Data import | Data export | Full IR | Round-trip expectation |
+|---|---:|---:|---:|---|
+| JSON RFC 8259 | yes | yes | yes | lossless for JSON values |
+| YAML 1.2 JSON profile | yes | yes | yes | normalized; comments/anchors not preserved |
+| TOML | yes | yes | data only | lossy for unsupported TOML presentation details |
+| HCL-shaped data | yes | yes | parser IR | normalized, not byte-identical HCL |
+| typed WellManifest | yes | yes | yes | canonical formatter output |
+| policy-sh | policy IR | generated IR | yes | full semantics in IR, not plain data |
+| safe TypeScript data module | yes | yes | data/IR | restricted subset only; no code execution |
+| proto3 | descriptor-oriented | source/IR scaffold | yes | canonical format remains `.proto`/descriptor set |
+
+## LLM benchmark matrix
+
+| Format | Parse check | Schema check | Semantic check | Default benchmark |
+|---|---:|---:|---:|---:|
+| JSON | yes | yes | exact normalized equality | yes |
+| YAML | yes | yes | exact normalized equality | yes |
+| typed WellManifest | yes | yes | exact normalized equality | yes |
+| TypeScript data module | yes | yes | exact normalized equality | yes |
+| HCL | yes | yes | exact normalized equality | opt-in |
+
+Selection policies:
+
+| Policy | Primary criterion | Tie-breakers |
+|---|---|---|
+| `lowest_cost` | lowest known measured total cost among capable models | score, latency |
+| `highest_score` | highest deterministic score | known cost, latency |
+| `lowest_latency` | lowest measured average latency | score, known cost |
+
+A model is not capable unless it passes the configured total threshold and the
+minimum score for every required format.
+
+## Environment matrix
+
+| Environment | Preferred deployment | Local capabilities | Remote fallback |
 |---|---|---|---|
-| `frontend` | WASM/JS SDK | remote gateway | HTTP/WS |
-| `backend` | Rust/Python in-process | remote gateway | native/HTTP/gRPC |
-| `firmware` | thin client | edge gateway | MQTT/HTTP/protobuf |
-| `rpi` | native Rust or Python | remote gateway | native/MQTT/HTTP |
-| `digital-twin` | server projection/router | remote service | HTTP/gRPC/events |
-| `datacenter` | worker pools | regional gateway | gRPC/queues |
+| browser | JS SDK + optional WASM | JSON/YAML/basic typed conversion | HTTP/WS wellm service |
+| Node backend | JS SDK or N-API later | plan helpers and URI client | HTTP/gRPC service |
+| Python backend | `wellm` | full reference runtime, Plesk planner, benchmark | remote gateway/provider |
+| Rust backend | native crate when completed | JSON/YAML core scaffold | Python/server reference |
+| Raspberry Pi Linux | Python package or ARM container | thin/local operations | server/edge gateway |
+| MicroPython/MCU | small envelope client | serialization and transport | all parsing/validation/execution |
+| Kubernetes/datacenter | sidecar/service | horizontally deployable gateway | connector-specific control planes |
+| digital twin | read-only service/profile | facts and routing projection | effect adapter remains separate |
 
-## Digital-twin artifacts
+## Security compatibility
 
-| Artifact | Mutable? | Contains authority? | Purpose |
-|---|---:|---:|---|
-| portrait/profile | no | references current contract only | routing fit and workload snapshot |
-| Contract AQL | controlled | yes | exact capability boundary |
-| situation snapshot | append/versioned | no | facts used by metrics |
-| situation profile | versioned | no mutation authority | deterministic assessment logic |
-| routing decision | event/receipt | no new authority | reproducible candidate selection |
-| execution receipt | immutable | evidence only | prove result/EQL handoff |
+Every environment must preserve these invariants:
 
-## Support policy
-
-Version 0.1.0 is experimental. JSON/YAML, JSON Schema, Python runtime and JS SDK
-are the conformance baseline. Full HCL, proto, native bindings and distributed
-stores require further compatibility and operational testing before stable
-claims.
+1. wildcard patterns exist only in authority scopes;
+2. execution uses a concrete URI without `*`;
+3. manifests contain no credentials;
+4. adapters are explicitly registered;
+5. Plesk apply uses the exact dry-run hash and signed grant;
+6. LLM output is untrusted until parsed, schema-validated and policy-checked;
+7. a runtime profile never expands Contract AQL authority;
+8. receipts and diagnostics remain stable across local and remote bindings.
