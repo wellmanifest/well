@@ -64,8 +64,8 @@ wheels = [
 ]
 
 [[package]]
-name = "wellmanifest-well"
-version = "0.1.4"
+name = "wellm"
+version = "0.1.6"
 source = { editable = "." }
 
 [package.optional-dependencies]
