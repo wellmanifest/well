@@ -1,0 +1,12 @@
+#!/usr/bin/env wellmanifest-policy
+DOCUMENT GOVERNANCE_CAPABILITIES
+VERSION 1
+MODE STRICT
+
+RULE AQL-URI-001 TYPE REQUIRED
+WHEN PRINCIPAL = "bot:project-operator-bot"
+DO ALLOW URI_PROCESS "youtube://*"
+DO ALLOW URI_PROCESS "situation://profile/evaluate/query"
+DO ALLOW URI_PROCESS "twin://router/delegation/query/decide"
+FORBID URI_PROCESS "flow://host/remote-access/command/provision"
+ASSERT WILDCARD_IS_PERMISSION_NOT_EXECUTABLE_ADDRESS

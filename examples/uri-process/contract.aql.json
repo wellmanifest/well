@@ -1,0 +1,13 @@
+{
+  "schema": "wellmanifest.contract/v1",
+  "id": "contract:youtube-readonly",
+  "status": "active",
+  "principal": "bot:marketing-operator-bot",
+  "allowedUriProcesses": ["youtube://channel/video/query/*"],
+  "allowedDialects": ["json", "yaml", "proto3"],
+  "limits": {
+    "maxRequestsPerMinute": 30,
+    "maxPayloadBytes": 65536,
+    "mutationsAllowed": false
+  }
+}

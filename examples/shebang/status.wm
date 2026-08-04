@@ -1,0 +1,7 @@
+#!/usr/bin/env wellmanifest-typed
+#@wellmanifest kind="data" schema="../../schemas/status.schema.json"
+status {
+  operation: FolderOperationId = "002-cv-pdf2md"
+  value: OperationState = "SUCCEEDED"
+  errors: [OperationError] = []
+}

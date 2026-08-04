@@ -1,0 +1,101 @@
+name: wellmanifest
+
+x-runtime: &runtime
+  image: wellmanifest/runtime:0.1.0-dev
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment:
+    WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+    WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
+    WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+  volumes:
+    - wellmanifest-data:/data
+    - ./config/contracts.json:/app/config/contracts.json:ro
+
+services:
+  runtime:
+    <<: *runtime
+    ports:
+      - "8080:8080"
+    networks: [public, runtime]
+
+  grpc:
+    <<: *runtime
+    entrypoint: ["wellmanifest-grpc"]
+    environment:
+      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+      WELLMANIFEST_EVENT_STORE: /data/grpc-events.jsonl
+      WELLMANIFEST_GRPC_ADDRESS: 0.0.0.0:50051
+    ports:
+      - "50051:50051"
+    networks: [runtime]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; grpc.channel_ready_future(grpc.insecure_channel('127.0.0.1:50051')).result(timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  mqtt:
+    image: eclipse-mosquitto:2.0.21
+    command: ["mosquitto", "-c", "/mosquitto-no-auth.conf"]
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto-no-auth.conf:ro
+    ports:
+      - "1883:1883"
+    networks: [runtime]
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -t '$$SYS/broker/version' -C 1 -W 2 >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mqtt-bridge:
+    <<: *runtime
+    entrypoint: ["wellmanifest-mqtt"]
+    environment:
+      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+      WELLMANIFEST_EVENT_STORE: /data/mqtt-events.jsonl
+      WELLMANIFEST_MQTT_HOST: mqtt
+      WELLMANIFEST_MQTT_PORT: 1883
+      WELLMANIFEST_TENANT: default
+    depends_on:
+      mqtt:
+        condition: service_healthy
+    networks: [runtime]
+    healthcheck:
+      disable: true
+
+  www:
+    build:
+      context: .
+      dockerfile: docker/www.Dockerfile
+    image: wellmanifest/www:0.1.0-dev
+    ports:
+      - "8088:8080"
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [public, runtime]
+
+  firmware-sim:
+    profiles: ["demo"]
+    build:
+      context: .
+      dockerfile: docker/firmware-sim.Dockerfile
+    environment:
+      WELLMANIFEST_URL: http://runtime:8080
+      WELLMANIFEST_CONTRACT: contract:firmware-thin
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [runtime]
+
+volumes:
+  wellmanifest-data: {}
+
+networks:
+  public: {}
+  runtime:
+    internal: false

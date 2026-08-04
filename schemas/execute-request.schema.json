@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/execute-request.schema.json",
+  "title": "WellManifest URI Process execution request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["uri", "payload"],
+  "properties": {
+    "uri": {"type": "string", "pattern": "^[a-z][a-z0-9+.-]*://[^\\s*]+$"},
+    "payload": true,
+    "mode": {"enum": ["query", "command", "execute", "plan", "dry-run"], "default": "execute"},
+    "contract_ref": {"type": ["string", "null"]},
+    "allowed_uri_processes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "run_id": {"type": "string", "pattern": "^[a-zA-Z0-9._:-]{0,160}$"},
+    "runtime": {"type": "object"}
+  }
+}

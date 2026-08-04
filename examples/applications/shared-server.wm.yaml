@@ -1,0 +1,25 @@
+schema: wellmanifest.application/v1
+id: application:shared-device-workload@1
+runtime:
+  runtime_ref: runtime:remote-gateway@1
+  environment: server
+  execution: remote
+contract_ref: contract:firmware-thin
+steps:
+  - id: validate-config
+    uri: wellmanifest://runtime/validate/execute
+    mode: query
+    payload:
+      source:
+        board: raspberry-pi-4
+      dialect: json
+      schema:
+        type: object
+        required: [board]
+  - id: plan-gpio
+    uri: gpio://rpi/pin/configure/plan
+    mode: plan
+    dependsOn: [validate-config]
+    payload:
+      pin: 17
+      direction: out

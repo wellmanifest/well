@@ -1,0 +1,44 @@
+{
+  "schema": "wellmanifest.contract-registry/v1",
+  "contracts": {
+    "contract:dev": {
+      "status": "active",
+      "allowedUriProcesses": [
+        "wellmanifest://*",
+        "situation://*",
+        "twin://*",
+        "youtube://channel/video/query/list",
+        "flow://host/remote-access/query/preflight",
+        "gpio://rpi/pin/configure/plan",
+        "soa://service/http/request/plan",
+        "llm://planner/manifest/query/propose"
+      ]
+    },
+    "contract:frontend-demo": {
+      "status": "active",
+      "allowedUriProcesses": [
+        "wellmanifest://runtime/convert/execute",
+        "wellmanifest://runtime/validate/execute",
+        "youtube://channel/video/query/list"
+      ]
+    },
+    "contract:firmware-thin": {
+      "status": "active",
+      "allowedUriProcesses": [
+        "wellmanifest://runtime/convert/execute",
+        "gpio://rpi/pin/configure/plan",
+        "twin://system/profile/query/get",
+        "wellmanifest://runtime/validate/execute",
+        "wellmanifest://application/run/execute"
+      ]
+    },
+    "contract:digital-twin-readonly": {
+      "status": "active",
+      "allowedUriProcesses": [
+        "twin://*",
+        "situation://profile/evaluate/query",
+        "wellmanifest://events/stream/query"
+      ]
+    }
+  }
+}

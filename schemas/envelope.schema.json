@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/envelope.schema.json",
+  "title": "WellManifest protocol envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spec", "id", "timestamp", "kind", "operation", "content_type", "accept", "runtime", "payload"],
+  "properties": {
+    "spec": {"const": "wellmanifest.protocol/v1"},
+    "id": {"type": "string", "minLength": 1, "maxLength": 160},
+    "correlation_id": {"type": ["string", "null"]},
+    "causation_id": {"type": ["string", "null"]},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "kind": {"enum": ["command", "query", "event", "result", "diagnostic", "handshake"]},
+    "operation": {"type": "string", "pattern": "^[a-z][a-z0-9+.-]*://[^\\s*]+$"},
+    "content_type": {"type": "string", "minLength": 1},
+    "accept": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "schema_ref": {"type": ["string", "null"]},
+    "contract_ref": {"type": ["string", "null"]},
+    "idempotency_key": {"type": ["string", "null"], "maxLength": 160},
+    "runtime": {"$ref": "#/$defs/runtime"},
+    "payload": true,
+    "diagnostics": {"type": "array", "items": {"$ref": "diagnostic.schema.json"}},
+    "metadata": {"type": "object"}
+  },
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime_ref", "environment", "execution", "resources"],
+      "properties": {
+        "runtime_ref": {"type": "string", "minLength": 1},
+        "environment": {"enum": ["frontend", "backend", "firmware", "rpi", "iot", "digital-twin", "server", "remote"]},
+        "execution": {"enum": ["local", "remote", "auto"]},
+        "resources": {"type": "object"}
+      }
+    }
+  }
+}

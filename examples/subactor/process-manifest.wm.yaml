@@ -1,0 +1,21 @@
+schema: SUBACTOR_PROCESS_MANIFEST_V1
+ticket_id: PLF-075
+owner: actor:operations-lead
+contract_ref: contract:dev
+idempotency_namespace: PLF-075
+steps:
+  - id: remote-access-preflight
+    actor: bot:operations-operator-bot
+    uri: flow://host/remote-access/query/preflight
+    payload:
+      ticket_id: PLF-075
+    depends_on: []
+    human_approval: false
+    status: READY
+  - id: remote-access-provision
+    actor: service:remote-access-bridge
+    uri: flow://host/remote-access/command/provision
+    payload: {}
+    depends_on: [remote-access-preflight]
+    human_approval: true
+    status: BLOCKED

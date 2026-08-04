@@ -1,0 +1,12 @@
+{
+  "schema": "wellmanifest.eql/v1",
+  "id": "eql:public-site-bootstrap-complete/v1",
+  "assertions": [
+    "receipts.inventory.status == \"DONE\"",
+    "receipts.domain.verified == true",
+    "receipts.dns.verified == true",
+    "receipts.tls.verified == true",
+    "receipts.content.verified == true"
+  ],
+  "terminal_status": "VERIFIED"
+}

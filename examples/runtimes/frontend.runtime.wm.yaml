@@ -1,0 +1,12 @@
+schema: wellmanifest.runtime-profile/v1
+id: runtime:frontend-wasm@1
+environment: frontend
+execution: auto
+artifacts:
+  local: wellmanifest-wasm
+  client: '@wellmanifest/sdk'
+  fallback: runtime:remote-gateway@1
+features: [json, yaml, websocket, schema]
+resources:
+  max_input_bytes: 1048576
+  timeout_ms: 5000

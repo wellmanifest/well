@@ -1,0 +1,12 @@
+schema: wellmanifest.runtime-profile/v1
+id: runtime:firmware-thin@1
+environment: firmware
+execution: remote
+artifacts:
+  client: wellmanifest-envelope-client
+  gateway: runtime:rpi-edge@1
+features: [http, mqtt-v5, protobuf, remote-convert, remote-execute]
+resources:
+  memory_kib: 128
+  max_response_bytes: 4096
+  timeout_ms: 3000

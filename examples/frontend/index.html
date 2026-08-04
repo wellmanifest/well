@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>WellManifest frontend example</title>
+<button id="convert">Convert YAML → JSON</button>
+<pre id="output"></pre>
+<script type="module">
+  import {WellManifestClient} from "../../packages/js/src/index.js";
+  const client = new WellManifestClient({baseUrl: "http://localhost:8080"});
+  document.querySelector("#convert").addEventListener("click", async () => {
+    const result = await client.convert("status: ok\n", {from: "yaml", to: "json"});
+    document.querySelector("#output").textContent = result.output;
+  });
+</script>

@@ -1,0 +1,15 @@
+[package]
+name = "wellmanifest-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "wellmanifest-native"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+wellmanifest-core = { path = "../wellmanifest-core" }

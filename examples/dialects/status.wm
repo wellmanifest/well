@@ -1,0 +1,28 @@
+#!/usr/bin/env wellmanifest-typed
+#@wellmanifest dialect="typed@1" kind="module"
+
+type OperationStatus {
+  type FolderOperationId = String
+
+  enum OperationState {
+    PENDING
+    RUNNING
+    SUCCEEDED
+    FAILED
+  }
+
+  type OperationError {
+    code: String
+    message: String
+  }
+
+  operation: FolderOperationId
+  value: OperationState
+  errors: [OperationError]
+}
+
+data status: OperationStatus = {
+  operation = "002-cv-pdf2md"
+  value = SUCCEEDED
+  errors = []
+}

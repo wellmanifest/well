@@ -1,0 +1,40 @@
+{
+  "inventory_rows": [
+    {
+      "id": "plesk-domain",
+      "available": true,
+      "role_dns": false,
+      "role_tls": false,
+      "role_domain": true,
+      "role_content": false,
+      "cloudflaredns_present": false
+    },
+    {
+      "id": "cloudflare-dns",
+      "available": true,
+      "role_dns": true,
+      "role_tls": false,
+      "role_domain": false,
+      "role_content": false,
+      "cloudflaredns_present": true
+    },
+    {
+      "id": "lets-encrypt",
+      "available": true,
+      "role_dns": false,
+      "role_tls": true,
+      "role_domain": false,
+      "role_content": false,
+      "cloudflaredns_present": false
+    },
+    {
+      "id": "plesk-content",
+      "available": true,
+      "role_dns": false,
+      "role_tls": false,
+      "role_domain": false,
+      "role_content": true,
+      "cloudflaredns_present": false
+    }
+  ]
+}

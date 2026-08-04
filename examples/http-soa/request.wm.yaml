@@ -1,0 +1,13 @@
+schema: wellmanifest.soa-http-plan/v1
+service: catalog
+request:
+  method: POST
+  url: https://api.example.invalid/catalog/items
+  headers:
+    accept: application/json
+  body:
+    sku: WM-001
+    quantity: 1
+runtime:
+  uri: soa://service/http/request/plan
+  contractRef: contract:dev

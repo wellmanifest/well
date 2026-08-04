@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/status.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "value", "errors"],
+      "properties": {
+        "operation": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9-]+$"},
+        "value": {"enum": ["PENDING", "RUNNING", "SUCCEEDED", "FAILED"]},
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "message"],
+            "properties": {
+              "code": {"type": "string"},
+              "message": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

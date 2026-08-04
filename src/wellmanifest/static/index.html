@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="WellManifest — a protocol and polyglot runtime for manifests, policies, URI Processes and real-time format negotiation.">
+  <title>WellManifest — one protocol, many dialects</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="WellManifest home">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <span>wellmanifest</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#architecture">Architecture</a>
+      <a href="#runtimes">Runtimes</a>
+      <a href="#playground">Playground</a>
+      <a href="#security">Security</a>
+    </nav>
+    <span id="health" class="health unknown">runtime: checking</span>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <div class="eyebrow">PROTOCOL · DSL · RUNTIME</div>
+        <h1>One manifest.<br><span>Every environment.</span></h1>
+        <p class="lede">Exchange typed configuration, procedural policy and URI Processes between browsers, services, Raspberry Pi devices, queues and digital twins—in the format each side prefers.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#playground">Try conversion</a>
+          <a class="button secondary" href="/docs" data-local-doc="README.md">Explore the repository</a>
+        </div>
+        <div class="protocol-strip" aria-label="Supported layers">
+          <span>JSON</span><span>YAML</span><span>HCL</span><span>typed@1</span><span>proto3</span><span>policy-sh</span>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="WellManifest envelope example">
+        <div class="card-bar"><span></span><span></span><span></span><b>envelope.wm.yaml</b></div>
+        <pre><code><i>spec:</i> wellmanifest.protocol/v1
+<i>kind:</i> command
+<i>operation:</i> <strong>youtube://channel/video/query/list</strong>
+<i>contract_ref:</i> contract:frontend-demo
+<i>runtime:</i>
+  <i>environment:</i> frontend
+  <i>execution:</i> remote
+<i>content_type:</i> yaml
+<i>accept:</i> [json, proto3]
+<i>payload:</i>
+  channel: ours</code></pre>
+        <div class="flow-pills"><span>validate</span><b>→</b><span>authorize</span><b>→</b><span>convert</span><b>→</b><span>receipt</span></div>
+      </div>
+    </section>
+
+    <section class="metrics shell" aria-label="Core properties">
+      <article><b>7</b><span>dialect frontends</span></article>
+      <article><b>4</b><span>transport families</span></article>
+      <article><b>3</b><span>diagnostic severities</span></article>
+      <article><b>0</b><span>implicit authority grants</span></article>
+    </section>
+
+    <section id="architecture" class="section shell">
+      <div class="section-heading">
+        <div><span class="eyebrow">ARCHITECTURE</span><h2>Different syntax. Common meaning.</h2></div>
+        <p>Each dialect has its own parser. Documents normalize into a canonical data/IR model, pass schema and policy checks, then travel inside one envelope.</p>
+      </div>
+      <div class="architecture-grid">
+        <div class="arch-column source">
+          <h3>Author</h3>
+          <span>JSON / YAML / TOML</span>
+          <span>HCL-compatible</span>
+          <span>Strongly typed DSL</span>
+          <span>Policy DSL</span>
+          <span>proto3</span>
+        </div>
+        <div class="arch-core">
+          <div class="core-ring ring-one"></div>
+          <div class="core-ring ring-two"></div>
+          <div class="core-label"><small>CANONICAL</small><b>WellManifest</b><span>Envelope + IR</span></div>
+        </div>
+        <div class="arch-column target">
+          <h3>Run</h3>
+          <span>Browser / WASM</span>
+          <span>Backend / gRPC</span>
+          <span>MQTT / IoT</span>
+          <span>Raspberry Pi</span>
+          <span>Digital twins</span>
+        </div>
+      </div>
+      <div class="transport-line"><span>HTTP</span><span>WebSocket</span><span>MQTT v5</span><span>protobuf / gRPC</span><span>CQRS / Events</span></div>
+    </section>
+
+    <section id="runtimes" class="section runtimes-section">
+      <div class="shell">
+        <div class="section-heading">
+          <div><span class="eyebrow">POLYGLOT RUNTIMES</span><h2>Local when capable. Remote when constrained.</h2></div>
+          <p>A runtime declaration selects a compatible implementation; it never uploads arbitrary code or expands Contract AQL authority.</p>
+        </div>
+        <div class="runtime-cards">
+          <article><div class="icon">◫</div><h3>Frontend</h3><p>Dependency-free JavaScript SDK, WebSocket streams and a WASM build path.</p><code>runtime:browser-wasm@1</code></article>
+          <article><div class="icon">⌘</div><h3>Backend</h3><p>Python reference service, Rust core, HTTP/gRPC APIs and append-only events.</p><code>runtime:backend-python@1</code></article>
+          <article><div class="icon">⌁</div><h3>Firmware</h3><p>Thin HTTP/MQTT clients delegate parsing and execution to an edge gateway.</p><code>runtime:firmware-thin@1</code></article>
+          <article><div class="icon">◇</div><h3>Digital twin</h3><p>Read-only portraits, situation metrics and authority-first actor routing.</p><code>runtime:digital-twin@1</code></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="playground" class="section shell playground">
+      <div class="section-heading">
+        <div><span class="eyebrow">LIVE PLAYGROUND</span><h2>Convert through the running gateway.</h2></div>
+        <p>The page calls <code>/v1/convert</code>. Start the runtime locally or with Compose to use it.</p>
+      </div>
+      <div class="playground-grid">
+        <div class="editor-panel">
+          <div class="panel-title"><b>Input</b><label>Dialect <select id="sourceDialect"><option value="yaml">YAML</option><option value="json">JSON</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="toml">TOML</option></select></label></div>
+          <textarea id="sourceText" spellcheck="false">status:
+  operation: 002-cv-pdf2md
+  value: SUCCEEDED
+  errors: []</textarea>
+        </div>
+        <button id="convertButton" class="convert-button" type="button" aria-label="Convert">⇄</button>
+        <div class="editor-panel">
+          <div class="panel-title"><b>Output</b><label>Dialect <select id="targetDialect"><option value="json">JSON</option><option value="yaml">YAML</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="toml">TOML</option></select></label></div>
+          <textarea id="outputText" readonly spellcheck="false">Select Convert to contact the runtime.</textarea>
+        </div>
+      </div>
+      <div id="diagnostics" class="diagnostics"><span class="info">INFO</span> Ready.</div>
+    </section>
+
+    <section id="security" class="section security-section">
+      <div class="shell security-grid">
+        <div>
+          <span class="eyebrow">FAIL-CLOSED BY DESIGN</span>
+          <h2>Wildcards grant scope.<br>Only concrete URIs execute.</h2>
+          <p><code>youtube://*</code> may appear in a Contract AQL permission. The process router accepts only a concrete address such as <code>youtube://channel/video/query/list</code>, a valid contract and a registered adapter.</p>
+        </div>
+        <ol>
+          <li><b>1</b><span><strong>Parse</strong> without shell evaluation</span></li>
+          <li><b>2</b><span><strong>Validate</strong> type and schema</span></li>
+          <li><b>3</b><span><strong>Authorize</strong> server-side contract</span></li>
+          <li><b>4</b><span><strong>Execute</strong> registered adapter only</span></li>
+          <li><b>5</b><span><strong>Record</strong> idempotent receipt/event</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section shell protocol-table-section">
+      <div class="section-heading">
+        <div><span class="eyebrow">ECOSYSTEM</span><h2>One protocol across the stack.</h2></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Use</th><th>Package / service</th><th>Preferred runtime</th><th>Transport</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Browser configuration</td><td><code>@wellmanifest/sdk</code></td><td>JS / WASM</td><td>HTTP · WS</td><td><span class="tag working">working</span></td></tr>
+            <tr><td>Backend orchestration</td><td><code>wellmanifest-server</code></td><td>Python / Rust</td><td>HTTP · gRPC</td><td><span class="tag working">working MVP</span></td></tr>
+            <tr><td>IoT / firmware</td><td>thin client + bridge</td><td>remote edge</td><td>MQTT · protobuf</td><td><span class="tag source">source</span></td></tr>
+            <tr><td>Digital twins</td><td>situation + router</td><td>read-only server</td><td>events · URI</td><td><span class="tag working">working demo</span></td></tr>
+            <tr><td>Native bindings</td><td>Rust / PyO3 / N-API</td><td>local native</td><td>FFI</td><td><span class="tag source">scaffold</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cta shell">
+      <div><span class="eyebrow">START WITH A SIDECAR</span><h2>Give every language one manifest gateway.</h2></div>
+      <pre><code>docker compose up --build runtime
+curl http://localhost:8080/v1/capabilities</code></pre>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <div class="brand"><span class="brand-mark">W</span><span>wellmanifest</span></div>
+    <p>Experimental protocol and reference implementation · Apache-2.0</p>
+    <div><a href="#top">Back to top ↑</a></div>
+  </footer>
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

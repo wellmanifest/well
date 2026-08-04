@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/contract.schema.json",
+  "title": "WellManifest capability contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "status", "allowedUriProcesses"],
+  "properties": {
+    "schema": {"const": "wellmanifest.contract/v1"},
+    "id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["active", "suspended", "revoked"]},
+    "principal": {"type": "string"},
+    "allowedUriProcesses": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z*][a-z0-9+.*-]*://.*$|^\\*$"},
+      "uniqueItems": true
+    },
+    "allowedDialects": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "limits": {"type": "object"}
+  }
+}

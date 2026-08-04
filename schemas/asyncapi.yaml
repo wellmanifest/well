@@ -1,0 +1,60 @@
+asyncapi: 3.0.0
+info:
+  title: WellManifest real-time protocol
+  version: 0.1.0
+  description: MQTT v5 and WebSocket exchange of WellManifest envelopes.
+servers:
+  mqtt:
+    host: localhost:1883
+    protocol: mqtt
+    description: Development MQTT v5 broker.
+  websocket:
+    host: localhost:8080
+    pathname: /v1/ws
+    protocol: wss
+    description: Use ws in local development and wss behind TLS in production.
+channels:
+  runtimeRequests:
+    address: wellmanifest/v1/{tenant}/request/{client}
+    parameters:
+      tenant: {description: Tenant identifier}
+      client: {description: Device or client identifier}
+    messages:
+      envelope:
+        $ref: '#/components/messages/Envelope'
+  runtimeResponses:
+    address: wellmanifest/v1/{tenant}/response/{client}
+    parameters:
+      tenant: {description: Tenant identifier}
+      client: {description: Device or client identifier}
+    messages:
+      envelope:
+        $ref: '#/components/messages/Envelope'
+  websocketExchange:
+    address: /v1/ws
+    messages:
+      envelope:
+        $ref: '#/components/messages/Envelope'
+operations:
+  receiveRuntimeRequest:
+    action: receive
+    channel: {$ref: '#/channels/runtimeRequests'}
+    messages:
+      - {$ref: '#/channels/runtimeRequests/messages/envelope'}
+  sendRuntimeResponse:
+    action: send
+    channel: {$ref: '#/channels/runtimeResponses'}
+    messages:
+      - {$ref: '#/channels/runtimeResponses/messages/envelope'}
+  exchangeWebSocketEnvelope:
+    action: send
+    channel: {$ref: '#/channels/websocketExchange'}
+    messages:
+      - {$ref: '#/channels/websocketExchange/messages/envelope'}
+components:
+  messages:
+    Envelope:
+      name: WellManifestEnvelope
+      contentType: application/wellmanifest+json
+      payload:
+        $ref: ./envelope.schema.json

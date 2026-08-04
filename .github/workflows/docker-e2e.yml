@@ -1,0 +1,35 @@
+name: Docker E2E
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Dockerfile*'
+      - 'compose*.yml'
+      - 'docker/**'
+      - 'src/**'
+      - 'crates/**'
+      - 'packages/**'
+      - 'proto/**'
+      - 'scripts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f compose.e2e.yml config
+      - run: docker compose -f compose.e2e.yml up --build --abort-on-container-exit --exit-code-from e2e
+      - if: always()
+        run: docker compose -f compose.e2e.yml logs --no-color > docker-e2e.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-e2e-log
+          path: docker-e2e.log
+      - if: always()
+        run: docker compose -f compose.e2e.yml down -v --remove-orphans

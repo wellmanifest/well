@@ -1,0 +1,19 @@
+{
+  "requirements": ["situation.evaluate"],
+  "twins": [
+    {
+      "id": "twin:operations-operator-bot",
+      "contractStatus": "active",
+      "allowedCapabilities": ["situation.evaluate", "ticket.read"],
+      "specializations": ["situation.evaluate"],
+      "workload": 0.2
+    },
+    {
+      "id": "twin:generic-service",
+      "contractStatus": "active",
+      "allowedCapabilities": ["ticket.read"],
+      "specializations": [],
+      "workload": 0.0
+    }
+  ]
+}

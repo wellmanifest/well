@@ -1,0 +1,13 @@
+{
+  "uri": "youtube://channel/video/query/list",
+  "mode": "query",
+  "payload": {"channel": "ours"},
+  "contract_ref": "contract:dev",
+  "run_id": "ticket-002:youtube-list:1",
+  "runtime": {
+    "runtime_ref": "remote-service",
+    "environment": "remote",
+    "execution": "remote",
+    "resources": {}
+  }
+}

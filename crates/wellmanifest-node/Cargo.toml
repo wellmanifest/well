@@ -1,0 +1,19 @@
+[package]
+name = "wellmanifest-node"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+build = "build.rs"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi.workspace = true
+napi-derive.workspace = true
+wellmanifest-core = { path = "../wellmanifest-core" }
+
+[build-dependencies]
+napi-build.workspace = true

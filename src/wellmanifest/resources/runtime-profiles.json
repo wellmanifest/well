@@ -1,0 +1,58 @@
+{
+  "schema": "wellmanifest.runtime-profiles/v1",
+  "profiles": [
+    {
+      "id": "runtime:frontend-wasm@1",
+      "environment": "frontend",
+      "execution": [
+        "local",
+        "remote"
+      ],
+      "artifact": "wellmanifest-wasm",
+      "fallback": "https://runtime.example.invalid"
+    },
+    {
+      "id": "runtime:backend-python@1",
+      "environment": "backend",
+      "execution": [
+        "local",
+        "remote"
+      ],
+      "artifact": "wellmanifest"
+    },
+    {
+      "id": "runtime:backend-rust@1",
+      "environment": "backend",
+      "execution": [
+        "local",
+        "sidecar"
+      ],
+      "artifact": "wellmanifest-cli"
+    },
+    {
+      "id": "runtime:rpi-edge@1",
+      "environment": "rpi",
+      "execution": [
+        "sidecar",
+        "remote"
+      ],
+      "artifact": "wellmanifest:arm64"
+    },
+    {
+      "id": "runtime:firmware-thin@1",
+      "environment": "firmware",
+      "execution": [
+        "remote"
+      ],
+      "artifact": "wellmanifest-envelope-client"
+    },
+    {
+      "id": "runtime:digital-twin-readonly@1",
+      "environment": "digital-twin",
+      "execution": [
+        "remote"
+      ],
+      "artifact": "wellmanifest-twin-router"
+    }
+  ]
+}

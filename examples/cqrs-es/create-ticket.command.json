@@ -1,0 +1,45 @@
+{
+  "spec": "wellmanifest.protocol/v1",
+  "id": "command-ticket-002",
+  "correlation_id": null,
+  "causation_id": null,
+  "timestamp": "2026-08-04T12:00:00Z",
+  "kind": "command",
+  "operation": "wellmanifest://application/run/execute",
+  "content_type": "application/wellmanifest+json",
+  "accept": ["application/wellmanifest+json"],
+  "schema_ref": null,
+  "contract_ref": "contract:dev",
+  "idempotency_key": "ticket-002:application:1",
+  "runtime": {
+    "runtime_ref": "backend-python",
+    "environment": "backend",
+    "execution": "remote",
+    "resources": {}
+  },
+  "payload": {
+    "steps": [
+      {
+        "id": "validate-status",
+        "uri": "wellmanifest://runtime/validate/execute",
+        "mode": "query",
+        "payload": {
+          "source": {"status": {"operation": "002-cv-pdf2md", "value": "SUCCEEDED", "errors": []}},
+          "dialect": "json",
+          "schema": {
+            "type": "object",
+            "required": ["status"]
+          }
+        }
+      },
+      {
+        "id": "list-video",
+        "uri": "youtube://channel/video/query/list",
+        "dependsOn": ["validate-status"],
+        "payload": {"channel": "ours"}
+      }
+    ]
+  },
+  "diagnostics": [],
+  "metadata": {"aggregate": "ticket-002"}
+}

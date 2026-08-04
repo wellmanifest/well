@@ -1,0 +1,25 @@
+#!/usr/bin/env wellmanifest-yaml
+spec: wellmanifest.protocol/v1
+id: rpi-gpio-plan-001
+correlation_id: null
+causation_id: null
+timestamp: "2026-08-04T12:00:00Z"
+kind: command
+operation: gpio://rpi/pin/configure/plan
+content_type: application/wellmanifest+json
+accept: [application/wellmanifest+json]
+schema_ref: null
+contract_ref: contract:firmware-thin
+idempotency_key: rpi-01:gpio17:plan
+runtime:
+  runtime_ref: rpi-edge
+  environment: rpi
+  execution: remote
+  resources:
+    memoryKiB: 4096
+payload:
+  pin: 17
+  direction: out
+diagnostics: []
+metadata:
+  deviceId: rpi-01

@@ -1,0 +1,15 @@
+[package]
+name = "wellmanifest-python"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "_wellmanifest_native"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+wellmanifest-core = { path = "../wellmanifest-core" }

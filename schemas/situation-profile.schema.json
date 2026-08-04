@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/situation-profile.schema.json",
+  "title": "Subactor DOQL situation profile accepted by WellManifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "id", "version", "status", "subject", "sources", "metrics", "assessments", "decision_candidates", "policy", "provenance"],
+  "properties": {
+    "schema": {"const": "subactor.doql-situation-profile/v1"},
+    "id": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["active", "inactive", "draft"]},
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "metrics": {"type": "array", "items": {"type": "object"}},
+    "assessments": {"type": "array", "items": {"type": "object"}},
+    "decision_candidates": {"type": "array", "items": {"type": "object"}},
+    "policy": {"type": "object"},
+    "provenance": {"type": "object"}
+  }
+}

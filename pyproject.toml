@@ -3,30 +3,73 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wellm"
-version = "0.1.6"
-description = "Minimal package"
+name = "wellmanifest"
+version = "0.1.7"
+description = "Polyglot manifest protocol, dialect runtime and remote execution gateway"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
-authors = [{name = "Tom", email = "tom@example.com"}, {name = "Tom Sapletta",email = "tom@sapletta.com"}]
-
-[project.urls]
-Homepage = "https://github.com/wellmanifest/wellm"
+authors = [{name = "WellManifest contributors"}, {name = "Tom Sapletta",email = "tom@sapletta.com"}]
+keywords = ["dsl", "manifest", "json-schema", "hcl", "mqtt", "grpc", "digital-twin", "iot"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+  "pydantic>=2.7",
+  "PyYAML>=6.0",
+  "jsonschema>=4.18",
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "httpx>=0.27",
+  "websockets>=12",
+  "protobuf>=5",
+]
 
 [project.optional-dependencies]
-test = ["pytest>=8.0"]
+mqtt = ["paho-mqtt>=2.1"]
+grpc = ["grpcio>=1.60", "grpcio-tools>=1.60"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.8",
+    "goal>=2.1.0",
+    "costs>=0.1.53",
+    "pfix>=0.1.60",
+]
+all = ["paho-mqtt>=2.1", "grpcio>=1.60", "grpcio-tools>=1.60"]
+
+[project.scripts]
+wellmanifest = "wellmanifest.cli:main"
+wellmanifest-server = "wellmanifest.server:main"
+wellmanifest-mqtt = "wellmanifest.mqtt_bridge:main"
+wellmanifest-grpc = "wellmanifest.grpc_server:main"
+wellmanifest-hcl = "wellmanifest.entrypoints:hcl"
+wellmanifest-typed = "wellmanifest.entrypoints:typed"
+wellmanifest-policy = "wellmanifest.entrypoints:policy"
+wellmanifest-yaml = "wellmanifest.entrypoints:yaml"
+wellmanifest-proto3 = "wellmanifest.entrypoints:proto3"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+wellmanifest = ["static/*", "resources/*.json", "generated/*.py"]
+
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]
-pythonpath = ["src"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
 
 [tool.costs]
 # AI Cost tracking configuration

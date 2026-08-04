@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package wellmanifest.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/wellmanifest/wellmanifest/gen/go/wellmanifest/v1;wellmanifestv1";
+option java_multiple_files = true;
+option java_package = "org.wellmanifest.v1";
+
+// The transport-neutral WellManifest envelope. Payload is a Value so gateways
+// can negotiate JSON/YAML/HCL/typed representations without changing routing.
+message Envelope {
+  string spec = 1;
+  string id = 2;
+  string correlation_id = 3;
+  string causation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string kind = 6;
+  string operation = 7;
+  string content_type = 8;
+  repeated string accept = 9;
+  string schema_ref = 10;
+  string contract_ref = 11;
+  string idempotency_key = 12;
+  RuntimeTarget runtime = 13;
+  google.protobuf.Value payload = 14;
+  repeated Diagnostic diagnostics = 15;
+  map<string, string> metadata = 16;
+}
+
+message RuntimeTarget {
+  string runtime_ref = 1;
+  string environment = 2;
+  string execution = 3;
+  google.protobuf.Struct resources = 4;
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  ERROR = 1;
+  WARNING = 2;
+  INFO = 3;
+}
+
+message Diagnostic {
+  string code = 1;
+  Severity severity = 2;
+  string message = 3;
+  string phase = 4;
+  string dialect = 5;
+  string path = 6;
+  string schema_path = 7;
+  string source = 8;
+  string hint = 9;
+  google.protobuf.Struct details = 10;
+}
+
+message ConvertRequest {
+  string source_text = 1;
+  string source_dialect = 2;
+  string target_dialect = 3;
+  string projection = 4;
+  google.protobuf.Struct schema = 5;
+  string source_name = 6;
+  bool pretty = 7;
+}
+
+message ConvertResponse {
+  string output = 1;
+  string source_dialect = 2;
+  string target_dialect = 3;
+  string projection = 4;
+  repeated Diagnostic diagnostics = 5;
+  string lossiness = 6;
+}
+
+message ValidateRequest {
+  string source_text = 1;
+  string dialect = 2;
+  google.protobuf.Struct schema = 3;
+  string source_name = 4;
+}
+
+message ValidateResponse {
+  bool valid = 1;
+  repeated Diagnostic diagnostics = 2;
+  google.protobuf.Value normalized = 3;
+}
+
+message ExecuteRequest {
+  string uri = 1;
+  google.protobuf.Value payload = 2;
+  string mode = 3;
+  string contract_ref = 4;
+  repeated string allowed_uri_processes = 5;
+  string run_id = 6;
+  RuntimeTarget runtime = 7;
+}
+
+message ExecuteResponse {
+  bool ok = 1;
+  string run_id = 2;
+  string uri = 3;
+  google.protobuf.Value result = 4;
+  repeated Diagnostic diagnostics = 5;
+  repeated google.protobuf.Struct events = 6;
+}
+
+message CapabilitiesResponse {
+  google.protobuf.Struct capabilities = 1;
+}
+
+service RuntimeService {
+  rpc Convert(ConvertRequest) returns (ConvertResponse);
+  rpc Validate(ValidateRequest) returns (ValidateResponse);
+  rpc Execute(ExecuteRequest) returns (ExecuteResponse);
+  rpc Exchange(stream Envelope) returns (stream Envelope);
+  rpc GetCapabilities(google.protobuf.Empty) returns (CapabilitiesResponse);
+}

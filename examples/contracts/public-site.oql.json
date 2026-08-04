@@ -1,0 +1,8 @@
+{
+  "schema": "wellmanifest.oql/v1",
+  "operation": "process.run",
+  "subject": "system:plesk-connector",
+  "objective": "bootstrap public site from verified capability inventory",
+  "process_ref": "application:public-site-bootstrap@1",
+  "contract_ref": "contract:dev"
+}

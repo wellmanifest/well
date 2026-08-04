@@ -1,0 +1,8 @@
+schema: wellmanifest.runtime-profile/v1
+id: runtime:digital-twin-readonly@1
+environment: digital-twin
+execution: remote
+features: [portrait, situation, authority-fit, workload-routing, events]
+constraints:
+  read_only: true
+  authority_expandable: false

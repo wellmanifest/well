@@ -1,0 +1,1169 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "WellManifest Runtime Gateway",
+    "description": "Polyglot dialect conversion, schema validation and capability-scoped URI Process execution.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Health Healthz Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/capabilities": {
+      "get": {
+        "summary": "Capabilities",
+        "operationId": "capabilities_v1_capabilities_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Capabilities V1 Capabilities Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dialects": {
+      "get": {
+        "summary": "Dialects",
+        "operationId": "dialects_v1_dialects_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Dialects V1 Dialects Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runtimes": {
+      "get": {
+        "summary": "Runtimes",
+        "operationId": "runtimes_v1_runtimes_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Runtimes V1 Runtimes Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convert": {
+      "post": {
+        "summary": "Convert",
+        "operationId": "convert_v1_convert_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Convert V1 Convert Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/validate": {
+      "post": {
+        "summary": "Validate",
+        "operationId": "validate_v1_validate_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Validate V1 Validate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/negotiate": {
+      "post": {
+        "summary": "Negotiate",
+        "operationId": "negotiate_v1_negotiate_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Negotiate V1 Negotiate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runtime/execute": {
+      "post": {
+        "summary": "Execute",
+        "operationId": "execute_v1_runtime_execute_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Execute V1 Runtime Execute Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/run": {
+      "post": {
+        "summary": "Urirun Compat",
+        "operationId": "urirun_compat_run_post",
+        "parameters": [
+          {
+            "name": "x-urirun-run-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Run-Id"
+            }
+          },
+          {
+            "name": "x-wellmanifest-contract",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Contract"
+            }
+          },
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Urirun Compat Run Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/envelopes": {
+      "post": {
+        "summary": "Exchange",
+        "operationId": "exchange_v1_envelopes_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Exchange V1 Envelopes Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "summary": "Events",
+        "operationId": "events_v1_events_get",
+        "parameters": [
+          {
+            "name": "stream",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stream"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "After"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Events V1 Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Landing",
+        "operationId": "landing__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConversionRequest": {
+        "properties": {
+          "source": {
+            "title": "Source"
+          },
+          "source_dialect": {
+            "type": "string",
+            "title": "Source Dialect",
+            "default": "auto"
+          },
+          "target_dialect": {
+            "type": "string",
+            "title": "Target Dialect",
+            "default": "json"
+          },
+          "projection": {
+            "type": "string",
+            "enum": [
+              "data",
+              "ir"
+            ],
+            "title": "Projection",
+            "default": "data"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema"
+          },
+          "source_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Name"
+          },
+          "pretty": {
+            "type": "boolean",
+            "title": "Pretty",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "ConversionRequest"
+      },
+      "Diagnostic": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/Severity"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "phase": {
+            "type": "string",
+            "title": "Phase",
+            "default": "runtime"
+          },
+          "dialect": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dialect"
+          },
+          "path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path"
+          },
+          "schema_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Path"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceRange"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hint"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "title": "Diagnostic"
+      },
+      "Envelope": {
+        "properties": {
+          "spec": {
+            "type": "string",
+            "const": "wellmanifest.protocol/v1",
+            "title": "Spec",
+            "default": "wellmanifest.protocol/v1"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "correlation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Correlation Id"
+          },
+          "causation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Causation Id"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "command",
+              "query",
+              "event",
+              "result",
+              "diagnostic",
+              "handshake"
+            ],
+            "title": "Kind",
+            "default": "command"
+          },
+          "operation": {
+            "type": "string",
+            "title": "Operation"
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type",
+            "default": "application/wellmanifest+json"
+          },
+          "accept": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Accept"
+          },
+          "schema_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Ref"
+          },
+          "contract_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Ref"
+          },
+          "idempotency_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idempotency Key"
+          },
+          "runtime": {
+            "$ref": "#/components/schemas/RuntimeTarget"
+          },
+          "payload": {
+            "title": "Payload"
+          },
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/Diagnostic"
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "operation"
+        ],
+        "title": "Envelope"
+      },
+      "ExecuteRequest": {
+        "properties": {
+          "uri": {
+            "type": "string",
+            "title": "Uri"
+          },
+          "payload": {
+            "title": "Payload"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "query",
+              "command",
+              "execute",
+              "plan",
+              "dry-run"
+            ],
+            "title": "Mode",
+            "default": "execute"
+          },
+          "contract_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contract Ref"
+          },
+          "allowed_uri_processes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Uri Processes"
+          },
+          "run_id": {
+            "type": "string",
+            "title": "Run Id",
+            "default": ""
+          },
+          "runtime": {
+            "$ref": "#/components/schemas/RuntimeTarget"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uri"
+        ],
+        "title": "ExecuteRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "RuntimeTarget": {
+        "properties": {
+          "runtime_ref": {
+            "type": "string",
+            "title": "Runtime Ref",
+            "default": "backend-python"
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "frontend",
+              "backend",
+              "firmware",
+              "rpi",
+              "iot",
+              "digital-twin",
+              "server",
+              "remote"
+            ],
+            "title": "Environment",
+            "default": "backend"
+          },
+          "execution": {
+            "type": "string",
+            "enum": [
+              "local",
+              "remote",
+              "auto"
+            ],
+            "title": "Execution",
+            "default": "auto"
+          },
+          "resources": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Resources"
+          }
+        },
+        "type": "object",
+        "title": "RuntimeTarget"
+      },
+      "Severity": {
+        "type": "string",
+        "enum": [
+          "ERROR",
+          "WARNING",
+          "INFO"
+        ],
+        "title": "Severity"
+      },
+      "SourcePosition": {
+        "properties": {
+          "line": {
+            "type": "integer",
+            "title": "Line",
+            "default": 1
+          },
+          "column": {
+            "type": "integer",
+            "title": "Column",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "title": "SourcePosition"
+      },
+      "SourceRange": {
+        "properties": {
+          "start": {
+            "$ref": "#/components/schemas/SourcePosition"
+          },
+          "end": {
+            "$ref": "#/components/schemas/SourcePosition"
+          }
+        },
+        "type": "object",
+        "title": "SourceRange"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "ValidationRequest": {
+        "properties": {
+          "source": {
+            "title": "Source"
+          },
+          "dialect": {
+            "type": "string",
+            "title": "Dialect",
+            "default": "auto"
+          },
+          "schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Schema"
+          },
+          "source_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "schema"
+        ],
+        "title": "ValidationRequest"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "wellmanifest.digital-twin/v1",
+  "id": "twin:operations-operator-bot",
+  "principal": "bot:operations-operator-bot",
+  "actorKind": "bot",
+  "role": "operations-operator",
+  "queue": "operations",
+  "contractStatus": "active",
+  "contractVersion": 2,
+  "delegatedBy": "principal:founder",
+  "allowedCapabilities": [
+    "situation.evaluate",
+    "ticket.read",
+    "flow.remote-access.preflight"
+  ],
+  "specializations": [
+    "situation.evaluate",
+    "flow.remote-access.preflight"
+  ],
+  "workload": 0.25,
+  "waitingForInput": false,
+  "contractGaps": [],
+  "revisionHash": "sha256:demo-read-only-revision",
+  "autonomy": {"enabled": false}
+}

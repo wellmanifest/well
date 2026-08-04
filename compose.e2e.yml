@@ -1,0 +1,166 @@
+name: wellmanifest-e2e
+
+x-runtime: &runtime
+  image: wellmanifest/runtime:e2e
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+    WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
+    WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+  networks: [e2e]
+
+services:
+  runtime:
+    <<: *runtime
+    volumes:
+      - e2e-data:/data
+
+  mqtt:
+    image: eclipse-mosquitto:2.0.21
+    command: ["mosquitto", "-c", "/mosquitto-no-auth.conf"]
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto-no-auth.conf:ro
+    networks: [e2e]
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -t '$$SYS/broker/version' -C 1 -W 2 >/dev/null 2>&1"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+
+  mqtt-bridge:
+    <<: *runtime
+    entrypoint: ["wellmanifest-mqtt"]
+    environment:
+      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+      WELLMANIFEST_EVENT_STORE: /data/mqtt-events.jsonl
+      WELLMANIFEST_MQTT_HOST: mqtt
+      WELLMANIFEST_MQTT_PORT: 1883
+      WELLMANIFEST_TENANT: default
+    depends_on:
+      mqtt:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  grpc:
+    <<: *runtime
+    entrypoint: ["wellmanifest-grpc"]
+    environment:
+      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+      WELLMANIFEST_EVENT_STORE: /data/grpc-events.jsonl
+      WELLMANIFEST_GRPC_ADDRESS: 0.0.0.0:50051
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; grpc.channel_ready_future(grpc.insecure_channel('127.0.0.1:50051')).result(timeout=2)"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  www:
+    image: wellmanifest/www:e2e
+    build:
+      context: .
+      dockerfile: docker/www.Dockerfile
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [e2e]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+
+  python-e2e:
+    build:
+      context: .
+      dockerfile: docker/python-e2e.Dockerfile
+    environment:
+      WELLMANIFEST_URL: http://runtime:8080
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [e2e]
+
+  node-e2e:
+    build:
+      context: .
+      dockerfile: docker/node-e2e.Dockerfile
+    environment:
+      WELLMANIFEST_URL: http://runtime:8080
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [e2e]
+
+  firmware-sim:
+    build:
+      context: .
+      dockerfile: docker/firmware-sim.Dockerfile
+    environment:
+      WELLMANIFEST_URL: http://runtime:8080
+      WELLMANIFEST_CONTRACT: contract:firmware-thin
+    depends_on:
+      runtime:
+        condition: service_healthy
+    networks: [e2e]
+
+  mqtt-e2e:
+    build:
+      context: .
+      dockerfile: docker/mqtt-e2e.Dockerfile
+    environment:
+      MQTT_HOST: mqtt
+    depends_on:
+      mqtt:
+        condition: service_healthy
+      mqtt-bridge:
+        condition: service_started
+    networks: [e2e]
+
+  grpc-e2e:
+    build:
+      context: .
+      dockerfile: docker/grpc-e2e.Dockerfile
+    environment:
+      WELLMANIFEST_GRPC_TARGET: grpc:50051
+    depends_on:
+      grpc:
+        condition: service_healthy
+    networks: [e2e]
+
+  rust-e2e:
+    build:
+      context: .
+      dockerfile: docker/runtime-rust.Dockerfile
+      target: builder
+    command: ["cargo", "test", "-p", "wellmanifest-core", "-p", "wellmanifest-cli"]
+    networks: [e2e]
+
+  www-e2e:
+    image: curlimages/curl:8.12.1
+    command: ["sh", "-ec", "curl -fsS http://www:8080/ | grep -q 'One manifest' && curl -fsS http://www:8080/v1/capabilities | grep -q 'wellmanifest.protocol/v1'"]
+    depends_on:
+      www:
+        condition: service_healthy
+    networks: [e2e]
+
+  e2e:
+    image: busybox:1.37.0
+    command: ["sh", "-c", "echo 'wellmanifest docker e2e: PASS'"]
+    depends_on:
+      python-e2e: {condition: service_completed_successfully}
+      node-e2e: {condition: service_completed_successfully}
+      firmware-sim: {condition: service_completed_successfully}
+      mqtt-e2e: {condition: service_completed_successfully}
+      grpc-e2e: {condition: service_completed_successfully}
+      rust-e2e: {condition: service_completed_successfully}
+      www-e2e: {condition: service_completed_successfully}
+    networks: [e2e]
+
+volumes:
+  e2e-data: {}
+
+networks:
+  e2e: {}

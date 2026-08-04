@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.org/schemas/diagnostic.schema.json",
+  "title": "WellManifest diagnostic",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "severity", "message"],
+  "properties": {
+    "code": {"type": "string", "pattern": "^(WM|GOV)-[A-Z0-9-]+$"},
+    "severity": {"enum": ["ERROR", "WARNING", "INFO"]},
+    "message": {"type": "string", "minLength": 1},
+    "phase": {"type": "string"},
+    "dialect": {"type": ["string", "null"]},
+    "path": {"type": ["string", "null"]},
+    "schema_path": {"type": ["string", "null"]},
+    "source": {"type": ["string", "null"]},
+    "hint": {"type": ["string", "null"]},
+    "details": {"type": "object"}
+  }
+}
