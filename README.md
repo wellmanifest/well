@@ -25,7 +25,7 @@ greet("Anna")    # -> "Hello, Anna!"
 Instalacja:
 
 ```bash
-pip install wellmanifest-well
+pip install wellm
 ```
 
 ## API

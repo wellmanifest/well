@@ -13,7 +13,7 @@
 
 version: '1.0'
 project:
-  name: wellmanifest-well
+  name: wellm
   type:
   - python
   description: Minimal package

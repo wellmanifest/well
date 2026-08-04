@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wellmanifest-well"
+name = "wellm"
 version = "0.1.4"
 description = "Minimal package"
 readme = "README.md"
