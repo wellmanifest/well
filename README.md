@@ -16,15 +16,34 @@ Generated on 2026-08-04 using [openrouter/qwen/qwen3-coder-next](https://openrou
 Minimalny pakiet Pythona o nazwie `well`.
 
 ```bash
-from well import hello
+from well import hello, greet
 
-hello()
+hello()          # -> "hello from well"
+greet("Anna")    # -> "Hello, Anna!"
 ```
 
 Instalacja:
 
 ```bash
 pip install well
+```
+
+## API
+
+- `hello() -> str`  
+  Zwraca podstawowy string powitalny.
+
+- `greet(name: str = "world") -> str`  
+  Zwraca spersonalizowane powitanie `Hello, {name}!`.
+
+## Przykłady
+
+```python
+from well import hello, greet
+
+print(hello())
+print(greet())
+print(greet("Piotr"))
 ```
 
 
