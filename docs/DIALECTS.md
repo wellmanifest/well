@@ -8,17 +8,20 @@ common document model; they are not forced into one ambiguous grammar.
 | Dialect | Input | Data export | IR export | Notes |
 |---|---:|---:|---:|---|
 | `json@rfc8259` | yes | yes | yes | Strict JSON; no shebang/comments. |
-| `yaml@1.2/json` | yes | yes | yes | JSON-compatible profile; duplicate keys rejected. |
-| `toml@1` | yes | yes | yes | Basic tables, arrays and scalar values. |
-| `hcl@2-lite` | yes | yes | yes | Data subset plus blocks; use external schema for types. |
+| `yaml@1.2/json-compatible` | yes | yes | yes | JSON-compatible profile; duplicate keys rejected. |
+| `toml@1.0` | yes | yes | yes | Basic tables, arrays and scalar values. |
+| `typescript@wellm-1` | yes | yes | yes | Restricted non-executing data module. |
+| `toon@1` | yes | normalized YAML/map | yes | Compact JSON-model/structural maps; code2llm map import. |
+| `hcl@2` | yes | yes | yes | Static data subset plus blocks; external schema supplies types. |
 | `typed@1` | yes | yes | yes | `name: Type = value`, type declarations and hints. |
 | `policy-sh@1` | yes | no | yes | `RULE/WHEN/DO/FORBID/ASSERT/NEXT`; never executed by Bash. |
-| `proto3-ir@1` | yes | limited | yes | Basic parser in Python; `protoc` remains build authority. |
+| `proto3` | yes | limited | yes | Basic parser in Python; `protoc` remains build authority. |
 
-The `-lite` and `-ir` names are deliberate: version 0.2.0rc3 does not claim full
-semantic compatibility with every HCL evaluator or every `protoc` nuance.
+The HCL and proto identifiers follow their public language major, but the
+implementation remains a compatibility frontend: version `0.2.0rc4` does not
+claim every application-specific HCL evaluator or every `protoc` nuance.
 Original source can be retained in IR and production builds can delegate to the
-official compiler.
+authoritative compiler.
 
 ## Shebang and dialect directives
 
@@ -130,6 +133,19 @@ data status: Status = {
 Nested names are addressable as `Status.OperationId`, `Status.State` and
 `Status.Error`.
 
+## TOON and code2llm maps
+
+The `toon@1` frontend accepts JSON-compatible YAML/TOON data and the compact
+structural layout used by `map.toon.yaml` from code2llm. It normalizes module
+rows, imports and exports into a regular Wellm data/IR projection:
+
+```bash
+wellm convert examples/toon/map.toon.yaml --from toon --to json -o map.json
+```
+
+The semantic module map is preserved, while compact row spelling and whitespace
+are normalized rather than byte-round-tripped.
+
 ## Procedural policy
 
 ```bash
@@ -168,8 +184,9 @@ or a descriptor set for lossless exchange.
 ## Import and export examples
 
 ```bash
-wellmanifest convert examples/dialects/status.hcl --from hcl --to yaml
-wellmanifest convert examples/dialects/status.yaml --from yaml --to typed
-wellmanifest parse examples/policy/CONTRIBUTING.policy --dialect policy --projection ir
-wellmanifest parse examples/proto/register.proto --dialect proto3 --projection ir
+wellm convert examples/dialects/status.hcl --from hcl --to yaml
+wellm convert examples/dialects/status.yaml --from yaml --to typed --types infer
+wellm convert examples/toon/map.toon.yaml --from toon --to json
+wellm parse examples/policy/CONTRIBUTING.policy --dialect policy --projection ir
+wellm parse examples/proto/register.proto --dialect proto3 --projection ir
 ```

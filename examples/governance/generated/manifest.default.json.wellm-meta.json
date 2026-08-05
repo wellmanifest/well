@@ -2,7 +2,7 @@
   "artifactSha256": "sha256:223775280426692483e4dfc09152b60dc3747620f70c1eb8af12ca3e84b8b511",
   "generator": {
     "name": "wellm",
-    "version": "0.2.0rc3"
+    "version": "0.2.0rc4"
   },
   "schema": "wellm.artifact-metadata/v1",
   "schemaRef": "fixtures/manifest.schema.json",

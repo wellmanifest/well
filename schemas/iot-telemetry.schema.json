@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/iot-telemetry.schema.json",
+  "title": "Wellm IoT telemetry command",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "deviceId", "readings"],
+  "properties": {
+    "schema": {"const": "wellm.iot-telemetry/v1"},
+    "deviceId": {"type": "string", "minLength": 1, "maxLength": 160},
+    "readings": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number"}
+    },
+    "unit": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "default": {}
+    },
+    "observedAt": {"type": "string", "format": "date-time"}
+  }
+}

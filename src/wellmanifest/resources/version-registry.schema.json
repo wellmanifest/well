@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/version-registry.schema.json",
+  "title": "Wellm version registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "package", "protocols", "standards", "apis", "dialects", "formatProfiles", "schemas", "packages"],
+  "properties": {
+    "schema": {"const": "wellm.version-registry/v1"},
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {"name": {"const": "wellm"}, "version": {"type": "string", "minLength": 1}}
+    },
+    "protocols": {"type": "array", "items": {"$ref": "#/$defs/versioned"}},
+    "standards": {"type": "array", "items": {"$ref": "#/$defs/basic"}},
+    "apis": {"type": "array", "items": {"type": "object", "required": ["id", "version", "transport", "contract", "schemaPath"], "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "transport": {"type": "string"}, "basePath": {"type": "string"}, "contract": {"type": "string"}, "schemaPath": {"type": "string"}, "sha256": {"type": ["string", "null"]}}, "additionalProperties": false}},
+    "dialects": {"type": "array", "items": {"type": "object"}},
+    "formatProfiles": {"type": "array", "items": {"type": "object"}},
+    "schemas": {"type": "array", "items": {"type": "object", "required": ["path", "id", "contract", "version", "compatibility", "dialect", "sha256"], "properties": {"path": {"type": "string"}, "id": {"type": "string", "minLength": 1}, "contract": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}, "compatibility": {"enum": ["exact-major", "exact-hash"]}, "dialect": {"const": "json-schema@2020-12"}, "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}, "additionalProperties": false}},
+    "packages": {"type": "array", "items": {"type": "object", "required": ["ecosystem", "name", "version"], "properties": {"ecosystem": {"type": "string"}, "name": {"type": "string"}, "version": {"type": "string"}}, "additionalProperties": false}}
+  },
+  "$defs": {
+    "basic": {"type": "object", "required": ["id", "version"], "properties": {"id": {"type": "string"}, "version": {"type": "string"}}, "additionalProperties": false},
+    "versioned": {"type": "object", "required": ["id", "version", "compatibility"], "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "compatibility": {"type": "string"}}, "additionalProperties": false}
+  }
+}

@@ -1,52 +1,40 @@
 # Changelog
 
-## 0.2.0rc3 — 2026-08-04
+## 0.2.0rc4 — 2026-08-05
 
-- Added `wellm-governance-profile@1` and named profiles for repository JSON,
-  wire JSON, YAML JSON-profile, static HCL, typed Wellm, TypeScript data and
-  policy Markdown.
-- Added deterministic `wellm governance build` and `--check` with schema
-  validation, exact-byte drift detection, metadata sidecars and source maps.
-- Added independent `artifactSha256` and `semanticSha256` digests with
-  Python/JavaScript parity tests.
-- Added `wellm fmt`, `wellm profiles`, `wellm semantic-diff`, `wellm roundtrip`
-  and policy `import`, `lint` and `fmt` commands.
-- Added HTTP, WebSocket and URI Process formatting/semantic-diff operations.
-- Policy import now recognizes policy-shaped `bash`/`sh` fences with
-  `WM-POLICY-101`, while ordinary shell blocks remain untouched.
-- Added state-machine lint that reports the supplied undeclared
-  `BLOCKED -> IN_PROGRESS` target instead of guessing a namespace.
-- Added current and legacy governance regression fixtures, conditional approval
-  evidence tests and generated governance examples.
-- Preserved the first normative document header when legend examples contain
-  placeholder `DOCUMENT`, `VERSION` or `MODE` declarations.
-- Added governance checks to CI, local verification, E2E and the landing page.
-- Added JSON Schemas for governance project files, build reports, artifact
-  metadata, source maps, conversion reports and semantic diff.
-- Added exact `subactor.projects/v1` examples for `obslugabiurowa.pl` and
-  generated JSON, YAML, typed WellManifest and restricted TypeScript forms.
-- Added deterministic Plesk publication planning using concrete URI Processes
-  for connector readiness, subscription capacity, DNS authority/propagation,
-  TLS probe, file/hash dry-run, guarded apply and publication verification.
-- Added a least-privilege `contract:plesk-publication` with exact routes rather
-  than a broad Plesk wildcard.
-- Added server-side workspace confinement, source-directory allowlisting and
-  remote execution disabled by default.
-- Added exact connector `plan_hash` and signed apply-grant checks before any
-  publication mutation.
-- Added read-only `@uri-twin/plesk` binding and documentation separating twin
-  facts from connector effects.
-- Added `wellm plesk-plan`, `wellm plesk-publish`, HTTP plan/publish endpoints
-  and JavaScript/TypeScript plan helpers.
-- Added an optional internal LiteLLM benchmark for JSON, YAML, typed
-  WellManifest, HCL and restricted TypeScript.
-- Added deterministic syntax/schema/semantic scoring, cost/latency/token
-  reporting and cheapest-capable first-request selection with fingerprint cache.
-- Fixed restricted TypeScript round-trip parsing and preservation of
-  single-element object lists in typed output.
-- Added Plesk/benchmark schemas, examples, documentation, Docker Compose example
-  and local tests.
-- Added Python/JavaScript canonical Plesk plan and manifest-hash parity E2E.
+- Added a three-layer IoT reference deployment with frontend, backend,
+  Mosquitto/bridge and firmware/RPi simulator in `compose.iot.yml`.
+- Added IoT config and typed telemetry URI Processes under a least-privilege
+  `contract:firmware-thin`.
+- Added `make up`, `make down`, `make iot-up`, `make iot-down`, `make e2e-local`,
+  `make e2e-docker`, `make iot-e2e` and fail-closed `make e2e` targets.
+- Added explicit configurable IPAM subnets and a Docker network preflight to
+  avoid exhausted predefined address-pool allocation.
+- Added `wellm.env-contract/v1` as the single source for names, defaults, types,
+  secret classification and `.env.example` generation across runtime, Make and
+  Compose.
+- Added `wellm.version-registry/v1` for dialects, formatting profiles, packages,
+  OpenAPI/AsyncAPI/proto contracts and every Draft 2020-12 JSON Schema.
+- Fixed the version-registry generator so it returns and validates the generated
+  object; malformed `null` registries can no longer pass `sync/check`.
+- Added schema version and compatibility metadata (`exact-major` or
+  `exact-hash`) plus exact contract SHA-256 values.
+- Added bidirectional JSON Schema ⇄ typed Wellm schema modules, schema-derived
+  data annotations and TypeScript/Python static type generation.
+- Added `toon@1` and `toon-map@1`, including import of the supplied code2llm
+  `map.toon.yaml` into a normalized 235-module structural map.
+- Added six-format intent analysis for JSON, YAML, typed Wellm, HCL, restricted
+  TypeScript and TOON, with exact/semantic digests, pairwise diff, schema checks
+  and `wellm.todo2code-format-evidence/v1` output.
+- Added HTTP, WebSocket, URI Process and JavaScript SDK endpoints for version,
+  environment and intent-format discovery/analysis.
+- Regenerated OpenAPI and expanded AsyncAPI MQTT/WebSocket contracts for
+  request, response and diagnostic envelopes.
+- Added `wellm-governance-profile@1`, deterministic repository/wire profiles,
+  exact-byte and semantic SHA-256, source maps, governance `build --check`,
+  policy linting and semantic round-trip reports.
+- Retained fail-closed Plesk planning/publication, URI Twin separation and the
+  optional LiteLLM format/logic benchmark.
 
 ## 0.2.0rc1 — 2026-08-04
 

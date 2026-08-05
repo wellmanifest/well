@@ -43,7 +43,7 @@ class DocumentMetadata(BaseModel):
     document_kind: Literal["data", "schema", "policy", "api", "module", "ir"] = "data"
     schema_dialect: str | None = None
     schema_ref: str | None = None
-    runtime_version: str = "0.2.0rc3"
+    runtime_version: str = "0.2.0rc4"
     ir_version: str = "wellmanifest-ir/v1"
     source_name: str | None = None
     directives: dict[str, Any] = Field(default_factory=dict)
@@ -101,6 +101,7 @@ class ConversionRequest(BaseModel):
     schema_document: dict[str, Any] | None = Field(default=None, alias="schema", serialization_alias="schema")
     source_name: str | None = None
     pretty: bool = True
+    type_mode: Literal["preserve", "schema", "infer", "none"] = "preserve"
 
 
 class ConversionResponse(BaseModel):

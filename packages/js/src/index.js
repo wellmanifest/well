@@ -137,7 +137,15 @@ export class WellManifestClient {
     return this.request("/v1/profiles", undefined, {method: "GET"});
   }
 
-  convert(source, {from = "auto", to = "json", projection = "data", schema = null, pretty = true} = {}) {
+  versions() {
+    return this.request("/v1/versions", undefined, {method: "GET"});
+  }
+
+  envContract() {
+    return this.request("/v1/env-contract", undefined, {method: "GET"});
+  }
+
+  convert(source, {from = "auto", to = "json", projection = "data", schema = null, pretty = true, types = "preserve"} = {}) {
     return this.request("/v1/convert", {
       source,
       source_dialect: from,
@@ -145,6 +153,7 @@ export class WellManifestClient {
       projection,
       schema,
       pretty,
+      type_mode: types,
     });
   }
 
@@ -158,6 +167,10 @@ export class WellManifestClient {
 
   semanticDiff(left, right) {
     return this.request("/v1/semantic-diff", {left, right});
+  }
+
+  analyzeIntent(representations, {id = "js-intent-analysis", schema = null} = {}) {
+    return this.request("/v1/intent/analyze", {id, schema, representations});
   }
 
   execute(uri, payload = {}, {

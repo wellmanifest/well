@@ -1,0 +1,11 @@
+schema: new-project.intent/v2
+ticket: ticket-002
+summary: Integracja adopcji manifestu z goal
+workstream: interfaces
+allowedPaths:
+  - sdk/**
+forbiddenPaths: []
+stacks: [typescript]
+dependsOn: []
+conflictsWith: []
+integrationTicket: null

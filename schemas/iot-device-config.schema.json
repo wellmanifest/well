@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/iot-device-config.schema.json",
+  "title": "Wellm thin-firmware runtime configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "deviceId",
+    "protocol",
+    "preferredFormats",
+    "telemetryUri",
+    "sampleIntervalSeconds",
+    "runtime"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.iot-device-config/v1"
+    },
+    "deviceId": {
+      "type": "string"
+    },
+    "protocol": {
+      "const": "wellmanifest.protocol/v1"
+    },
+    "preferredFormats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "telemetryUri": {
+      "const": "iot://device/telemetry/command/ingest"
+    },
+    "sampleIntervalSeconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "runtime": {
+      "const": "runtime:firmware-thin@1"
+    }
+  }
+}

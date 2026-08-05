@@ -21,6 +21,30 @@ class WellManifestClient:
             response.raise_for_status()
             return response.json()
 
+    def versions(self) -> dict[str, Any]:
+        with httpx.Client(timeout=self.timeout) as client:
+            response = client.get(f"{self.base_url}/v1/versions", headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
+    def env_contract(self) -> dict[str, Any]:
+        with httpx.Client(timeout=self.timeout) as client:
+            response = client.get(f"{self.base_url}/v1/env-contract", headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
+    def analyze_intent(
+        self,
+        representations: list[dict[str, Any]],
+        *,
+        schema: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        payload = {"representations": representations, "schema": schema}
+        with httpx.Client(timeout=self.timeout) as client:
+            response = client.post(f"{self.base_url}/v1/intent/analyze", json=payload, headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
     def convert(
         self,
         source: Any,
@@ -29,6 +53,7 @@ class WellManifestClient:
         target_dialect: str = "json",
         projection: str = "data",
         schema: dict[str, Any] | None = None,
+        type_mode: str = "preserve",
     ) -> dict[str, Any]:
         payload = {
             "source": source,
@@ -36,6 +61,7 @@ class WellManifestClient:
             "target_dialect": target_dialect,
             "projection": projection,
             "schema": schema,
+            "type_mode": type_mode,
         }
         with httpx.Client(timeout=self.timeout) as client:
             response = client.post(f"{self.base_url}/v1/convert", json=payload, headers=self.headers)
@@ -56,7 +82,11 @@ class WellManifestClient:
             "payload": payload or {},
             "contract_ref": contract_ref,
             "run_id": run_id,
-            "runtime": {"runtime_ref": "runtime:remote-service@1", "environment": environment, "execution": "remote"},
+            "runtime": {
+                "runtime_ref": "runtime:remote-service@1",
+                "environment": environment,
+                "execution": "remote",
+            },
         }
         with httpx.Client(timeout=self.timeout) as client:
             response = client.post(f"{self.base_url}/v1/runtime/execute", json=request, headers=self.headers)
@@ -74,6 +104,33 @@ class AsyncWellManifestClient:
     def headers(self) -> dict[str, str]:
         return {"x-wellmanifest-token": self.token} if self.token else {}
 
+    async def versions(self) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.get(f"{self.base_url}/v1/versions", headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
+    async def env_contract(self) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.get(f"{self.base_url}/v1/env-contract", headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
+    async def analyze_intent(
+        self,
+        representations: list[dict[str, Any]],
+        *,
+        schema: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.post(
+                f"{self.base_url}/v1/intent/analyze",
+                json={"representations": representations, "schema": schema},
+                headers=self.headers,
+            )
+            response.raise_for_status()
+            return response.json()
+
     async def convert(self, source: Any, **options: Any) -> dict[str, Any]:
         payload = {
             "source": source,
@@ -81,6 +138,7 @@ class AsyncWellManifestClient:
             "target_dialect": options.get("target_dialect", "json"),
             "projection": options.get("projection", "data"),
             "schema": options.get("schema"),
+            "type_mode": options.get("type_mode", "preserve"),
         }
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             response = await client.post(f"{self.base_url}/v1/convert", json=payload, headers=self.headers)
@@ -100,6 +158,10 @@ class AsyncWellManifestClient:
             },
         }
         async with httpx.AsyncClient(timeout=self.timeout) as client:
-            response = await client.post(f"{self.base_url}/v1/runtime/execute", json=request, headers=self.headers)
+            response = await client.post(
+                f"{self.base_url}/v1/runtime/execute",
+                json=request,
+                headers=self.headers,
+            )
             response.raise_for_status()
             return response.json()

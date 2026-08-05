@@ -2,7 +2,7 @@
 
 ## Packages, services and runtimes
 
-| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity `0.2.0rc3` |
+| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity `0.2.0rc4` |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | Protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | yes | yes | specified + schemas |
 | Python distribution | `wellm` | yes | client/server | no | yes | CPython RPi | control | tested reference |
@@ -17,9 +17,12 @@
 | WASM | `wellmanifest-wasm` | yes | fallback | yes | edge | limited | projection | scaffold |
 | PyO3 | `wellmanifest-python` | yes | no | no | yes | Linux RPi | control | scaffold |
 | N-API | `wellmanifest-node` | yes | no | yes/Node | Node | gateway | control | scaffold |
-| MQTT | `wellm-mqtt` | broker/bridge | yes | gateway | queue | device | events | source + Compose |
-| gRPC | `wellm-grpc` | generated | yes | gateway | SOA | edge | streams | source + Compose |
-| firmware client | MicroPython/C examples | yes | server | no | no | yes | telemetry | examples |
+| version registry | `wellm.version-registry/v1` | yes | HTTP/URI | consume | enforce | consume | contract discovery | tested |
+| environment contract | `wellm.env-contract/v1` | yes | HTTP/URI | consume | enforce | consume | configuration names | tested |
+| intent-format analysis | `wellm.intent-format-analysis/v1` | yes | HTTP/URI | report | service | evidence | intent drift | tested |
+| MQTT | `wellm-mqtt` | broker/bridge | yes | gateway | queue | device | events | source + local contracts; Compose target |
+| gRPC | `wellm-grpc` | generated | yes | gateway | SOA | edge | streams | source + Compose/CI target |
+| firmware client | MQTT/RPi simulator | yes | server | no | no | yes | telemetry | source + local runtime tests; Compose target |
 | situation evaluator | Python adapter | yes | service | query | yes | telemetry | native | tested |
 | twin router | URI query process | yes | service | query | yes | telemetry | native | working demo |
 | CQRS/ES | JSONL event store | yes | service | read | yes | edge buffer | projection | tested |
@@ -48,7 +51,8 @@ reference for this release candidate.
 | YAML 1.2 JSON profile | yes | yes | yes | normalized; comments/anchors not preserved |
 | TOML | yes | yes | data only | lossy for unsupported TOML presentation details |
 | HCL-shaped data | yes | yes | parser IR | normalized, not byte-identical HCL |
-| typed WellManifest | yes | yes | yes | canonical formatter output |
+| typed WellManifest | yes | yes | yes | canonical formatter output; schema hints preserved |
+| TOON/code2llm map | yes | normalized map/YAML | data/IR | compact structural map; presentation normalized |
 | policy-sh | policy IR | generated IR | yes | full semantics in IR, not plain data |
 | safe TypeScript data module | yes | yes | data/IR | restricted subset only; no code execution |
 | proto3 | descriptor-oriented | source/IR scaffold | yes | canonical format remains `.proto`/descriptor set |
@@ -112,3 +116,26 @@ Every environment must preserve these invariants:
 | policy Markdown import/lint | yes | runtime/IR | consume IR | no |
 | semantic diff | yes | yes | remote | remote |
 | round-trip report | yes | via conversion API | client orchestration | remote |
+
+## Contract-control matrix
+
+| Surface | Source of truth | Drift command | Runtime discovery |
+|---|---|---|---|
+| dialects and formatting profiles | parser/profile registries | `make versions-check` | `GET /v1/versions` |
+| HTTP, WebSocket, MQTT, gRPC | OpenAPI, AsyncAPI, proto | `make versions-check` | `GET /v1/versions` |
+| JSON Schema 2020-12 | `schemas/*.schema.json` | `make versions-check` | registry path/id/version/hash |
+| environment variables | `config/env-contract.json` | `make env-check` | `GET /v1/env-contract` without values |
+| Docker networks/ports/images | environment contract + Compose | `make compose-check` and network preflight | `.env`/Compose config |
+| typed schema bridge | JSON Schema or typed schema module | `make schema-demo`, `make verify` | CLI/API conversion metadata |
+
+## Three-layer IoT matrix
+
+| Layer | Artifact | Local protocol | Remote runtime role |
+|---|---|---|---|
+| frontend | `examples/iot-three-layer/frontend/` | HTTP to backend | event/config display |
+| backend | `wellm-server` | HTTP/WS + JSONL events | schema/URI execution and discovery |
+| firmware | `examples/iot-three-layer/firmware/device.py` | MQTT v5 envelope | thin config/telemetry client |
+| transport | Mosquitto + `wellm-mqtt` | MQTT response topic/correlation data | contract enforcement bridge |
+
+The dedicated `compose.iot.yml` and `make iot-up/iot-down/iot-e2e` targets use
+one explicit subnet and the same generated `.env` contract as the main stack.

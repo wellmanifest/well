@@ -11,7 +11,12 @@
         "flow://host/remote-access/query/preflight",
         "gpio://rpi/pin/configure/plan",
         "soa://service/http/request/plan",
-        "llm://planner/manifest/query/propose"
+        "llm://planner/manifest/query/propose",
+        "iot://device/telemetry/command/ingest",
+        "iot://device/config/query/get",
+        "wellmanifest://intent/formats/analyze",
+        "wellmanifest://runtime/versions/query",
+        "wellmanifest://runtime/env-contract/query"
       ]
     },
     "contract:frontend-demo": {
@@ -29,7 +34,12 @@
         "gpio://rpi/pin/configure/plan",
         "twin://system/profile/query/get",
         "wellmanifest://runtime/validate/execute",
-        "wellmanifest://application/run/execute"
+        "wellmanifest://application/run/execute",
+        "iot://device/telemetry/command/ingest",
+        "iot://device/config/query/get",
+        "wellmanifest://intent/formats/analyze",
+        "wellmanifest://runtime/versions/query",
+        "wellmanifest://runtime/env-contract/query"
       ]
     },
     "contract:digital-twin-readonly": {

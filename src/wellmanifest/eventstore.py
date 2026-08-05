@@ -14,9 +14,23 @@ class JsonlEventStore:
         self._events: list[dict[str, Any]] = []
         self._lock = threading.Lock()
         if self.path and self.path.exists():
-            for line in self.path.read_text(encoding="utf-8").splitlines():
-                if line.strip():
-                    self._events.append(json.loads(line))
+            self._refresh_from_disk_unlocked()
+
+    def _refresh_from_disk_unlocked(self) -> None:
+        if not self.path or not self.path.exists():
+            return
+        parsed: list[dict[str, Any]] = []
+        for line in self.path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                parsed.append(json.loads(line))
+            except json.JSONDecodeError:
+                # A different process may be appending the final line. The next
+                # read retries without exposing a partial event.
+                continue
+        if len(parsed) >= len(self._events):
+            self._events = parsed
 
     def append(
         self,
@@ -29,6 +43,7 @@ class JsonlEventStore:
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         with self._lock:
+            self._refresh_from_disk_unlocked()
             event = {
                 "spec": "wellmanifest.event/v1",
                 "id": str(uuid4()),
@@ -50,9 +65,11 @@ class JsonlEventStore:
 
     def read(self, *, stream: str | None = None, after: int = 0, limit: int = 100) -> list[dict[str, Any]]:
         with self._lock:
+            self._refresh_from_disk_unlocked()
             events = [item for item in self._events if stream is None or item.get("stream") == stream]
             return [item.copy() for item in events[after : after + min(max(limit, 0), 1000)]]
 
     def count(self) -> int:
         with self._lock:
+            self._refresh_from_disk_unlocked()
             return len(self._events)

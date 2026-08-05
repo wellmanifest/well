@@ -1,0 +1,607 @@
+{
+  "schema": "wellm.version-registry/v1",
+  "package": {
+    "name": "wellm",
+    "version": "0.2.0rc4"
+  },
+  "protocols": [
+    {
+      "id": "wellmanifest.protocol/v1",
+      "version": "1.0.0",
+      "compatibility": "backward-compatible-within-v1"
+    },
+    {
+      "id": "wellmanifest-ir/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm-governance-profile@1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.type-module/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.version-registry/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.env-contract/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.intent-format-project/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.intent-format-analysis/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.todo2code-format-evidence/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.iot-telemetry/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    },
+    {
+      "id": "wellm.iot-device-config/v1",
+      "version": "1.0.0",
+      "compatibility": "exact-major"
+    }
+  ],
+  "standards": [
+    {
+      "id": "json@rfc8259",
+      "version": "RFC 8259"
+    },
+    {
+      "id": "yaml@1.2",
+      "version": "1.2.2"
+    },
+    {
+      "id": "json-schema@2020-12",
+      "version": "2020-12"
+    },
+    {
+      "id": "hcl@2",
+      "version": "2"
+    },
+    {
+      "id": "proto3",
+      "version": "proto3"
+    },
+    {
+      "id": "toon@1",
+      "version": "1"
+    },
+    {
+      "id": "mqtt",
+      "version": "5.0"
+    },
+    {
+      "id": "grpc",
+      "version": "1"
+    },
+    {
+      "id": "asyncapi",
+      "version": "3.0.0"
+    }
+  ],
+  "apis": [
+    {
+      "id": "wellm-http-api",
+      "version": "v1",
+      "transport": "http",
+      "basePath": "/v1",
+      "contract": "openapi@3.1",
+      "schemaPath": "schemas/openapi.json",
+      "sha256": "sha256:49f4e839bb3dde01d0e18e4c4425aeb9f00c2945236bed391dfeb3e91f2e7341"
+    },
+    {
+      "id": "wellm-websocket-api",
+      "version": "v1",
+      "transport": "websocket",
+      "basePath": "/v1/ws",
+      "contract": "asyncapi@3.0.0",
+      "schemaPath": "schemas/asyncapi.yaml",
+      "sha256": "sha256:c52df2ba28bc2d956fd047a2198330ac1ebf1a8b2dffa80cc842be2b0d60294d"
+    },
+    {
+      "id": "wellm-mqtt-api",
+      "version": "v1",
+      "transport": "mqtt-v5",
+      "basePath": "wellmanifest/v1/{tenant}",
+      "contract": "asyncapi@3.0.0",
+      "schemaPath": "schemas/asyncapi.yaml",
+      "sha256": "sha256:c52df2ba28bc2d956fd047a2198330ac1ebf1a8b2dffa80cc842be2b0d60294d"
+    },
+    {
+      "id": "wellm-grpc-api",
+      "version": "v1",
+      "transport": "grpc",
+      "basePath": "wellmanifest.v1.RuntimeService",
+      "contract": "proto3",
+      "schemaPath": "proto/wellmanifest/v1/wellmanifest.proto",
+      "sha256": "sha256:12491ef0767cda5517214b8acab5b42a3206690731abd08189d6eaafd439650b"
+    }
+  ],
+  "dialects": [
+    {
+      "id": "hcl@2",
+      "family": "hcl",
+      "version": "2",
+      "status": "stable",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/hcl",
+        "application/wellmanifest+hcl"
+      ],
+      "extensions": [
+        ".hcl",
+        ".tf",
+        ".wm.hcl"
+      ]
+    },
+    {
+      "id": "json@rfc8259",
+      "family": "json",
+      "version": "rfc8259",
+      "status": "stable",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/json",
+        "application/wellmanifest+json"
+      ],
+      "extensions": [
+        ".json",
+        ".wm.json"
+      ]
+    },
+    {
+      "id": "policy-sh@1",
+      "family": "policy-sh",
+      "version": "1",
+      "status": "candidate",
+      "documentKind": "policy",
+      "mediaTypes": [
+        "application/wellmanifest+policy"
+      ],
+      "extensions": [
+        ".policy",
+        ".policy.dsl",
+        ".dsl"
+      ]
+    },
+    {
+      "id": "proto3",
+      "family": "proto3",
+      "version": "unversioned",
+      "status": "stable",
+      "documentKind": "api",
+      "mediaTypes": [
+        "application/protobuf",
+        "text/x-protobuf"
+      ],
+      "extensions": [
+        ".proto"
+      ]
+    },
+    {
+      "id": "toml@1.0",
+      "family": "toml",
+      "version": "1.0",
+      "status": "candidate",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/toml"
+      ],
+      "extensions": [
+        ".toml",
+        ".wm.toml"
+      ]
+    },
+    {
+      "id": "toon@1",
+      "family": "toon",
+      "version": "1",
+      "status": "candidate",
+      "documentKind": "ir",
+      "mediaTypes": [
+        "text/toon",
+        "application/toon+yaml",
+        "application/vnd.code2llm.toon+yaml",
+        "application/wellmanifest+toon"
+      ],
+      "extensions": [
+        ".toon.yaml",
+        ".toon.yml",
+        ".toon"
+      ]
+    },
+    {
+      "id": "typed@1",
+      "family": "typed",
+      "version": "1",
+      "status": "candidate",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/wellmanifest+typed"
+      ],
+      "extensions": [
+        ".wm",
+        ".wellmanifest",
+        ".typed"
+      ]
+    },
+    {
+      "id": "typescript@wellm-1",
+      "family": "typescript",
+      "version": "wellm-1",
+      "status": "candidate",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/typescript",
+        "text/typescript",
+        "application/wellmanifest+typescript"
+      ],
+      "extensions": [
+        ".wm.ts",
+        ".wellm.ts",
+        ".manifest.ts"
+      ]
+    },
+    {
+      "id": "yaml@1.2/json-compatible",
+      "family": "yaml",
+      "version": "1.2/json-compatible",
+      "status": "stable",
+      "documentKind": "data",
+      "mediaTypes": [
+        "application/yaml",
+        "application/x-yaml",
+        "application/wellmanifest+yaml"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml",
+        ".wm.yaml",
+        ".wm.yml"
+      ]
+    }
+  ],
+  "formatProfiles": [
+    {
+      "id": "wellm-typed@1",
+      "family": "typed",
+      "mediaType": "application/wellmanifest+typed",
+      "extension": ".wm",
+      "canonical": true,
+      "description": "Canonical authoring profile with inline type metadata."
+    },
+    {
+      "id": "json-data@1",
+      "family": "json",
+      "mediaType": "application/json",
+      "extension": ".json",
+      "canonical": false,
+      "description": "Readable JSON data preserving source object order."
+    },
+    {
+      "id": "repo-json@1",
+      "family": "json",
+      "mediaType": "application/json",
+      "extension": ".json",
+      "canonical": true,
+      "description": "Deterministic repository JSON ordered by schema and lexical dynamic keys."
+    },
+    {
+      "id": "wire-json@1",
+      "family": "json",
+      "mediaType": "application/wellmanifest+json",
+      "extension": ".json",
+      "canonical": true,
+      "description": "Compact deterministic JSON used for semantic digests and transport."
+    },
+    {
+      "id": "yaml-json@1",
+      "family": "yaml",
+      "mediaType": "application/wellmanifest+yaml",
+      "extension": ".yaml",
+      "canonical": true,
+      "description": "YAML 1.2 restricted to the JSON-compatible data model."
+    },
+    {
+      "id": "hcl-static@1",
+      "family": "hcl",
+      "mediaType": "application/wellmanifest+hcl",
+      "extension": ".hcl",
+      "canonical": true,
+      "description": "Static HCL-shaped data without evaluation-dependent expressions."
+    },
+    {
+      "id": "typescript-data@1",
+      "family": "typescript",
+      "mediaType": "application/wellmanifest+typescript",
+      "extension": ".wm.ts",
+      "canonical": true,
+      "description": "Restricted export-default TypeScript data module."
+    },
+    {
+      "id": "toon-map@1",
+      "family": "toon",
+      "mediaType": "application/wellmanifest+toon",
+      "extension": ".toon.yaml",
+      "canonical": true,
+      "description": "YAML-compatible compact code/project map with versioned producer metadata."
+    },
+    {
+      "id": "policy-md@1",
+      "family": "policy",
+      "mediaType": "text/markdown",
+      "extension": ".md",
+      "canonical": true,
+      "description": "Markdown with canonical dsl/policy/wellm-policy fenced blocks."
+    }
+  ],
+  "schemas": [
+    {
+      "path": "schemas/artifact-metadata.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/artifact-metadata.schema.json",
+      "contract": "wellm.artifact-metadata/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:c7954f6b4d870fa748cb30cbb4533caeb58153ba65042194e8035b6e2324cd1d"
+    },
+    {
+      "path": "schemas/contract.schema.json",
+      "id": "https://wellmanifest.org/schemas/contract.schema.json",
+      "contract": "wellmanifest.contract/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:9c2394d589dd68943c23943b53d7bc79728c5936a54f2699095b60cbb2253a53"
+    },
+    {
+      "path": "schemas/conversion-report.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/conversion-report.schema.json",
+      "contract": "wellm.conversion-report/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:28cf58eb3c3becc5daa70cc4fbe35c3767907dd67e3cd884a28328a1901197fe"
+    },
+    {
+      "path": "schemas/diagnostic.schema.json",
+      "id": "https://wellmanifest.org/schemas/diagnostic.schema.json",
+      "contract": "diagnostic.schema",
+      "version": "0.2.0rc4",
+      "compatibility": "exact-hash",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:cc85c5546f7788d979bf6d3f09322dc68b0bd346ccfb3b35eb6f9ad5fee8ed83"
+    },
+    {
+      "path": "schemas/digital-twin.schema.json",
+      "id": "https://wellmanifest.org/schemas/digital-twin.schema.json",
+      "contract": "wellmanifest.digital-twin/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:1ecdb324292b5683bc911154f4320b450484855955533d75999d2eebd72a62da"
+    },
+    {
+      "path": "schemas/env-contract.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/env-contract.schema.json",
+      "contract": "wellm.env-contract/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:293bfa8a2b05476840689db9b82228499e14fb3b2c5755d15f1c1ce8b05d916a"
+    },
+    {
+      "path": "schemas/envelope.schema.json",
+      "id": "https://wellmanifest.org/schemas/envelope.schema.json",
+      "contract": "wellmanifest.protocol/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:cfbc5246d3af0d353f067d827faa26cf744ee7e0257036f91e4f745997660ced"
+    },
+    {
+      "path": "schemas/execute-request.schema.json",
+      "id": "https://wellmanifest.org/schemas/execute-request.schema.json",
+      "contract": "execute-request.schema",
+      "version": "0.2.0rc4",
+      "compatibility": "exact-hash",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:1250ef351a98c44e5405657f7d594436d645054829e2faeefae327809d724442"
+    },
+    {
+      "path": "schemas/governance-build-report.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/governance-build-report.schema.json",
+      "contract": "wellm.governance-build-report/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:51bf18bd73c5a1dff3205d60cd12239261da9dd701ca52190c1d72826fd23802"
+    },
+    {
+      "path": "schemas/governance-project.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/governance-project.schema.json",
+      "contract": "wellm.governance-project/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:176be694f4eab5e7bd0a179cd499f8cad05314cbdda502c33bfa8cdb24df5b24"
+    },
+    {
+      "path": "schemas/intent-format-analysis.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/intent-format-analysis.schema.json",
+      "contract": "wellm.intent-format-analysis/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:72e76165e631b20b063fa70c45eb60bb75ceae9d5592b5ab1b9aa852bb7434b1"
+    },
+    {
+      "path": "schemas/intent-format-project.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/intent-format-project.schema.json",
+      "contract": "wellm.intent-format-project/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:20d511d7199b63c72d9d79864af100c93d90340d3ff81e02eef2054e8613866b"
+    },
+    {
+      "path": "schemas/iot-device-config.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/iot-device-config.schema.json",
+      "contract": "wellm.iot-device-config/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:f309bd528db7daa6ed347c93a76a72e9f60eb8cc4e73c198435ca0520a33a356"
+    },
+    {
+      "path": "schemas/iot-telemetry.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/iot-telemetry.schema.json",
+      "contract": "wellm.iot-telemetry/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:df59412346f894438c45b4c2e36a55a2ff75052ff505e906dddd8c02a14acf26"
+    },
+    {
+      "path": "schemas/llm-benchmark-report.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/llm-benchmark-report.schema.json",
+      "contract": "wellmanifest.llm-benchmark-report/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:76830a840061341a34c5d35fe0708c002e5117a6f53f8ad3d086e5cd9bde3794"
+    },
+    {
+      "path": "schemas/llm-benchmark.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/llm-benchmark.schema.json",
+      "contract": "wellmanifest.llm-benchmark/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:e4b17baedfd3a3b7f28968f7aad74c7a70e624ceef1819a89987478801ee8a6a"
+    },
+    {
+      "path": "schemas/projects.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/projects.schema.json",
+      "contract": "subactor.projects/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:006a6a2a1ce5ba5e9798dd47876e42c87ea809fdad40855f8f80eff770aa1149"
+    },
+    {
+      "path": "schemas/publication-plan.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/publication-plan.schema.json",
+      "contract": "wellmanifest.plesk-publication-plan/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:59e19670baa0bc92364a194a0f5bb1cae5b8446b3f575be468c8de78ffabbf03"
+    },
+    {
+      "path": "schemas/publication-receipt.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/publication-receipt.schema.json",
+      "contract": "wellmanifest.plesk-publication-receipt/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:3671e2a43706f6457db6d06134e3511f78f8866320bd8332d65f6ba40e82f8fa"
+    },
+    {
+      "path": "schemas/semantic-diff.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/semantic-diff.schema.json",
+      "contract": "wellm.semantic-diff/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:4516c1a3f828bbb7aea9c91065edb9fcf9f458ee0bc6a45317959be0b448cdd2"
+    },
+    {
+      "path": "schemas/situation-profile.schema.json",
+      "id": "https://wellmanifest.org/schemas/situation-profile.schema.json",
+      "contract": "subactor.doql-situation-profile/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:b01783507a133087de4d8bf2d6ea5c00a18755dfbb261029fb8c83c0e82211ed"
+    },
+    {
+      "path": "schemas/source-map.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/source-map.schema.json",
+      "contract": "wellm.source-map/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:d00bee5f176fabeab9e2cb6b2141f114eb2ce68963804501f442c2a73f0b502c"
+    },
+    {
+      "path": "schemas/status.schema.json",
+      "id": "https://wellmanifest.org/schemas/status.schema.json",
+      "contract": "status.schema",
+      "version": "0.2.0rc4",
+      "compatibility": "exact-hash",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:7b919ef4a8074ca492764aff80eb2178cad3ebeac1c29c6e45c0ab394167f7f1"
+    },
+    {
+      "path": "schemas/todo2code-format-evidence.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/todo2code-format-evidence.schema.json",
+      "contract": "wellm.todo2code-format-evidence/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:68603d85d3dc319098841ebfc8eb115f97448d29ccb0b04e8aebb4c2dcd51029"
+    },
+    {
+      "path": "schemas/version-registry.schema.json",
+      "id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/version-registry.schema.json",
+      "contract": "wellm.version-registry/v1",
+      "version": "v1",
+      "compatibility": "exact-major",
+      "dialect": "json-schema@2020-12",
+      "sha256": "sha256:aaaa93c45716c06c83341124a3f425adc25d585ac0cb096d7a412ea52b144a29"
+    }
+  ],
+  "packages": [
+    {
+      "ecosystem": "python",
+      "name": "wellm",
+      "version": "0.2.0rc4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@wellmanifest/wellm-sdk",
+      "version": "0.2.0-rc.4"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "wellmanifest-core",
+      "version": "0.2.0-rc.4"
+    },
+    {
+      "ecosystem": "container",
+      "name": "wellmanifest/wellm",
+      "version": "0.2.0rc4"
+    }
+  ]
+}

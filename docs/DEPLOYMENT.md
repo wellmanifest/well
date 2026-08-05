@@ -84,7 +84,7 @@ in the benchmark YAML, image layer, Compose file or result artifact.
 After publishing images, an application image can copy the Rust CLI:
 
 ```dockerfile
-FROM wellmanifest/wellm-runtime-rust:0.2.0rc3 AS wellm
+FROM wellmanifest/wellm-runtime-rust:0.2.0rc4 AS wellm
 FROM gcr.io/distroless/cc-debian12
 COPY --from=wellm /usr/local/bin/wellmanifest-native /usr/local/bin/wellm-native
 ENTRYPOINT ["/usr/local/bin/wellm-native"]
@@ -121,7 +121,7 @@ act as a thin client. Use Buildx for multi-architecture images:
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   -f Dockerfile \
-  -t registry.example/wellmanifest/wellm:0.2.0rc3 \
+  -t registry.example/wellmanifest/wellm:0.2.0rc4 \
   --push .
 ```
 
@@ -176,5 +176,5 @@ A production release should publish:
 - `.proto` and JSON Schemas;
 - SBOM, provenance and conformance report.
 
-Version 0.2.0rc3 packages source and build recipes; registry publication is not
+Version 0.2.0rc4 packages source and build recipes; registry publication is not
 performed by this artifact.

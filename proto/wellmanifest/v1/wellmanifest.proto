@@ -66,6 +66,7 @@ message ConvertRequest {
   google.protobuf.Struct schema = 5;
   string source_name = 6;
   bool pretty = 7;
+  string type_mode = 8; // preserve | schema | infer | none
 }
 
 message ConvertResponse {

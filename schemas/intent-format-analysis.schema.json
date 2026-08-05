@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/intent-format-analysis.schema.json",
+  "title": "Wellm multi-format intent analysis",
+  "type": "object",
+  "required": ["schema", "id", "equivalent", "representations", "pairs", "diagnostics", "todo2code"],
+  "properties": {
+    "schema": {"const": "wellm.intent-format-analysis/v1"},
+    "id": {"type": "string"},
+    "sourceProject": {"type": ["string", "null"]},
+    "equivalent": {"type": "boolean"},
+    "canonicalSemanticSha256": {"type": ["string", "null"], "pattern": "^(sha256:[0-9a-f]{64})?$"},
+    "recommendedAuthoring": {"type": ["string", "null"]},
+    "recommendedEnforcement": {"type": "string"},
+    "representations": {"type": "array", "items": {"type": "object"}},
+    "pairs": {"type": "array", "items": {"type": "object"}},
+    "diagnostics": {"type": "array", "items": {"$ref": "diagnostic.schema.json"}},
+    "todo2code": {"type": "object"}
+  }
+}

@@ -12,9 +12,12 @@ from fastapi import Depends, FastAPI, Header, HTTPException, WebSocket, WebSocke
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .env_contract import load_env_contract
 from .governance import available_profiles, semantic_diff, semantic_sha256, serialize_profile
+from .intent_analysis import InlineIntentAnalysisRequest, analyze_inline_representations
 from .models import ConversionRequest, Envelope, ExecuteRequest, ValidationRequest
 from .runtime import WellManifestRuntime
+from .versions import load_version_registry
 
 
 
@@ -87,6 +90,18 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
     @app.get("/v1/profiles", dependencies=[Depends(authorize)])
     def profiles() -> list[dict[str, Any]]:
         return available_profiles()
+
+    @app.get("/v1/versions", dependencies=[Depends(authorize)])
+    def versions() -> dict[str, Any]:
+        return load_version_registry()
+
+    @app.get("/v1/env-contract", dependencies=[Depends(authorize)])
+    def env_contract() -> dict[str, Any]:
+        return load_env_contract()
+
+    @app.post("/v1/intent/analyze", dependencies=[Depends(authorize)])
+    def analyze_intent(request: InlineIntentAnalysisRequest) -> dict[str, Any]:
+        return analyze_inline_representations(runtime, request).model_dump(mode="json", by_alias=True)
 
     @app.post("/v1/convert", dependencies=[Depends(authorize)])
     def convert(request: ConversionRequest) -> dict[str, Any]:
@@ -273,6 +288,13 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
                 elif operation == "semantic-diff":
                     request = SemanticDiffApiRequest.model_validate(message.get("request", {}))
                     result = semantic_diff(request.left, request.right).model_dump(mode="json", by_alias=True)
+                elif operation == "versions":
+                    result = load_version_registry()
+                elif operation == "env-contract":
+                    result = load_env_contract()
+                elif operation == "intent-analyze":
+                    request = InlineIntentAnalysisRequest.model_validate(message.get("request", {}))
+                    result = analyze_inline_representations(runtime, request).model_dump(mode="json", by_alias=True)
                 elif operation == "execute":
                     request = ExecuteRequest.model_validate(message.get("request", {}))
                     if not request.contract_ref and not request.allowed_uri_processes:

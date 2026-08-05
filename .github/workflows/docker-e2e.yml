@@ -12,6 +12,7 @@ on:
       - 'packages/**'
       - 'proto/**'
       - 'scripts/**'
+      - 'examples/iot-three-layer/**'
 
 permissions:
   contents: read
@@ -19,17 +20,23 @@ permissions:
 jobs:
   compose:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose -f compose.e2e.yml config
-      - run: docker compose -f compose.e2e.yml up --build --abort-on-container-exit --exit-code-from e2e
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - run: make env-setup
+      - run: make compose-check
+      - run: make e2e-docker
+      - run: make iot-e2e
       - if: always()
-        run: docker compose -f compose.e2e.yml logs --no-color > docker-e2e.log
+        run: |
+          docker compose --env-file .env -f compose.e2e.yml logs --no-color > docker-e2e.log 2>&1 || true
+          docker compose --env-file .env -f compose.iot.yml --profile e2e logs --no-color > iot-e2e.log 2>&1 || true
       - if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: docker-e2e-log
-          path: docker-e2e.log
-      - if: always()
-        run: docker compose -f compose.e2e.yml down -v --remove-orphans
+          name: docker-e2e-logs
+          path: |
+            docker-e2e.log
+            iot-e2e.log

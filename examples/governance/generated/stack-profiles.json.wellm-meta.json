@@ -2,7 +2,7 @@
   "artifactSha256": "sha256:d770708be29ade21961483e91a84d7beb1034641b25a5df4b171c3dee7121703",
   "generator": {
     "name": "wellm",
-    "version": "0.2.0rc3"
+    "version": "0.2.0rc4"
   },
   "schema": "wellm.artifact-metadata/v1",
   "schemaRef": null,

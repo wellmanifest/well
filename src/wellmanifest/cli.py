@@ -9,6 +9,7 @@ from typing import Any
 
 import yaml
 
+from .env_contract import load_env_contract, setup_env, sync_env_contract, verify_env_contract
 from .governance import (
     FORMAT_PROFILES,
     GovernanceBuilder,
@@ -19,9 +20,17 @@ from .governance import (
     semantic_diff,
     serialize_profile,
 )
+from .intent_analysis import analyze_intent_project, todo2code_evidence
 from .models import ConversionRequest, Document, DocumentMetadata, ExecuteRequest, RuntimeTarget, ValidationRequest
 from .runtime import WellManifestRuntime
+from .type_bridge import (
+    json_schema_to_python,
+    json_schema_to_typed_module,
+    json_schema_to_typescript,
+    typed_module_to_json_schema,
+)
 from .version import __version__
+from .versions import build_version_registry, load_version_registry, serialize_registry, sync_version_registry
 
 
 def _read(path: str) -> str:
@@ -126,6 +135,13 @@ def build_parser() -> argparse.ArgumentParser:
     convert_parser.add_argument("--schema")
     convert_parser.add_argument("--output", "-o", default="-")
     convert_parser.add_argument("--compact", action="store_true")
+    convert_parser.add_argument(
+        "--types",
+        dest="type_mode",
+        choices=["preserve", "schema", "infer", "none"],
+        default="preserve",
+        help="Type metadata strategy when emitting typed@1.",
+    )
 
     validate_parser = subparsers.add_parser("validate", help="Validate against JSON Schema 2020-12")
     validate_parser.add_argument("file")
@@ -154,6 +170,43 @@ def build_parser() -> argparse.ArgumentParser:
     roundtrip_parser.add_argument("--via", required=True, help="Comma-separated dialect list, e.g. yaml,json,typescript")
     roundtrip_parser.add_argument("--schema")
     roundtrip_parser.add_argument("--output", "-o", default="-")
+
+    schema_parser = subparsers.add_parser("schema", help="Import/export JSON Schema and generate language types")
+    schema_sub = schema_parser.add_subparsers(dest="schema_command", required=True)
+    schema_import = schema_sub.add_parser("import", help="Import JSON Schema 2020-12 into a typed Wellm module")
+    schema_import.add_argument("file")
+    schema_import.add_argument("--root-type")
+    schema_import.add_argument("--output", "-o", default="-")
+    schema_export = schema_sub.add_parser("export", help="Export a typed Wellm schema module to JSON Schema")
+    schema_export.add_argument("file")
+    schema_export.add_argument("--output", "-o", default="-")
+    schema_codegen = schema_sub.add_parser("codegen", help="Generate static types from JSON Schema or a typed schema module")
+    schema_codegen.add_argument("file")
+    schema_codegen.add_argument("--from", dest="source_format", choices=["json-schema", "typed"], default="json-schema")
+    schema_codegen.add_argument("--language", choices=["typescript", "python"], required=True)
+    schema_codegen.add_argument("--root-type")
+    schema_codegen.add_argument("--output", "-o", default="-")
+
+    intent_parser = subparsers.add_parser("intent", help="Compare intent represented in multiple file formats")
+    intent_sub = intent_parser.add_subparsers(dest="intent_command", required=True)
+    intent_analyze = intent_sub.add_parser("analyze", help="Analyze semantic and schema drift between representations")
+    intent_analyze.add_argument("project", help="wellm.intent-format-project/v1 JSON or YAML")
+    intent_analyze.add_argument("--output", "-o", default="-")
+    intent_analyze.add_argument("--todo2code-evidence")
+
+    env_parser = subparsers.add_parser("env", help="Manage and verify the global environment contract")
+    env_sub = env_parser.add_subparsers(dest="env_command", required=True)
+    env_sub.add_parser("show", help="Print the environment contract without secret values")
+    env_setup = env_sub.add_parser("setup", help="Create .env from .env.example if missing")
+    env_setup.add_argument("--force", action="store_true")
+    env_sub.add_parser("sync", help="Regenerate .env.example and packaged contract")
+    env_check = env_sub.add_parser("check", help="Verify variable declarations and .env values")
+    env_check.add_argument("--dotenv")
+
+    versions_parser = subparsers.add_parser("versions", help="Print, synchronize or verify format/API/schema versions")
+    versions_parser.add_argument("--write", action="store_true")
+    versions_parser.add_argument("--check", action="store_true")
+    versions_parser.add_argument("--output", "-o", default="-")
 
     governance_parser = subparsers.add_parser("governance", help="Build deterministic governance artifacts")
     governance_sub = governance_parser.add_subparsers(dest="governance_command", required=True)
@@ -191,7 +244,7 @@ def build_parser() -> argparse.ArgumentParser:
     plesk_plan.add_argument("--project", required=True)
     plesk_plan.add_argument("--source-ref", action="append", default=[], metavar="REF=PATH")
     plesk_plan.add_argument("--workspace-root")
-    plesk_plan.add_argument("--to", choices=["json", "yaml", "typed", "hcl", "typescript"], default="json")
+    plesk_plan.add_argument("--to", choices=["json", "yaml", "typed", "hcl", "typescript", "toon"], default="json")
     plesk_plan.add_argument("--output", "-o", default="-")
 
     plesk_publish = subparsers.add_parser(
@@ -233,6 +286,67 @@ def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
     runtime = WellManifestRuntime()
+
+    if args.command == "versions":
+        try:
+            if args.write:
+                registry = sync_version_registry()
+            elif args.check:
+                registry = sync_version_registry(check=True)
+            else:
+                registry = load_version_registry()
+        except ValueError as exc:
+            print(f"ERROR WM-VERSION-001: {exc}", file=sys.stderr)
+            raise SystemExit(1) from exc
+        _write_output(serialize_registry(registry), args.output)
+        return
+
+    if args.command == "env":
+        if args.env_command == "show":
+            print(json.dumps(load_env_contract(), ensure_ascii=False, indent=2))
+            return
+        if args.env_command == "setup":
+            print(setup_env(force=args.force))
+            return
+        if args.env_command == "sync":
+            sync_env_contract()
+            print("environment contract synchronized")
+            return
+        report = verify_env_contract(dotenv=args.dotenv)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        raise SystemExit(0 if report["ok"] else 1)
+
+    if args.command == "schema":
+        if args.schema_command == "import":
+            schema = _load_json(args.file)
+            _write_output(json_schema_to_typed_module(schema, root_name=args.root_type), args.output)
+            return
+        if args.schema_command == "export":
+            schema = typed_module_to_json_schema(_read(args.file), source_name=args.file)
+            _write_output(json.dumps(schema, ensure_ascii=False, indent=2) + "\n", args.output)
+            return
+        schema = (
+            typed_module_to_json_schema(_read(args.file), source_name=args.file)
+            if args.source_format == "typed"
+            else _load_json(args.file)
+        )
+        output = (
+            json_schema_to_typescript(schema, root_name=args.root_type)
+            if args.language == "typescript"
+            else json_schema_to_python(schema, root_name=args.root_type)
+        )
+        _write_output(output, args.output)
+        return
+
+    if args.command == "intent":
+        report = analyze_intent_project(runtime, args.project)
+        rendered = json.dumps(report.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n"
+        _write_output(rendered, args.output)
+        if args.todo2code_evidence:
+            evidence = todo2code_evidence(report)
+            _write_output(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", args.todo2code_evidence)
+        _print_diagnostics(report.diagnostics)
+        raise SystemExit(0 if report.equivalent else 1)
 
     if args.command == "inspect":
         source = _read(args.file)
@@ -279,6 +393,7 @@ def main(argv: list[str] | None = None) -> None:
                 schema=schema,
                 source_name=args.file,
                 pretty=not args.compact,
+                type_mode=args.type_mode,
             )
         )
         _print_diagnostics(result.diagnostics)

@@ -12,3 +12,5 @@ node_modules/
 .runtime/
 *.log
 coverage/
+.wellm/
+.intent/

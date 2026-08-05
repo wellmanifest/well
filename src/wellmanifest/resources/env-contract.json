@@ -1,0 +1,593 @@
+{
+  "schema": "wellm.env-contract/v1",
+  "variables": [
+    {
+      "name": "WELLMANIFEST_E2E_SUBNET",
+      "group": "docker",
+      "type": "cidr",
+      "default": "172.30.242.0/24",
+      "required": false,
+      "secret": false,
+      "description": "Explicit E2E subnet, avoiding Docker default-pool exhaustion."
+    },
+    {
+      "name": "WELLMANIFEST_GRPC_HOST_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "50051",
+      "required": false,
+      "secret": false,
+      "description": "Host gRPC port."
+    },
+    {
+      "name": "WELLMANIFEST_HTTP_HOST_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "8080",
+      "required": false,
+      "secret": false,
+      "description": "Host HTTP port."
+    },
+    {
+      "name": "WELLMANIFEST_IMAGE",
+      "group": "docker",
+      "type": "string",
+      "default": "wellmanifest/wellm",
+      "required": false,
+      "secret": false,
+      "description": "Runtime image repository."
+    },
+    {
+      "name": "WELLMANIFEST_IMAGE_TAG",
+      "group": "docker",
+      "type": "string",
+      "default": "0.2.0rc4-dev",
+      "required": false,
+      "secret": false,
+      "description": "Runtime image tag."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_BACKEND_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "8091",
+      "required": false,
+      "secret": false,
+      "description": "IoT backend host port."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_FRONTEND_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "8090",
+      "required": false,
+      "secret": false,
+      "description": "IoT frontend host port."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_MQTT_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "1884",
+      "required": false,
+      "secret": false,
+      "description": "IoT MQTT host port."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_SUBNET",
+      "group": "docker",
+      "type": "cidr",
+      "default": "172.30.243.0/24",
+      "required": false,
+      "secret": false,
+      "description": "Explicit three-layer IoT subnet."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_HOST_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "1883",
+      "required": false,
+      "secret": false,
+      "description": "Host MQTT port."
+    },
+    {
+      "name": "WELLMANIFEST_PUBLIC_SUBNET",
+      "group": "docker",
+      "type": "cidr",
+      "default": "172.30.240.0/24",
+      "required": false,
+      "secret": false,
+      "description": "Explicit public Compose subnet."
+    },
+    {
+      "name": "WELLMANIFEST_RUNTIME_SUBNET",
+      "group": "docker",
+      "type": "cidr",
+      "default": "172.30.241.0/24",
+      "required": false,
+      "secret": false,
+      "description": "Explicit runtime Compose subnet."
+    },
+    {
+      "name": "WELLMANIFEST_WWW_HOST_PORT",
+      "group": "docker",
+      "type": "integer",
+      "default": "8088",
+      "required": false,
+      "secret": false,
+      "description": "Host landing page port."
+    },
+    {
+      "name": "WELLMANIFEST_GRPC_ADDRESS",
+      "group": "grpc",
+      "type": "string",
+      "default": "0.0.0.0:50051",
+      "required": false,
+      "secret": false,
+      "description": "gRPC bind address."
+    },
+    {
+      "name": "WELLMANIFEST_GRPC_TARGET",
+      "group": "grpc",
+      "type": "string",
+      "default": "localhost:50051",
+      "required": false,
+      "secret": false,
+      "description": "gRPC client target."
+    },
+    {
+      "name": "WELLMANIFEST_GRPC_WORKERS",
+      "group": "grpc",
+      "type": "integer",
+      "default": "8",
+      "required": false,
+      "secret": false,
+      "description": "gRPC worker count."
+    },
+    {
+      "name": "TODO2CODE_BIN",
+      "group": "integration",
+      "type": "string",
+      "default": "t2c",
+      "required": false,
+      "secret": false,
+      "description": "todo2code CLI command used by the intent integration target."
+    },
+    {
+      "name": "TODO2CODE_IMAGE",
+      "group": "integration",
+      "type": "string",
+      "default": "todo2code:local",
+      "required": false,
+      "secret": false,
+      "description": "Optional local todo2code image."
+    },
+    {
+      "name": "TODO2CODE_OUTPUT_DIR",
+      "group": "integration",
+      "type": "path",
+      "default": ".intent/wellm-formats",
+      "required": false,
+      "secret": false,
+      "description": "Output directory for Wellm/todo2code format evidence."
+    },
+    {
+      "name": "TODO2CODE_TOKEN",
+      "group": "integration",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "Optional todo2code A2A bearer token."
+    },
+    {
+      "name": "TODO2CODE_URL",
+      "group": "integration",
+      "type": "url",
+      "default": "http://localhost:8787",
+      "required": false,
+      "secret": false,
+      "description": "todo2code A2A base URL."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_DEVICE_ID",
+      "group": "iot",
+      "type": "string",
+      "default": "rpi-sim-001",
+      "required": false,
+      "secret": false,
+      "description": "Firmware simulator device identifier."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_RUN_ONCE",
+      "group": "iot",
+      "type": "boolean",
+      "default": "1",
+      "required": false,
+      "secret": false,
+      "description": "Exit firmware simulator after one acknowledged sample."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_SAMPLE_INTERVAL",
+      "group": "iot",
+      "type": "number",
+      "default": "1.0",
+      "required": false,
+      "secret": false,
+      "description": "Firmware telemetry interval in seconds."
+    },
+    {
+      "name": "MQTT_HOST",
+      "group": "mqtt",
+      "type": "string",
+      "default": "mqtt",
+      "required": false,
+      "secret": false,
+      "description": "E2E MQTT client host."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_HOST",
+      "group": "mqtt",
+      "type": "string",
+      "default": "mqtt",
+      "required": false,
+      "secret": false,
+      "description": "MQTT broker hostname."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_PASSWORD",
+      "group": "mqtt",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "Optional MQTT password."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_PORT",
+      "group": "mqtt",
+      "type": "integer",
+      "default": "1883",
+      "required": false,
+      "secret": false,
+      "description": "MQTT broker port."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_REQUEST_TOPIC",
+      "group": "mqtt",
+      "type": "string",
+      "default": "wellmanifest/v1/default/request/#",
+      "required": false,
+      "secret": false,
+      "description": "Bridge subscription topic."
+    },
+    {
+      "name": "WELLMANIFEST_MQTT_USERNAME",
+      "group": "mqtt",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": false,
+      "description": "Optional MQTT username."
+    },
+    {
+      "name": "WELLMANIFEST_TENANT",
+      "group": "mqtt",
+      "type": "string",
+      "default": "default",
+      "required": false,
+      "secret": false,
+      "description": "Protocol tenant identifier."
+    },
+    {
+      "name": "WELLMANIFEST_DOCKER_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Docker E2E result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_E2E_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Local E2E result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_ENV_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Environment contract verification recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_GOVERNANCE_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Governance build result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_INTENT_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Multi-format intent analysis result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_IOT_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Three-layer IoT/firmware result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_NODE_TEST_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Node test result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_NPM_PACKAGE_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "npm package smoke result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_PYTHON_TEST_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Python test result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_RUFF_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Ruff result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_RUST_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Rust/WASM result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_SOURCE_ARCHIVE_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Source archive smoke result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_TYPING_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Bidirectional schema typing result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_VERSION_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Version registry verification recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_WHEEL_RESULT",
+      "group": "release",
+      "type": "string",
+      "default": "not-run",
+      "required": false,
+      "secret": false,
+      "description": "Wheel smoke result recorded in release metadata."
+    },
+    {
+      "name": "WELLMANIFEST_CONTRACT",
+      "group": "runtime",
+      "type": "string",
+      "default": "contract:firmware-thin",
+      "required": false,
+      "secret": false,
+      "description": "Client-side contract reference."
+    },
+    {
+      "name": "WELLMANIFEST_CONTRACTS",
+      "group": "runtime",
+      "type": "path",
+      "default": "/app/config/contracts.json",
+      "required": false,
+      "secret": false,
+      "description": "Contract registry path."
+    },
+    {
+      "name": "WELLMANIFEST_DEFAULT_CONTRACT",
+      "group": "runtime",
+      "type": "string",
+      "default": "contract:dev",
+      "required": false,
+      "secret": false,
+      "description": "Default Contract AQL reference."
+    },
+    {
+      "name": "WELLMANIFEST_DEV_ALLOW",
+      "group": "runtime",
+      "type": "boolean",
+      "default": "0",
+      "required": false,
+      "secret": false,
+      "description": "Development-only URI allow switch."
+    },
+    {
+      "name": "WELLMANIFEST_ENABLE_PLESK_EXECUTION",
+      "group": "runtime",
+      "type": "boolean",
+      "default": "0",
+      "required": false,
+      "secret": false,
+      "description": "Enable remote Plesk execution endpoint."
+    },
+    {
+      "name": "WELLMANIFEST_EVENT_STORE",
+      "group": "runtime",
+      "type": "path",
+      "default": "/data/events.jsonl",
+      "required": false,
+      "secret": false,
+      "description": "Append-only event store path."
+    },
+    {
+      "name": "WELLMANIFEST_HOST",
+      "group": "runtime",
+      "type": "string",
+      "default": "0.0.0.0",
+      "required": false,
+      "secret": false,
+      "description": "HTTP bind host."
+    },
+    {
+      "name": "WELLMANIFEST_MAX_BODY_BYTES",
+      "group": "runtime",
+      "type": "integer",
+      "default": "1048576",
+      "required": false,
+      "secret": false,
+      "description": "Documented request body budget."
+    },
+    {
+      "name": "WELLMANIFEST_PORT",
+      "group": "runtime",
+      "type": "integer",
+      "default": "8080",
+      "required": false,
+      "secret": false,
+      "description": "HTTP bind/container port."
+    },
+    {
+      "name": "WELLMANIFEST_RELOAD",
+      "group": "runtime",
+      "type": "boolean",
+      "default": "0",
+      "required": false,
+      "secret": false,
+      "description": "Enable Uvicorn reload in development."
+    },
+    {
+      "name": "WELLMANIFEST_TOKEN",
+      "group": "runtime",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "Optional HTTP bearer-style gateway token."
+    },
+    {
+      "name": "WELLMANIFEST_URL",
+      "group": "runtime",
+      "type": "url",
+      "default": "http://localhost:8080",
+      "required": false,
+      "secret": false,
+      "description": "Public/client runtime URL."
+    },
+    {
+      "name": "WELLMANIFEST_WORKSPACE_ROOT",
+      "group": "runtime",
+      "type": "path",
+      "default": "/workspace",
+      "required": false,
+      "secret": false,
+      "description": "Allowed workspace root for publication planning."
+    },
+    {
+      "name": "OPENROUTER_API_KEY",
+      "group": "security",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "Optional LiteLLM/OpenRouter benchmark key."
+    },
+    {
+      "name": "URIRUN_APPLY_GRANT",
+      "group": "security",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "Signed single-use apply grant."
+    },
+    {
+      "name": "URIRUN_NODE_URL",
+      "group": "security",
+      "type": "url",
+      "default": "http://urirun-bridge:8080",
+      "required": false,
+      "secret": false,
+      "description": "Trusted urirun bridge/node URL."
+    },
+    {
+      "name": "URIRUN_TOKEN",
+      "group": "security",
+      "type": "string",
+      "default": "",
+      "required": false,
+      "secret": true,
+      "description": "urirun bridge token."
+    },
+    {
+      "name": "WELLMANIFEST_E2E_ALLOW_LOCAL_FALLBACK",
+      "group": "test",
+      "type": "boolean",
+      "default": "0",
+      "required": false,
+      "secret": false,
+      "description": "Allow make e2e to skip Docker only when explicitly enabled."
+    },
+    {
+      "name": "WELLMANIFEST_E2E_PORT",
+      "group": "test",
+      "type": "integer",
+      "default": "18080",
+      "required": false,
+      "secret": false,
+      "description": "Local E2E HTTP port."
+    }
+  ],
+  "ignoredReferences": [
+    "WELLMANIFEST_ENVELOPE_H"
+  ]
+}

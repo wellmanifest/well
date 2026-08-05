@@ -45,6 +45,24 @@ PYTHONPATH="$ROOT/src" python -m wellmanifest.cli benchmark-llm "$ROOT/examples/
 test -s "$EXTRA/benchmark/benchmark-report.json"
 PYTHONPATH="$ROOT/src" python -m wellmanifest.cli governance build "$ROOT/examples/governance/wellm.project.yaml" --check >"$EXTRA/governance-check.json"
 test -s "$EXTRA/governance-check.json"
+PYTHONPATH="$ROOT/src" python "$ROOT/scripts/env_contract.py" check >"$EXTRA/env-check.json"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli versions --check >"$EXTRA/versions.json"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli intent analyze "$ROOT/examples/todo2code/intent-formats.wellm.yaml" \
+  -o "$EXTRA/intent-report.json" --todo2code-evidence "$EXTRA/todo2code-evidence.json"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli schema import "$ROOT/schemas/status.schema.json" -o "$EXTRA/status.schema.wm"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli schema export "$EXTRA/status.schema.wm" -o "$EXTRA/status.schema.json"
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli convert "$ROOT/examples/toon/map.toon.yaml" --from toon --to json -o "$EXTRA/map.json"
+python - "$EXTRA/intent-report.json" "$EXTRA/status.schema.json" "$EXTRA/map.json" "$ROOT/schemas/status.schema.json" <<'PY2'
+import json, sys
+report=json.load(open(sys.argv[1], encoding='utf-8'))
+roundtrip=json.load(open(sys.argv[2], encoding='utf-8'))
+toon=json.load(open(sys.argv[3], encoding='utf-8'))
+original=json.load(open(sys.argv[4], encoding='utf-8'))
+assert report['equivalent'] is True
+assert roundtrip == original
+assert toon['moduleCount'] == 235
+print('versions/env/types/intent/TOON local e2e: PASS')
+PY2
 printf '%s\n' 'plesk/benchmark/governance local e2e: PASS'
 python - <<'PY'
 import json, os, urllib.request
@@ -60,6 +78,12 @@ assert json.loads(data['output'])['status']['value']=='SUCCEEDED'
 with urllib.request.urlopen(base+'/v1/events?limit=20',timeout=5) as r:
   events=json.load(r)['events']
 assert any(e['type']=='ProcessCompleted' for e in events)
-print('http/events e2e: PASS')
+with urllib.request.urlopen(base+'/v1/versions',timeout=5) as r:
+  versions=json.load(r)
+assert versions['package']['version'] == '0.2.0rc4'
+with urllib.request.urlopen(base+'/v1/env-contract',timeout=5) as r:
+  env_contract=json.load(r)
+assert env_contract['schema'] == 'wellm.env-contract/v1'
+print('http/events/version/env e2e: PASS')
 PY
 printf '%s\n' 'local multi-client e2e: PASS'

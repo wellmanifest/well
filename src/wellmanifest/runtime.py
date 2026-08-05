@@ -34,6 +34,10 @@ from .security import (
     matches_uri_process,
 )
 from .situation import evaluate_situation_profile
+from .type_bridge import apply_schema_type_hints, infer_type_hints
+from .env_contract import load_env_contract
+from .intent_analysis import analyze_inline_representations
+from .versions import load_version_registry
 from .version import __version__
 
 ProcessHandler = Callable[[Any, dict[str, Any]], Any]
@@ -117,6 +121,13 @@ class WellManifestRuntime:
 
         try:
             target = self.registry.get(request.target_dialect)
+            if target.name == "typed@1" and request.projection == "data":
+                if request.type_mode == "none":
+                    document.metadata.type_hints = {}
+                elif request.type_mode == "infer":
+                    infer_type_hints(document)
+                elif request.schema_document is not None and request.type_mode in {"schema", "preserve"}:
+                    apply_schema_type_hints(document, request.schema_document)
             if request.projection == "data" and document.data is None:
                 raise ValueError(
                     f"Dialect {document.metadata.source_dialect} has no plain data projection; use projection=ir"
@@ -343,6 +354,10 @@ class WellManifestRuntime:
             "runtimes": self.runtime_descriptors(),
             "diagnosticSeverities": ["ERROR", "WARNING", "INFO"],
             "projections": ["data", "ir"],
+            "versionRegistry": {
+                "schema": "wellm.version-registry/v1",
+                "endpoint": "/v1/versions",
+            },
             "extensions": {
                 "pleskPublication": {
                     "schema": "subactor.projects/v1",
@@ -352,8 +367,19 @@ class WellManifestRuntime:
                 },
                 "llmBenchmark": {
                     "schema": "wellmanifest.llm-benchmark/v1",
-                    "formats": ["json", "yaml", "typed", "hcl", "typescript"],
+                    "formats": ["json", "yaml", "typed", "hcl", "typescript", "toon"],
                     "selection": ["lowest_cost", "lowest_latency", "highest_score"],
+                },
+                "iotThreeLayer": {
+                    "schema": "wellm.iot-telemetry/v1",
+                    "layers": ["frontend", "backend", "firmware"],
+                    "transports": ["http", "websocket", "mqtt-v5"],
+                    "compose": "compose.iot.yml",
+                },
+                "multiFormatIntent": {
+                    "schema": "wellm.intent-format-analysis/v1",
+                    "evidence": "wellm.todo2code-format-evidence/v1",
+                    "endpoint": "/v1/intent/analyze",
                 },
             },
             "security": {
@@ -416,11 +442,12 @@ class WellManifestRuntime:
             return "LOSSLESS"
         if source == target:
             return "LOSSLESS"
-        if source in {"json@rfc8259", "yaml@1.2/json-compatible", "hcl@2", "typed@1"} and target in {
+        if source in {"json@rfc8259", "yaml@1.2/json-compatible", "hcl@2", "typed@1", "toon@1"} and target in {
             "json@rfc8259",
             "yaml@1.2/json-compatible",
             "hcl@2",
             "typed@1",
+            "toon@1",
         }:
             return "NORMALIZED"
         return "LOSSY"
@@ -436,6 +463,9 @@ class WellManifestRuntime:
         self.register_process("wellmanifest://runtime/validate/execute", self._process_validate)
         self.register_process("wellmanifest://runtime/format/execute", self._process_format)
         self.register_process("wellmanifest://runtime/semantic-diff/query", self._process_semantic_diff)
+        self.register_process("wellmanifest://runtime/versions/query", self._process_versions)
+        self.register_process("wellmanifest://runtime/env-contract/query", self._process_env_contract)
+        self.register_process("wellmanifest://intent/formats/analyze", self._process_intent_analysis)
         self.register_process("wellmanifest://application/run/execute", self._process_application)
         self.register_process("wellmanifest://events/stream/query", self._process_events_query)
         self.register_process("situation://profile/evaluate/query", self._process_situation)
@@ -444,6 +474,8 @@ class WellManifestRuntime:
         self.register_process("youtube://channel/video/query/list", self._process_youtube_demo)
         self.register_process("flow://host/remote-access/query/preflight", self._process_remote_preflight)
         self.register_process("gpio://rpi/pin/configure/plan", self._process_gpio_plan)
+        self.register_process("iot://device/telemetry/command/ingest", self._process_iot_telemetry)
+        self.register_process("iot://device/config/query/get", self._process_iot_config)
         self.register_process("soa://service/http/request/plan", self._process_http_plan)
         self.register_process("llm://planner/manifest/query/propose", self._process_llm_plan)
 
@@ -470,6 +502,19 @@ class WellManifestRuntime:
     def _process_semantic_diff(payload: Any, _context: dict[str, Any]) -> Any:
         payload = payload or {}
         return semantic_diff(payload.get("left"), payload.get("right")).model_dump(mode="json", by_alias=True)
+
+    @staticmethod
+    def _process_versions(_payload: Any, _context: dict[str, Any]) -> Any:
+        return load_version_registry()
+
+    @staticmethod
+    def _process_env_contract(_payload: Any, _context: dict[str, Any]) -> Any:
+        contract = load_env_contract()
+        # The contract contains names and secret classifications, never values.
+        return contract
+
+    def _process_intent_analysis(self, payload: Any, _context: dict[str, Any]) -> Any:
+        return analyze_inline_representations(self, payload or {}).model_dump(mode="json", by_alias=True)
 
     def _process_events_query(self, payload: Any, _context: dict[str, Any]) -> Any:
         payload = payload or {}
@@ -549,6 +594,47 @@ class WellManifestRuntime:
                 {"action": "configure-direction", "pin": pin, "direction": direction},
             ],
             "mutationAttempted": False,
+        }
+
+    def _process_iot_telemetry(self, payload: Any, context: dict[str, Any]) -> Any:
+        payload = dict(payload or {})
+        schema_id = str(payload.get("schema", "wellm.iot-telemetry/v1"))
+        if schema_id != "wellm.iot-telemetry/v1":
+            raise RuntimeExecutionError("WM-IOT-003", f"Unsupported telemetry schema: {schema_id}", status=422)
+        device_id = str(payload.get("deviceId", "")).strip()
+        readings = payload.get("readings", {})
+        if not device_id or not isinstance(readings, dict) or not readings:
+            raise RuntimeExecutionError("WM-IOT-001", "Telemetry requires deviceId and non-empty readings", status=422)
+        normalized: dict[str, float] = {}
+        for name, value in readings.items():
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise RuntimeExecutionError("WM-IOT-002", f"Reading {name!r} must be numeric", status=422)
+            normalized[str(name)] = float(value)
+        event = self.events.append(
+            "TelemetryReceived",
+            {"deviceId": device_id, "readings": normalized, "unit": payload.get("unit", {})},
+            stream=f"device:{device_id}",
+            correlation_id=context.get("run_id"),
+        )
+        return {
+            "ok": True,
+            "deviceId": device_id,
+            "accepted": sorted(normalized),
+            "eventId": event["id"],
+            "sequence": event["sequence"],
+        }
+
+    @staticmethod
+    def _process_iot_config(payload: Any, _context: dict[str, Any]) -> Any:
+        device_id = str((payload or {}).get("deviceId", "unknown"))
+        return {
+            "schema": "wellm.iot-device-config/v1",
+            "deviceId": device_id,
+            "protocol": "wellmanifest.protocol/v1",
+            "preferredFormats": ["application/wellmanifest+json", "application/wellmanifest+yaml"],
+            "telemetryUri": "iot://device/telemetry/command/ingest",
+            "sampleIntervalSeconds": 5,
+            "runtime": "runtime:firmware-thin@1",
         }
 
     @staticmethod

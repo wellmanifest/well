@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/projects.schema.json",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/projects.schema.json",
   "title": "WellManifest Subactor project registry",
   "$defs": {
     "ConnectorBinding": {

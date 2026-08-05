@@ -142,3 +142,26 @@ test("canonical JSON and semantic digest ignore object key order", async () => {
     "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777",
   );
 });
+
+test("client exposes version, env and intent-analysis contracts", async () => {
+  const calls = [];
+  const fetchImpl = async (url, init = {}) => {
+    calls.push({url, init});
+    if (url.endsWith("/v1/versions")) {
+      return new Response(JSON.stringify({schema: "wellm.version-registry/v1", package: {version: "0.2.0rc4"}}), {status: 200});
+    }
+    if (url.endsWith("/v1/env-contract")) {
+      return new Response(JSON.stringify({schema: "wellm.env-contract/v1", variables: []}), {status: 200});
+    }
+    return new Response(JSON.stringify({schema: "wellm.intent-format-analysis/v1", equivalent: true}), {status: 200});
+  };
+  const client = new WellManifestClient({baseUrl: "http://runtime", fetchImpl});
+  assert.equal((await client.versions()).package.version, "0.2.0rc4");
+  assert.equal((await client.envContract()).schema, "wellm.env-contract/v1");
+  assert.equal((await client.analyzeIntent({id: "demo", representations: []})).equivalent, true);
+  assert.deepEqual(calls.map((call) => call.url), [
+    "http://runtime/v1/versions",
+    "http://runtime/v1/env-contract",
+    "http://runtime/v1/intent/analyze",
+  ]);
+});

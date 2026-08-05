@@ -44,6 +44,7 @@ def main() -> None:
                     schema=_dict_from_struct(request.schema) or None,
                     source_name=request.source_name or None,
                     pretty=request.pretty,
+                    type_mode=getattr(request, "type_mode", "preserve") or "preserve",
                 )
             )
             return _parse_dict(result.model_dump(mode="json"), wellmanifest_pb2.ConvertResponse())

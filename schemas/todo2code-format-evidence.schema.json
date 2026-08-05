@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/todo2code-format-evidence.schema.json",
+  "title": "Wellm deterministic multi-format evidence for todo2code",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "analysisId", "equivalent", "semanticSha256", "representations", "pairs", "diagnostics", "todo2code"],
+  "properties": {
+    "schema": {"const": "wellm.todo2code-format-evidence/v1"},
+    "analysisId": {"type": "string", "minLength": 1},
+    "equivalent": {"type": "boolean"},
+    "semanticSha256": {"type": ["string", "null"], "pattern": "^(sha256:[0-9a-f]{64})?$"},
+    "representations": {"type": "array", "items": {"type": "object"}},
+    "pairs": {"type": "array", "items": {"type": "object"}},
+    "diagnostics": {"type": "array", "items": {"$ref": "diagnostic.schema.json"}},
+    "todo2code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["epistemicClass", "confidence", "suggestedSource"],
+      "properties": {
+        "epistemicClass": {"const": "fact"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "suggestedSource": {"const": "configuration"}
+      }
+    }
+  }
+}

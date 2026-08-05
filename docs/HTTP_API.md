@@ -28,6 +28,8 @@ GET /healthz
 GET /v1/capabilities
 GET /v1/dialects
 GET /v1/runtimes
+GET /v1/versions
+GET /v1/env-contract
 ```
 
 `/v1/capabilities` includes the Plesk publication and LLM benchmark extension
@@ -43,12 +45,14 @@ metadata exposed by the current runtime.
   "source_dialect": "yaml",
   "target_dialect": "json",
   "projection": "data",
-  "schema": null
+  "schema": null,
+  "type_mode": "preserve"
 }
 ```
 
 The response contains `output`, selected dialects, conversion lossiness and
-structured diagnostics.
+structured diagnostics. `type_mode` is `preserve`, `schema`, `infer` or `none`
+when the target is typed Wellm.
 
 ## Validate
 
@@ -67,6 +71,24 @@ structured diagnostics.
   "schema": {"type": "object"}
 }
 ```
+
+## Analyze intent represented in multiple formats
+
+`POST /v1/intent/analyze`
+
+```json
+{
+  "representations": [
+    {"id": "json", "dialect": "json", "source": "{\"schema\":\"example/v1\"}"},
+    {"id": "yaml", "dialect": "yaml", "source": "schema: example/v1\n"}
+  ],
+  "schema": {"type": "object", "required": ["schema"]}
+}
+```
+
+The response is `wellm.intent-format-analysis/v1`: exact hashes, semantic
+hashes, schema results and pairwise structural diffs. File-based projects use
+the richer `wellm intent analyze` CLI, which can also emit todo2code evidence.
 
 ## Execute a registered URI Process
 
@@ -211,8 +233,8 @@ GET /v1/events?stream=<optional>&after=0&limit=100
 WS  /v1/ws?token=<optional>
 ```
 
-The WebSocket subprotocol is `wellmanifest.v1`. Supported operations are
-`convert`, `validate`, `execute` and `exchange`.
+The WebSocket subprotocol is `wellmanifest.v1`. Supported operations include `convert`, `validate`, `execute`, `exchange`,
+`format`, `semantic-diff`, `versions`, `env-contract` and `intent-analyze`.
 
 ## Format profiles
 

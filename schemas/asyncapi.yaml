@@ -1,8 +1,9 @@
 asyncapi: 3.0.0
 info:
   title: WellManifest real-time protocol
-  version: 0.2.0-rc.3
-  description: MQTT v5 and WebSocket exchange of WellManifest envelopes.
+  version: 0.2.0-rc.4
+  description: MQTT v5 and WebSocket exchange of versioned WellManifest envelopes.
+  x-wellm-contract: wellmanifest.realtime/v1
 servers:
   mqtt:
     host: localhost:1883
@@ -12,7 +13,7 @@ servers:
     host: localhost:8080
     pathname: /v1/ws
     protocol: wss
-    description: Use ws in local development and wss behind TLS in production.
+    description: Use ws locally and wss behind TLS in production.
 channels:
   runtimeRequests:
     address: wellmanifest/v1/{tenant}/request/{client}
@@ -30,6 +31,14 @@ channels:
     messages:
       envelope:
         $ref: '#/components/messages/Envelope'
+  runtimeDiagnostics:
+    address: wellmanifest/v1/{tenant}/diagnostic/{component}
+    parameters:
+      tenant: {description: Tenant identifier}
+      component: {description: Component reporting the diagnostic}
+    messages:
+      envelope:
+        $ref: '#/components/messages/Envelope'
   websocketExchange:
     address: /v1/ws
     messages:
@@ -39,13 +48,20 @@ operations:
   receiveRuntimeRequest:
     action: receive
     channel: {$ref: '#/channels/runtimeRequests'}
+    summary: Receive query or command envelopes, including IoT config and telemetry URI Processes.
     messages:
       - {$ref: '#/channels/runtimeRequests/messages/envelope'}
   sendRuntimeResponse:
     action: send
     channel: {$ref: '#/channels/runtimeResponses'}
+    summary: Return correlated result envelopes using MQTT v5 Response Topic and Correlation Data.
     messages:
       - {$ref: '#/channels/runtimeResponses/messages/envelope'}
+  sendRuntimeDiagnostic:
+    action: send
+    channel: {$ref: '#/channels/runtimeDiagnostics'}
+    messages:
+      - {$ref: '#/channels/runtimeDiagnostics/messages/envelope'}
   exchangeWebSocketEnvelope:
     action: send
     channel: {$ref: '#/channels/websocketExchange'}

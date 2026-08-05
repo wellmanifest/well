@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wellm IoT — trzy warstwy</title>
+  <style>
+    body{font-family:system-ui,sans-serif;max-width:1000px;margin:0 auto;padding:2rem;background:#f4f6f8;color:#17202a}
+    header,.card{background:white;border-radius:16px;padding:1.4rem;margin-bottom:1rem;box-shadow:0 8px 30px #0001}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}.metric{font-size:2rem;font-weight:700}
+    code{background:#eef2f5;padding:.15rem .35rem;border-radius:5px} pre{white-space:pre-wrap;overflow:auto}
+    .ok{color:#087f5b}.muted{color:#687078}
+  </style>
+</head>
+<body>
+<header><h1>Wellm IoT: frontend → backend → firmware</h1><p>Frontend odczytuje zdarzenia backendu, a firmware komunikuje się przez MQTT v5 i kanoniczny envelope.</p></header>
+<div class="grid">
+  <section class="card"><h2>Backend</h2><div id="health" class="metric muted">…</div><code>/api/healthz</code></section>
+  <section class="card"><h2>Telemetria</h2><div id="count" class="metric">0</div><span class="muted">zdarzeń TelemetryReceived</span></section>
+  <section class="card"><h2>Protokół</h2><div class="metric">v1</div><code>wellmanifest.protocol/v1</code></section>
+</div>
+<section class="card"><h2>Ostatnie zdarzenie</h2><pre id="event">Brak telemetrii.</pre></section>
+<script src="app.js" type="module"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-export type Dialect = "json" | "yaml" | "toml" | "hcl" | "typed" | "policy" | "proto3" | "typescript" | string;
+export type Dialect = "json" | "yaml" | "toml" | "hcl" | "typed" | "policy" | "proto3" | "typescript" | "toon" | string;
 export type Severity = "ERROR" | "WARNING" | "INFO";
 
 export interface Diagnostic {
@@ -62,10 +62,13 @@ export class WellManifestClient {
   constructor(options: {baseUrl: string; token?: string; timeoutMs?: number; fetchImpl?: typeof fetch});
   capabilities(): Promise<Record<string, unknown>>;
   profiles(): Promise<Array<Record<string, unknown>>>;
-  convert(source: unknown, options?: {from?: Dialect; to?: Dialect; projection?: "data" | "ir"; schema?: object | null; pretty?: boolean}): Promise<Record<string, unknown>>;
+  versions(): Promise<Record<string, unknown>>;
+  envContract(): Promise<Record<string, unknown>>;
+  convert(source: unknown, options?: {from?: Dialect; to?: Dialect; projection?: "data" | "ir"; schema?: object | null; pretty?: boolean; types?: "preserve" | "schema" | "infer" | "none"}): Promise<Record<string, unknown>>;
   validate(source: unknown, schema: object, options?: {dialect?: Dialect}): Promise<Record<string, unknown>>;
   format(value: unknown, options?: {profile?: string; schema?: object | null}): Promise<Record<string, unknown>>;
   semanticDiff(left: unknown, right: unknown): Promise<Record<string, unknown>>;
+  analyzeIntent(representations: Array<{id?: string; source: string; sourceName?: string; dialect?: Dialect}>, options?: {id?: string; schema?: object | null}): Promise<Record<string, unknown>>;
   execute(uri: string, payload?: unknown, options?: {mode?: string; contractRef?: string; allowedUriProcesses?: string[]; runId?: string; runtime?: RuntimeTarget}): Promise<Record<string, unknown>>;
   exchange(envelope: Envelope): Promise<Envelope>;
   planPlesk(config: ProjectRegistry, options: {projectId: string; sourceRefs?: Record<string, string>}): Promise<PleskPublicationPlan>;

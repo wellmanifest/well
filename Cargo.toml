@@ -10,7 +10,7 @@ members = [
 default-members = ["crates/wellmanifest-core", "crates/wellmanifest-cli"]
 
 [workspace.package]
-version = "0.2.0-rc.3"
+version = "0.2.0-rc.4"
 edition = "2021"
 license = "Apache-2.0"
 repository = "https://github.com/wellmanifest/wellm"

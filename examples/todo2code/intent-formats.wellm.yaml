@@ -1,0 +1,27 @@
+schema: wellm.intent-format-project/v1
+id: ticket-002-multi-format-intent
+schemaRef: intent.schema.json
+preferredAuthoring:
+  - typed@1
+  - typescript@wellm-1
+  - json@rfc8259
+  - yaml@1.2/json-compatible
+representations:
+  - id: typed
+    path: intent.wm
+    dialect: typed
+  - id: json
+    path: intent.json
+    dialect: json
+  - id: yaml
+    path: intent.yaml
+    dialect: yaml
+  - id: hcl
+    path: intent.hcl
+    dialect: hcl
+  - id: typescript
+    path: intent.wm.ts
+    dialect: typescript
+  - id: toon
+    path: intent.toon.yaml
+    dialect: toon

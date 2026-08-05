@@ -1,0 +1,127 @@
+name: wellmanifest-iot
+
+x-backend-environment: &backend-environment
+  WELLMANIFEST_HOST: 0.0.0.0
+  WELLMANIFEST_PORT: 8080
+  WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+  WELLMANIFEST_DEFAULT_CONTRACT: ${WELLMANIFEST_DEFAULT_CONTRACT:-contract:dev}
+  WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+  WELLMANIFEST_TOKEN: ${WELLMANIFEST_TOKEN:-}
+
+services:
+  frontend:
+    image: wellmanifest/wellm-iot-frontend:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
+    build:
+      context: .
+      dockerfile: docker/iot-frontend.Dockerfile
+    ports:
+      - "${WELLMANIFEST_IOT_FRONTEND_PORT:-8090}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [iot]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+
+  backend:
+    image: ${WELLMANIFEST_IMAGE:-wellmanifest/wellm}:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: *backend-environment
+    ports:
+      - "${WELLMANIFEST_IOT_BACKEND_PORT:-8091}:8080"
+    volumes:
+      - iot-data:/data
+      - ./config/contracts.json:/app/config/contracts.json:ro
+    networks: [iot]
+
+  broker:
+    image: eclipse-mosquitto:2.0.21
+    command: ["mosquitto", "-c", "/mosquitto-no-auth.conf"]
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto-no-auth.conf:ro
+    ports:
+      - "${WELLMANIFEST_IOT_MQTT_PORT:-1884}:1883"
+    networks: [iot]
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -t '$$SYS/broker/version' -C 1 -W 2 >/dev/null 2>&1"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+
+  bridge:
+    image: ${WELLMANIFEST_IMAGE:-wellmanifest/wellm}:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["wellmanifest-mqtt"]
+    environment:
+      <<: *backend-environment
+      WELLMANIFEST_MQTT_HOST: broker
+      WELLMANIFEST_MQTT_PORT: 1883
+      WELLMANIFEST_MQTT_REQUEST_TOPIC: wellmanifest/v1/${WELLMANIFEST_TENANT:-default}/request/#
+      WELLMANIFEST_TENANT: ${WELLMANIFEST_TENANT:-default}
+    volumes:
+      - iot-data:/data
+      - ./config/contracts.json:/app/config/contracts.json:ro
+    depends_on:
+      broker:
+        condition: service_healthy
+    networks: [iot]
+
+  firmware:
+    image: wellmanifest/wellm-iot-firmware:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
+    build:
+      context: .
+      dockerfile: docker/iot-firmware.Dockerfile
+    environment:
+      WELLMANIFEST_MQTT_HOST: broker
+      WELLMANIFEST_MQTT_PORT: 1883
+      WELLMANIFEST_TENANT: ${WELLMANIFEST_TENANT:-default}
+      WELLMANIFEST_CONTRACT: ${WELLMANIFEST_CONTRACT:-contract:firmware-thin}
+      WELLMANIFEST_IOT_DEVICE_ID: ${WELLMANIFEST_IOT_DEVICE_ID:-rpi-sim-001}
+      WELLMANIFEST_IOT_SAMPLE_INTERVAL: ${WELLMANIFEST_IOT_SAMPLE_INTERVAL:-1.0}
+      WELLMANIFEST_IOT_RUN_ONCE: ${WELLMANIFEST_IOT_RUN_ONCE:-1}
+    volumes:
+      - iot-state:/state
+    depends_on:
+      broker:
+        condition: service_healthy
+      bridge:
+        condition: service_started
+    networks: [iot]
+
+  iot-e2e:
+    profiles: ["e2e"]
+    image: busybox:1.37.0
+    command:
+      - sh
+      - -ec
+      - |
+        test -s /state/firmware-result.json
+        grep -q 'wellm.iot-firmware-result/v1' /state/firmware-result.json
+        wget -qO- http://backend:8080/healthz | grep -q '"status":"ok"'
+        wget -qO- http://frontend:8080/ | grep -q 'Wellm IoT'
+        echo 'wellm three-layer IoT e2e: PASS'
+    volumes:
+      - iot-state:/state:ro
+    depends_on:
+      firmware:
+        condition: service_completed_successfully
+      frontend:
+        condition: service_healthy
+    networks: [iot]
+
+volumes:
+  iot-data: {}
+  iot-state: {}
+
+networks:
+  iot:
+    ipam:
+      config:
+        - subnet: ${WELLMANIFEST_IOT_SUBNET:-172.30.243.0/24}

@@ -6,24 +6,25 @@ WellManifest, procedural policy, restricted TypeScript data modules and proto3
 IR into one document/envelope model with schema validation and structured
 `ERROR`, `WARNING` and `INFO` diagnostics.
 
-Release candidate `0.2.0rc3` adds `wellm-governance-profile@1`: named
-formatting profiles, deterministic repository JSON, semantic and exact-byte
-hashes, source maps, governance `build --check`, policy Markdown linting,
-semantic diff and round-trip reports. It retains the fail-closed Plesk
-publication workflow and optional LiteLLM benchmark introduced in the previous
-candidate.
+Release candidate `0.2.0rc4` extends the governance profile with a complete
+three-layer IoT example, explicit Docker IPAM, one generated environment
+contract, a version-and-hash registry for formats/APIs/schemas, bidirectional
+JSON Schema ⇄ typed Wellm modules, TOON/code2llm map import and deterministic
+multi-format intent evidence for `todo2code`. It retains deterministic
+repository JSON, source maps, fail-closed Plesk publication and the optional
+LiteLLM benchmark.
 
 > This repository is a reference implementation and release candidate, not a
 > hosted production control plane. The Python runtime, CLI, HTTP/WebSocket API,
-> JSON/YAML/TOML conversion, four status forms, project/Plesk planner, offline
-> LLM benchmark and JavaScript SDK are executable. Rust/WASM/PyO3/N-API remain
+> JSON/YAML/TOML/TOON conversion, four status forms, project/Plesk planner,
+> offline LLM benchmark and JavaScript SDK are executable. Rust/WASM/PyO3/N-API remain
 > compatibility scaffolds; MQTT/gRPC and Docker E2E have container definitions
 > but require their corresponding toolchains/runtime.
 
 ## Architecture
 
 ```text
-JSON / YAML / TOML / HCL / typed@1 / TypeScript / policy-sh@1 / proto3
+JSON / YAML / TOML / HCL / typed@1 / TypeScript / TOON / policy / proto3
                                   │
                                   ▼
                     WellManifest Document + Core IR
@@ -65,8 +66,7 @@ python -m pip install -e '.[benchmark]'
 ```
 
 The former `wellmanifest` commands and Python namespace remain compatibility
-aliases. New code should use the `wellm` distribution and CLI.
- The original
+aliases. New code should use the `wellm` distribution and CLI. The original
 `from well import hello, greet` API from `wellm` 0.1.x is retained; see
 [docs/MIGRATION_0.1_TO_0.2.md](docs/MIGRATION_0.1_TO_0.2.md).
 
@@ -83,11 +83,16 @@ curl -fsS http://localhost:8080/healthz
 curl -fsS http://localhost:8080/v1/capabilities
 ```
 
-Docker sidecar:
+Makefile-managed local and Docker setup:
 
 ```bash
-docker compose up --build runtime www
+make setup-lite       # creates .env only when absent and installs dev runtimes
+make up               # HTTP/WS/MQTT/gRPC stack
+make down
 ```
+
+The same `.env` is used by Make and every Compose file. `make env-check` fails
+on undeclared product variables, unknown local variables or invalid values.
 
 Any language can then use HTTP:
 
@@ -186,6 +191,118 @@ wellm roundtrip examples/governance/generated/manifest.default.json \
 closed JSON Schemas are not modified.
 
 Full guide: [docs/GOVERNANCE_FORMATTING.md](docs/GOVERNANCE_FORMATTING.md).
+
+## Versions, schemas, APIs and environment
+
+One generated registry tracks the public identity, compatibility rule and
+SHA-256 of every API contract and JSON Schema, plus each dialect, formatting
+profile and package:
+
+```bash
+make versions-sync
+make versions-check
+wellm versions
+```
+
+The current registry contains versioned dialects such as `typed@1`, `hcl@2`
+and `toon@1`, versioned profiles such as `repo-json@1`, API majors under
+`/v1`, and Draft 2020-12 schemas with either major compatibility or exact-hash
+compatibility. It is available locally, through `GET /v1/versions`, and through
+`wellmanifest://runtime/versions/query`.
+
+Environment names, defaults, types and secret classification have one source:
+
+```bash
+make env-sync
+make env-setup
+make env-check
+```
+
+`config/env-contract.json` generates `.env.example`; Compose and application
+code use the same names. Local `.env` is never overwritten by setup unless
+`wellm env setup --force` is explicitly selected.
+
+See [docs/VERSIONING.md](docs/VERSIONING.md) and
+[docs/ENVIRONMENT.md](docs/ENVIRONMENT.md).
+
+## Bidirectional schema typing
+
+```bash
+wellm convert examples/todo2code/intent.json \
+  --from json --to typed \
+  --schema examples/todo2code/intent.schema.json \
+  --types schema
+
+wellm schema import schemas/status.schema.json -o status.schema.wm
+wellm schema export status.schema.wm -o status.schema.roundtrip.json
+wellm schema codegen status.schema.wm --from typed \
+  --language typescript -o status.d.ts
+wellm schema codegen status.schema.wm --from typed \
+  --language python -o status_types.py
+```
+
+Data annotations can be preserved, inferred or derived from JSON Schema. The
+schema-module path is an exact round trip for Draft 2020-12, including
+`oneOf`, `allOf`, `if/then`, tuple `prefixItems` and extension keywords. Free
+human-authored type declarations are parsed and preserved, but the exact
+normative reverse compiler currently uses the embedded schema module.
+
+See [docs/TYPING.md](docs/TYPING.md).
+
+## Three-layer IoT Compose example
+
+```bash
+make iot-up
+# frontend http://localhost:8090
+# backend  http://localhost:8091
+# MQTT    localhost:1884
+make iot-down
+make iot-e2e
+```
+
+The example contains:
+
+```text
+frontend (nginx + JavaScript)
+             │ HTTP
+             ▼
+backend (Wellm HTTP/WS + event store)
+             ▲
+             │ shared receipts/events
+MQTT bridge ◄─ broker ◄─ firmware/RPi simulator
+```
+
+Firmware requests remote configuration, then sends typed telemetry as a
+WellManifest envelope. Contract AQL remains server-side. Every Compose network
+uses an explicit configurable subnet, avoiding Docker's exhausted predefined
+address-pool allocator.
+
+See [docs/IOT_THREE_LAYER.md](docs/IOT_THREE_LAYER.md) and
+[docs/DOCKER_NETWORKS.md](docs/DOCKER_NETWORKS.md).
+
+## Multi-format intent analysis for todo2code
+
+The same intent is included as JSON, YAML, typed Wellm, HCL, restricted
+TypeScript and TOON:
+
+```bash
+make intent-demo
+make todo2code-intent   # additionally runs t2c extract config when t2c is installed
+wellm intent analyze examples/todo2code/intent-formats.wellm.yaml \
+  -o .wellm/intent-demo/report.json \
+  --todo2code-evidence .wellm/intent-demo/todo2code-evidence.json
+```
+
+Wellm validates every representation against one schema, computes exact and
+semantic digests and performs all pairwise diffs. The deterministic evidence
+can be consumed by `t2c extract config` and linked with Git, AST, TODO,
+changelog, documentation and communication records. An LLM does not decide
+whether unequal formats are equivalent.
+
+The TOON frontend also imports the supplied code2llm-style `map.toon.yaml` into
+a normalized module map.
+
+See [docs/TODO2CODE_INTEGRATION.md](docs/TODO2CODE_INTEGRATION.md).
 
 ## Plesk publication from `subactor.projects/v1`
 
@@ -314,7 +431,7 @@ independently resolve authority from the active contract.
 
 ## Package, service and runtime matrix
 
-| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc3` |
+| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc4` |
 |---|---|---:|---:|---:|---:|---|---|
 | protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | envelope, negotiation, diagnostics | specified + schemas |
 | Python | `wellm` / `wellmanifest` alias | remote client | local/service | RPi | control | parsers, validation, planner, benchmark | **working/tested** |
@@ -326,9 +443,12 @@ independently resolve authority from the active contract.
 | Rust core | `wellmanifest-core` | via WASM | native | ARM Linux | projections | native conversion core | scaffold |
 | WASM | `wellmanifest-wasm` | local | edge | limited | projections | browser conversion | scaffold |
 | PyO3/N-API | native bindings | Node | Python/Node | Linux RPi | control | acceleration | scaffold |
-| MQTT bridge | `wellm-mqtt` | gateway | queue | devices | events | request/response topics | source + Compose |
-| gRPC | `wellm-grpc` | gateway | SOA | edge | streams | protobuf API | source + Compose |
-| firmware thin client | MicroPython/C examples | — | remote | MCU/RPi | — | small envelope and remote runtime | examples |
+| version registry | `wellm.version-registry/v1` | discover | enforce | consume | consume | format/API/schema versions and hashes | **working/tested** |
+| environment contract | `wellm.env-contract/v1` | consume | enforce | consume | consume | shared names/defaults/secrets across Make/Compose/runtime | **working/tested** |
+| intent-format analyzer | `wellm.intent-format-analysis/v1` | report | local/service | remote | evidence | schema + semantic drift for todo2code | **working/tested** |
+| MQTT bridge | `wellm-mqtt` | gateway | queue | devices | events | request/response topics | source + local contract tests; Docker target included |
+| gRPC | `wellm-grpc` | gateway | SOA | edge | streams | protobuf API | source + Compose; generated in container/CI |
+| firmware thin client | MQTT/RPi example | — | remote | MCU/RPi | — | config query and typed telemetry | **working source/local runtime tests; Docker target included** |
 | digital twin router | situation/twin URI processes | read | service | telemetry | native | read-only portrait and routing | working demo |
 | CQRS/ES | JSONL event store | read | local | edge buffer | projection | command/receipt replay | working/tested |
 
@@ -345,10 +465,14 @@ packages/js/               browser/Node SDK and TypeScript declarations
 crates/                    Rust, CLI, WASM, PyO3 and N-API scaffolds
 proto/                     protobuf/gRPC contract
 schemas/                   JSON Schema 2020-12 and OpenAPI/AsyncAPI
+config/                    version registry, env contract, runtime/authority profiles
+examples/iot-three-layer/  frontend/backend/firmware IoT implementation
+examples/todo2code/        six intent formats, drift fixture and evidence project
+examples/toon/             imported code2llm structural map
 examples/plesk/            real project registry and publication examples
 examples/benchmark/        offline/live model selection examples
 www/                       landing page
-compose*.yml               runtime and E2E environments
+compose*.yml               main, IoT and full E2E environments
 docs/                      protocol, deployment and integration guides
 tests/                     parser, schema, governance, Plesk and benchmark tests
 ```
@@ -356,18 +480,20 @@ tests/                     parser, schema, governance, Plesk and benchmark tests
 ## Development and verification
 
 ```bash
-make test
-python -m pytest -q
-(cd packages/js && npm test)
-python -m compileall -q src
+make setup          # .env + venv + Python/JS development dependencies
+make verify         # env/version drift, Python/JS, governance, types, TOON
+make e2e-local      # HTTP/Node/RPi/Plesk/benchmark/governance without Docker
+make up             # main Compose stack
+make down
+make iot-up
+make iot-down
+make e2e            # fail-closed: local + full Docker + three-layer IoT
 ```
 
-Docker E2E:
-
-```bash
-docker compose -f compose.e2e.yml up \
-  --build --abort-on-container-exit --exit-code-from e2e
-```
+`make e2e` requires a running Docker Engine and does not silently claim success
+with a host-runtime fallback. `make docker-network-doctor` reports subnet
+collisions before Compose creates a network. A local-only run is explicit:
+`make e2e-local`.
 
 The Plesk connector live path is intentionally not exercised by default. Local
 and CI tests use deterministic fake receipts and do not mutate infrastructure.
@@ -397,6 +523,12 @@ See [docs/SECURITY.md](docs/SECURITY.md),
 - [Protocol and negotiation](docs/PROTOCOL.md)
 - [Dialects](docs/DIALECTS.md)
 - [Governance formatting](docs/GOVERNANCE_FORMATTING.md)
+- [Version registry](docs/VERSIONING.md)
+- [Environment contract and Makefile](docs/ENVIRONMENT.md)
+- [Bidirectional typing](docs/TYPING.md)
+- [Three-layer IoT](docs/IOT_THREE_LAYER.md)
+- [Docker networks](docs/DOCKER_NETWORKS.md)
+- [todo2code multi-format intent](docs/TODO2CODE_INTEGRATION.md)
 - [Plesk publication](docs/PLESK_PUBLICATION.md)
 - [LLM benchmark](docs/LLM_BENCHMARK.md)
 - [HTTP API](docs/HTTP_API.md)

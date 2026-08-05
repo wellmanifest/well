@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc4/schemas/env-contract.schema.json",
+  "title": "Wellm environment variable contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "variables", "ignoredReferences"],
+  "properties": {
+    "schema": {"const": "wellm.env-contract/v1"},
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "group", "type", "default", "required", "secret", "description"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+          "group": {"type": "string", "minLength": 1},
+          "type": {"enum": ["string", "integer", "number", "boolean", "url", "path", "cidr"]},
+          "default": {"type": "string"},
+          "required": {"type": "boolean"},
+          "secret": {"type": "boolean"},
+          "description": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "ignoredReferences": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  }
+}

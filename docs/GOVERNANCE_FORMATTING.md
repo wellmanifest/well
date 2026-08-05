@@ -105,7 +105,7 @@ The generated sidecar has the form:
   "sourceDialect": "typed@1",
   "targetProfile": "repo-json@1",
   "schemaRef": "fixtures/manifest.schema.json",
-  "generator": {"name": "wellm", "version": "0.2.0rc3"},
+  "generator": {"name": "wellm", "version": "0.2.0rc4"},
   "sourceSha256": "sha256:...",
   "schemaSha256": "sha256:...",
   "semanticSha256": "sha256:...",

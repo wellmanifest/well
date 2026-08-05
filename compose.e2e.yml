@@ -171,4 +171,7 @@ volumes:
   e2e-data: {}
 
 networks:
-  e2e: {}
+  e2e:
+    ipam:
+      config:
+        - subnet: ${WELLMANIFEST_E2E_SUBNET:-172.30.242.0/24}

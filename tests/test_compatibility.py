@@ -12,7 +12,7 @@ def test_original_wellm_01_api_remains_available() -> None:
 def test_new_primary_namespace_exposes_the_runtime() -> None:
     from wellm import WellManifestRuntime, __version__
 
-    assert __version__ == "0.2.0rc3"
+    assert __version__ == "0.2.0rc4"
     assert WellManifestRuntime().capabilities()["protocol"] == "wellmanifest.protocol/v1"
 
 

@@ -33,6 +33,10 @@ _PUBLIC_SUBMODULES = (
     "schema",
     "security",
     "server",
+    "versions",
+    "type_bridge",
+    "intent_analysis",
+    "env_contract",
 )
 
 for _name in _PUBLIC_SUBMODULES:

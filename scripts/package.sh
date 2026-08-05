@@ -14,6 +14,11 @@ WHEEL_RESULT=${WELLMANIFEST_WHEEL_RESULT:-"not run by package command"}
 NPM_PACKAGE_RESULT=${WELLMANIFEST_NPM_PACKAGE_RESULT:-"not run by package command"}
 SOURCE_ARCHIVE_RESULT=${WELLMANIFEST_SOURCE_ARCHIVE_RESULT:-"not run by package command"}
 GOVERNANCE_RESULT=${WELLMANIFEST_GOVERNANCE_RESULT:-"not recorded by package command"}
+ENV_RESULT=${WELLMANIFEST_ENV_RESULT:-"not recorded by package command"}
+VERSION_RESULT=${WELLMANIFEST_VERSION_RESULT:-"not recorded by package command"}
+TYPING_RESULT=${WELLMANIFEST_TYPING_RESULT:-"not recorded by package command"}
+INTENT_RESULT=${WELLMANIFEST_INTENT_RESULT:-"not recorded by package command"}
+IOT_RESULT=${WELLMANIFEST_IOT_RESULT:-"not recorded by package command"}
 rm -rf "$DIST"
 mkdir -p "$DIST/$NAME" "$DIST/python"
 
@@ -21,6 +26,7 @@ mkdir -p "$DIST/$NAME" "$DIST/python"
 tar -C "$ROOT" \
   --exclude='./dist' \
   --exclude='./.git' \
+  --exclude='./.env' \
   --exclude='./.pytest_cache' \
   --exclude='./.wellm' \
   --exclude='./build' \
@@ -42,6 +48,11 @@ Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 | JavaScript SDK tests | $NODE_RESULT |
 | Local HTTP/Node/RPi E2E | $E2E_RESULT |
 | Governance build/check | $GOVERNANCE_RESULT |
+| Environment contract | $ENV_RESULT |
+| Version/API/schema registry | $VERSION_RESULT |
+| Bidirectional schema typing | $TYPING_RESULT |
+| Multi-format intent/todo2code evidence | $INTENT_RESULT |
+| Three-layer IoT | $IOT_RESULT |
 | Python wheel smoke | $WHEEL_RESULT |
 | npm package smoke | $NPM_PACKAGE_RESULT |
 | Source ZIP smoke | $SOURCE_ARCHIVE_RESULT |
@@ -59,6 +70,9 @@ A source scaffold or Docker recipe is not marked as executed unless the
 corresponding toolchain was available in the packaging environment.
 EOF
 cp "$DIST/TEST-REPORT.md" "$DIST/$NAME/TEST-REPORT.md"
+cp "$ROOT/RELEASE-NOTES.md" "$DIST/RELEASE-NOTES.md"
+cp "$ROOT/config/version-registry.json" "$DIST/VERSION-REGISTRY.json"
+find "$DIST/$NAME" -type f -print | sed "s#^$DIST/$NAME/##" | LC_ALL=C sort > "$DIST/FILELIST.txt"
 
 (cd "$DIST" && tar -czf "$NAME.tar.gz" "$NAME")
 python - "$DIST" "$NAME" <<'PY'

@@ -59,7 +59,7 @@ workspace adds:
 - `wellmanifest-python` for PyO3 acceleration;
 - `wellmanifest-node` for a Node-API module.
 
-Version 0.2.0rc3 still treats these crates as build scaffolds. The Python reference
+Version 0.2.0rc4 still treats these crates as build scaffolds. The Python reference
 implementation remains the conformance oracle until parser and validator parity
 is demonstrated by differential tests.
 

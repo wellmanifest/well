@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="wellm — WellManifest protocol, deterministic governance formatting, typed DSL runtime, guarded Plesk publication and adaptive LLM format benchmark.">
+  <meta name="description" content="wellm — versioned multi-format protocol, typed runtime, three-layer IoT, governance formatting, guarded publication and intent analysis.">
   <title>wellm — one protocol, many dialects</title>
   <link rel="stylesheet" href="/assets/styles.css">
 </head>
@@ -16,6 +16,7 @@
     <nav aria-label="Main navigation">
       <a href="#architecture">Architecture</a>
       <a href="#governance">Governance</a>
+      <a href="#iot">IoT</a>
       <a href="#plesk">Plesk</a>
       <a href="#benchmark">LLM benchmark</a>
       <a href="#playground">Playground</a>
@@ -27,7 +28,7 @@
   <main id="top">
     <section class="hero shell">
       <div class="hero-copy">
-        <div class="eyebrow">PROTOCOL · TYPED DSL · URI PROCESS · 0.2.0rc3</div>
+        <div class="eyebrow">PROTOCOL · TYPED DSL · URI PROCESS · 0.2.0rc4</div>
         <h1>One manifest.<br><span>Every environment.</span></h1>
         <p class="lede">Author typed configuration, generate byte-stable governance artifacts, publish through guarded URI Processes, select an LLM by deterministic format capability, and serve browsers, services, Raspberry Pi devices, queues and digital twins in the format each side prefers.</p>
         <div class="hero-actions">
@@ -35,7 +36,7 @@
           <a class="button secondary" href="#governance">Check governance</a>
         </div>
         <div class="protocol-strip" aria-label="Supported layers">
-          <span>JSON</span><span>YAML</span><span>HCL</span><span>typed@1</span><span>TypeScript</span><span>proto3</span><span>policy-sh</span>
+          <span>JSON</span><span>YAML</span><span>HCL</span><span>typed@1</span><span>TypeScript</span><span>TOON</span><span>proto3</span><span>policy-sh</span>
         </div>
       </div>
       <div class="hero-card" aria-label="WellManifest Plesk plan example">
@@ -53,9 +54,9 @@
     </section>
 
     <section class="metrics shell" aria-label="Core properties">
-      <article><b>8</b><span>format profiles</span></article>
-      <article><b>7</b><span>exact Plesk URI routes</span></article>
-      <article><b>3</b><span>diagnostic severities</span></article>
+      <article><b>9</b><span>versioned format profiles</span></article>
+      <article><b>25</b><span>tracked JSON Schemas</span></article>
+      <article><b>4</b><span>hashed API contracts</span></article>
       <article><b>0</b><span>implicit authority grants</span></article>
     </section>
 
@@ -71,6 +72,7 @@
           <span>HCL-compatible</span>
           <span>Strongly typed DSL</span>
           <span>Safe TypeScript data</span>
+          <span>TOON / code2llm maps</span>
           <span>Policy DSL / proto3</span>
         </div>
         <div class="arch-core">
@@ -124,6 +126,25 @@ wellm semantic-diff current.json previous.json</code></pre>
       </div>
     </section>
 
+    <section id="iot" class="section shell">
+      <div class="section-heading">
+        <div><span class="eyebrow">THREE-LAYER IOT</span><h2>Frontend, backend and firmware share one protocol.</h2></div>
+        <p>A thin MQTT v5 device asks for remote configuration, publishes typed telemetry, and receives a correlated receipt. The browser reads the same append-only event stream through the backend.</p>
+      </div>
+      <div class="runtime-cards">
+        <article><div class="icon">◫</div><h3>Frontend</h3><p>Nginx and dependency-free JavaScript display device receipts through the backend proxy.</p><code>localhost:8090</code></article>
+        <article><div class="icon">⌘</div><h3>Backend</h3><p>HTTP/WS runtime validates schemas, resolves contracts, executes URI Processes and stores events.</p><code>localhost:8091</code></article>
+        <article><div class="icon">⌁</div><h3>Firmware</h3><p>RPi/MCU-shaped client sends a small envelope and delegates parsing and policy to the server.</p><code>contract:firmware-thin</code></article>
+        <article><div class="icon">↔</div><h3>Transport</h3><p>Mosquitto and the Wellm bridge preserve response topics, correlation data and diagnostics.</p><code>MQTT v5 · localhost:1884</code></article>
+      </div>
+      <div class="cta">
+        <div><span class="eyebrow">COMPOSE</span><h2>Run and test the isolated IoT topology.</h2></div>
+        <pre><code>make iot-up
+make iot-down
+make iot-e2e</code></pre>
+      </div>
+    </section>
+
     <section id="plesk" class="section shell">
       <div class="section-heading">
         <div><span class="eyebrow">PLESK PUBLICATION</span><h2>Review facts. Dry-run exact files. Apply one signed plan.</h2></div>
@@ -166,7 +187,7 @@ wellm semantic-diff current.json previous.json</code></pre>
       </div>
       <div class="playground-grid">
         <div class="editor-panel">
-          <div class="panel-title"><b>Input</b><label>Dialect <select id="sourceDialect"><option value="yaml">YAML</option><option value="json">JSON</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="typescript">TypeScript</option><option value="toml">TOML</option></select></label></div>
+          <div class="panel-title"><b>Input</b><label>Dialect <select id="sourceDialect"><option value="yaml">YAML</option><option value="json">JSON</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="typescript">TypeScript</option><option value="toon">TOON</option><option value="toml">TOML</option></select></label></div>
           <textarea id="sourceText" spellcheck="false">status:
   operation: 002-cv-pdf2md
   value: SUCCEEDED
@@ -174,7 +195,7 @@ wellm semantic-diff current.json previous.json</code></pre>
         </div>
         <button id="convertButton" class="convert-button" type="button" aria-label="Convert">⇄</button>
         <div class="editor-panel">
-          <div class="panel-title"><b>Output</b><label>Dialect <select id="targetDialect"><option value="json">JSON</option><option value="yaml">YAML</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="typescript">TypeScript</option><option value="toml">TOML</option></select></label></div>
+          <div class="panel-title"><b>Output</b><label>Dialect <select id="targetDialect"><option value="json">JSON</option><option value="yaml">YAML</option><option value="hcl">HCL</option><option value="typed">typed@1</option><option value="typescript">TypeScript</option><option value="toon">TOON</option><option value="toml">TOML</option></select></label></div>
           <textarea id="outputText" readonly spellcheck="false">Select Convert to contact the runtime.</textarea>
         </div>
       </div>
@@ -211,7 +232,7 @@ wellm semantic-diff current.json previous.json</code></pre>
             <tr><td>Backend orchestration</td><td><code>wellm-server</code></td><td>Python / Rust path</td><td>HTTP · gRPC</td><td><span class="tag working">working RC</span></td></tr>
             <tr><td>Plesk publication</td><td><code>wellm.plesk</code></td><td>Control / bridge</td><td>concrete URI · receipt</td><td><span class="tag working">tested planner</span></td></tr>
             <tr><td>LLM model selection</td><td><code>wellm.llmbench</code></td><td>Python + LiteLLM</td><td>schema · semantics · cost</td><td><span class="tag working">offline tested</span></td></tr>
-            <tr><td>IoT / firmware</td><td>thin client + bridge</td><td>remote edge</td><td>MQTT · protobuf</td><td><span class="tag source">source</span></td></tr>
+            <tr><td>IoT / firmware</td><td><code>compose.iot.yml</code></td><td>frontend + backend + thin device</td><td>MQTT v5 · HTTP · events</td><td><span class="tag working">contract tested</span></td></tr>
             <tr><td>Digital twins</td><td>situation + router</td><td>read-only server</td><td>events · URI</td><td><span class="tag working">working demo</span></td></tr>
             <tr><td>Native bindings</td><td>Rust / PyO3 / N-API</td><td>local native</td><td>FFI</td><td><span class="tag source">scaffold</span></td></tr>
           </tbody>
@@ -221,10 +242,12 @@ wellm semantic-diff current.json previous.json</code></pre>
 
     <section class="cta shell">
       <div><span class="eyebrow">START WITH A SIDECAR</span><h2>Give every language one manifest gateway.</h2></div>
-      <pre><code>docker compose up --build runtime
-curl http://localhost:8080/v1/capabilities
-wellm governance build examples/governance/wellm.project.yaml --check
-wellm benchmark-llm examples/benchmark/config.yaml --mock</code></pre>
+      <pre><code>make env-setup
+make up
+make iot-up
+make versions-check
+make intent-demo
+make e2e</code></pre>
     </section>
   </main>
 

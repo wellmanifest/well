@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: wellmanifest/wellm:0.2.0rc3
+    image: wellmanifest/wellm:0.2.0rc4
     command: ["wellm", "serve", "--host", "0.0.0.0", "--port", "8080"]
     environment:
       WELLMANIFEST_WORKSPACE_ROOT: /workspace

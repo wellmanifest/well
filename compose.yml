@@ -1,16 +1,22 @@
 name: wellmanifest
 
+x-runtime-environment: &runtime-environment
+  WELLMANIFEST_HOST: ${WELLMANIFEST_HOST:-0.0.0.0}
+  WELLMANIFEST_PORT: ${WELLMANIFEST_PORT:-8080}
+  WELLMANIFEST_CONTRACTS: ${WELLMANIFEST_CONTRACTS:-/app/config/contracts.json}
+  WELLMANIFEST_DEFAULT_CONTRACT: ${WELLMANIFEST_DEFAULT_CONTRACT:-contract:dev}
+  WELLMANIFEST_EVENT_STORE: ${WELLMANIFEST_EVENT_STORE:-/data/events.jsonl}
+  WELLMANIFEST_WORKSPACE_ROOT: ${WELLMANIFEST_WORKSPACE_ROOT:-/workspace}
+  WELLMANIFEST_ENABLE_PLESK_EXECUTION: ${WELLMANIFEST_ENABLE_PLESK_EXECUTION:-0}
+  WELLMANIFEST_TOKEN: ${WELLMANIFEST_TOKEN:-}
+
 x-runtime: &runtime
-  image: wellmanifest/wellm:0.2.0rc3-dev
+  image: ${WELLMANIFEST_IMAGE:-wellmanifest/wellm}:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
   build:
     context: .
     dockerfile: Dockerfile
   restart: unless-stopped
-  environment:
-    WELLMANIFEST_CONTRACTS: /app/config/contracts.json
-    WELLMANIFEST_DEFAULT_CONTRACT: contract:dev
-    WELLMANIFEST_EVENT_STORE: /data/events.jsonl
-    WELLMANIFEST_ENABLE_PLESK_EXECUTION: "0"
+  environment: *runtime-environment
   volumes:
     - wellmanifest-data:/data
     - ./config/contracts.json:/app/config/contracts.json:ro
@@ -19,18 +25,19 @@ services:
   runtime:
     <<: *runtime
     ports:
-      - "8080:8080"
+      - "${WELLMANIFEST_HTTP_HOST_PORT:-8080}:8080"
     networks: [public, runtime]
 
   grpc:
     <<: *runtime
     entrypoint: ["wellmanifest-grpc"]
     environment:
-      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
+      <<: *runtime-environment
       WELLMANIFEST_EVENT_STORE: /data/grpc-events.jsonl
-      WELLMANIFEST_GRPC_ADDRESS: 0.0.0.0:50051
+      WELLMANIFEST_GRPC_ADDRESS: ${WELLMANIFEST_GRPC_ADDRESS:-0.0.0.0:50051}
+      WELLMANIFEST_GRPC_WORKERS: ${WELLMANIFEST_GRPC_WORKERS:-8}
     ports:
-      - "50051:50051"
+      - "${WELLMANIFEST_GRPC_HOST_PORT:-50051}:50051"
     networks: [runtime]
     healthcheck:
       test: ["CMD", "python", "-c", "import grpc; grpc.channel_ready_future(grpc.insecure_channel('127.0.0.1:50051')).result(timeout=2)"]
@@ -44,7 +51,7 @@ services:
     volumes:
       - ./docker/mosquitto.conf:/mosquitto-no-auth.conf:ro
     ports:
-      - "1883:1883"
+      - "${WELLMANIFEST_MQTT_HOST_PORT:-1883}:1883"
     networks: [runtime]
     healthcheck:
       test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -t '$$SYS/broker/version' -C 1 -W 2 >/dev/null 2>&1"]
@@ -56,11 +63,14 @@ services:
     <<: *runtime
     entrypoint: ["wellmanifest-mqtt"]
     environment:
-      WELLMANIFEST_CONTRACTS: /app/config/contracts.json
-      WELLMANIFEST_EVENT_STORE: /data/mqtt-events.jsonl
-      WELLMANIFEST_MQTT_HOST: mqtt
-      WELLMANIFEST_MQTT_PORT: 1883
-      WELLMANIFEST_TENANT: default
+      <<: *runtime-environment
+      WELLMANIFEST_EVENT_STORE: /data/events.jsonl
+      WELLMANIFEST_MQTT_HOST: ${WELLMANIFEST_MQTT_HOST:-mqtt}
+      WELLMANIFEST_MQTT_PORT: ${WELLMANIFEST_MQTT_PORT:-1883}
+      WELLMANIFEST_MQTT_USERNAME: ${WELLMANIFEST_MQTT_USERNAME:-}
+      WELLMANIFEST_MQTT_PASSWORD: ${WELLMANIFEST_MQTT_PASSWORD:-}
+      WELLMANIFEST_MQTT_REQUEST_TOPIC: ${WELLMANIFEST_MQTT_REQUEST_TOPIC:-wellmanifest/v1/default/request/#}
+      WELLMANIFEST_TENANT: ${WELLMANIFEST_TENANT:-default}
     depends_on:
       mqtt:
         condition: service_healthy
@@ -72,9 +82,9 @@ services:
     build:
       context: .
       dockerfile: docker/www.Dockerfile
-    image: wellmanifest/wellm-www:0.2.0rc3-dev
+    image: wellmanifest/wellm-www:${WELLMANIFEST_IMAGE_TAG:-0.2.0rc4-dev}
     ports:
-      - "8088:8080"
+      - "${WELLMANIFEST_WWW_HOST_PORT:-8088}:8080"
     depends_on:
       runtime:
         condition: service_healthy
@@ -87,7 +97,8 @@ services:
       dockerfile: docker/firmware-sim.Dockerfile
     environment:
       WELLMANIFEST_URL: http://runtime:8080
-      WELLMANIFEST_CONTRACT: contract:firmware-thin
+      WELLMANIFEST_CONTRACT: ${WELLMANIFEST_CONTRACT:-contract:firmware-thin}
+      WELLMANIFEST_TOKEN: ${WELLMANIFEST_TOKEN:-}
     depends_on:
       runtime:
         condition: service_healthy
@@ -97,6 +108,12 @@ volumes:
   wellmanifest-data: {}
 
 networks:
-  public: {}
+  public:
+    ipam:
+      config:
+        - subnet: ${WELLMANIFEST_PUBLIC_SUBNET:-172.30.240.0/24}
   runtime:
     internal: false
+    ipam:
+      config:
+        - subnet: ${WELLMANIFEST_RUNTIME_SUBNET:-172.30.241.0/24}

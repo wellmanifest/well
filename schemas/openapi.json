@@ -3,7 +3,7 @@
   "info": {
     "title": "wellm — WellManifest Runtime Gateway",
     "description": "Polyglot dialect conversion, schema validation and capability-scoped URI Process execution.",
-    "version": "0.2.0rc3"
+    "version": "0.2.0rc4"
   },
   "paths": {
     "/healthz": {
@@ -274,6 +274,208 @@
                     "additionalProperties": true
                   },
                   "title": "Response Profiles V1 Profiles Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/versions": {
+      "get": {
+        "summary": "Versions",
+        "operationId": "versions_v1_versions_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Versions V1 Versions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/env-contract": {
+      "get": {
+        "summary": "Env Contract",
+        "operationId": "env_contract_v1_env_contract_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Env Contract V1 Env Contract Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intent/analyze": {
+      "post": {
+        "summary": "Analyze Intent",
+        "operationId": "analyze_intent_v1_intent_analyze_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InlineIntentAnalysisRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Analyze Intent V1 Intent Analyze Post"
                 }
               }
             }
@@ -1253,6 +1455,17 @@
             "type": "boolean",
             "title": "Pretty",
             "default": true
+          },
+          "type_mode": {
+            "type": "string",
+            "enum": [
+              "preserve",
+              "schema",
+              "infer",
+              "none"
+            ],
+            "title": "Type Mode",
+            "default": "preserve"
           }
         },
         "type": "object",
@@ -1580,6 +1793,40 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "InlineIntentAnalysisRequest": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "default": "inline-intent-analysis"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema"
+          },
+          "representations": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Representations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "representations"
+        ],
+        "title": "InlineIntentAnalysisRequest"
       },
       "PleskPlanApiRequest": {
         "properties": {
