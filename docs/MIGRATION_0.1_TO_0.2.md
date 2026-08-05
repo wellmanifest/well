@@ -42,6 +42,6 @@ transition. They should not be used in new examples.
 
 ## Versioning
 
-`0.2.0rc2` is intentionally a pre-release. Installing `wellm` without an
+`0.2.0rc3` is intentionally a pre-release. Installing `wellm` without an
 explicit pre-release version continues to prefer the latest stable 0.1.x
 release until a stable 0.2 release is published.

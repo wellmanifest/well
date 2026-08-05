@@ -1,7 +1,7 @@
 name: wellmanifest
 
 x-runtime: &runtime
-  image: wellmanifest/wellm:0.2.0rc2-dev
+  image: wellmanifest/wellm:0.2.0rc3-dev
   build:
     context: .
     dockerfile: Dockerfile
@@ -72,7 +72,7 @@ services:
     build:
       context: .
       dockerfile: docker/www.Dockerfile
-    image: wellmanifest/wellm-www:0.2.0rc2-dev
+    image: wellmanifest/wellm-www:0.2.0rc3-dev
     ports:
       - "8088:8080"
     depends_on:

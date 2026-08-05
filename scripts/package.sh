@@ -9,6 +9,11 @@ NODE_RESULT=${WELLMANIFEST_NODE_TEST_RESULT:-"not recorded by package command"}
 E2E_RESULT=${WELLMANIFEST_E2E_RESULT:-"not recorded by package command"}
 DOCKER_RESULT=${WELLMANIFEST_DOCKER_RESULT:-"not run by package command"}
 RUST_RESULT=${WELLMANIFEST_RUST_RESULT:-"not run by package command"}
+RUFF_RESULT=${WELLMANIFEST_RUFF_RESULT:-"not run by package command"}
+WHEEL_RESULT=${WELLMANIFEST_WHEEL_RESULT:-"not run by package command"}
+NPM_PACKAGE_RESULT=${WELLMANIFEST_NPM_PACKAGE_RESULT:-"not run by package command"}
+SOURCE_ARCHIVE_RESULT=${WELLMANIFEST_SOURCE_ARCHIVE_RESULT:-"not run by package command"}
+GOVERNANCE_RESULT=${WELLMANIFEST_GOVERNANCE_RESULT:-"not recorded by package command"}
 rm -rf "$DIST"
 mkdir -p "$DIST/$NAME" "$DIST/python"
 
@@ -36,6 +41,11 @@ Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 | Python reference tests | $PYTHON_RESULT |
 | JavaScript SDK tests | $NODE_RESULT |
 | Local HTTP/Node/RPi E2E | $E2E_RESULT |
+| Governance build/check | $GOVERNANCE_RESULT |
+| Python wheel smoke | $WHEEL_RESULT |
+| npm package smoke | $NPM_PACKAGE_RESULT |
+| Source ZIP smoke | $SOURCE_ARCHIVE_RESULT |
+| Ruff lint | $RUFF_RESULT |
 | Docker Compose E2E | $DOCKER_RESULT |
 | Rust/WASM/PyO3/N-API | $RUST_RESULT |
 

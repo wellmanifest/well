@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/source-map.schema.json",
+  "title": "Wellm source map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source",
+    "generated",
+    "mappings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.source-map/v1"
+    },
+    "source": {
+      "type": "string"
+    },
+    "generated": {
+      "type": "string"
+    },
+    "mappings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceLine",
+          "sourceColumn",
+          "endLine",
+          "endColumn"
+        ],
+        "properties": {
+          "sourceLine": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sourceColumn": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "endLine": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "endColumn": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}

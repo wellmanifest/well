@@ -1,0 +1,16 @@
+{
+  "artifactSha256": "sha256:aa36931d4ca5ec3819a97650172df6d6710cd609f406240110d3e604e320ef01",
+  "generator": {
+    "name": "wellm",
+    "version": "0.2.0rc3"
+  },
+  "schema": "wellm.artifact-metadata/v1",
+  "schemaRef": "fixtures/intent.schema.json",
+  "schemaSha256": "sha256:b2dc37ee348ca33e2f0d33515dd79c2403ac8afb504257cdebb65edf472a2637",
+  "semanticSha256": "sha256:c73a93a8f0738a8b335bd8301795f49d64f98065f8050d00c04c41e4bb57a7bd",
+  "source": "intent.wm",
+  "sourceDialect": "typed@1",
+  "sourceSha256": "sha256:471746f3bcd43114193e9aeb1d47680f8c0425e09d1243d568bdad8a9db78555",
+  "target": "generated/intent.json",
+  "targetProfile": "repo-json@1"
+}

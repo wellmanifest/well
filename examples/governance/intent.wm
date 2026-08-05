@@ -1,0 +1,21 @@
+#@wellmanifest kind="data" schema="fixtures/intent.schema.json"
+
+schema = "new-project.intent/v2"
+
+ticket = "ticket-002"
+
+summary = "Integracja adopcji manifestu z goal"
+
+workstream = "integration"
+
+allowedPaths = ["scripts/create_adoption_lock.py", "tests/adoption-lock.test.sh", "docs/GOAL_ADOPTION.md", "docs/ROADMAP_AFTER_0.9.0.md", "README.md", "project/ticket-002/**", "TODO.md", "project/TICKETS.md"]
+
+forbiddenPaths = ["project/ticket-*/user-*.md"]
+
+stacks = ["python"]
+
+dependsOn = []
+
+conflictsWith = []
+
+integrationTicket = null

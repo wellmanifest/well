@@ -1,4 +1,4 @@
-# Implementation status — 0.2.0rc2
+# Implementation status — 0.2.0rc3
 
 ## Working reference implementation
 
@@ -9,6 +9,12 @@ local tests:
 - procedural policy import to structured IR;
 - four requested status syntaxes;
 - JSON Schema Draft 2020-12 validation;
+- named governance formatting profiles (`repo-json@1`, `wire-json@1`, `yaml-json@1` and others);
+- deterministic governance build/check with metadata and source-map sidecars;
+- exact-byte and semantic SHA-256 digests;
+- structural semantic diff and multi-dialect round-trip reports;
+- policy-shaped Bash fence compatibility, canonical fence rewriting and state-machine lint;
+- HTTP/WebSocket/URI Process formatting and semantic-diff operations;
 - stable `ERROR`, `WARNING` and `INFO` diagnostics;
 - HTTP/WebSocket gateway, content negotiation and JSONL event store;
 - concrete URI Process validation, contract scopes and idempotent execution;
@@ -53,6 +59,9 @@ presence from an actually executed build.
 
 ## Deliberate limitations
 
+- Semantic diff is structural and does not claim full JSON Schema compatibility analysis.
+- `repo-json@1` orders declared properties by schema and dynamic maps lexically; it is a Wellm profile, not a claim of RFC 8785/JCS conformance.
+- Source maps identify authored values and their closest parent; generated formatter tokens do not preserve every comment span.
 - HCL support is a data-oriented compatibility frontend, not a guarantee of all
   application-specific HashiCorp decoding semantics.
 - The TypeScript dialect is a non-executing data subset, not a JavaScript/TS

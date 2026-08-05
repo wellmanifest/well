@@ -43,7 +43,9 @@ test -s "$EXTRA/plan.json"
 PYTHONPATH="$ROOT/src" python -m wellmanifest.cli benchmark-llm "$ROOT/examples/benchmark/config.yaml" \
   --mock --output-dir "$EXTRA/benchmark" >/dev/null
 test -s "$EXTRA/benchmark/benchmark-report.json"
-printf '%s\n' 'plesk/benchmark local e2e: PASS'
+PYTHONPATH="$ROOT/src" python -m wellmanifest.cli governance build "$ROOT/examples/governance/wellm.project.yaml" --check >"$EXTRA/governance-check.json"
+test -s "$EXTRA/governance-check.json"
+printf '%s\n' 'plesk/benchmark/governance local e2e: PASS'
 python - <<'PY'
 import json, os, urllib.request
 base=os.environ['WELLMANIFEST_URL']

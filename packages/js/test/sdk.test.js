@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {assertConcreteUri, createEnvelope, matchesUriProcess, UrirunProcessClient, WellManifestClient} from "../src/index.js";
+import {assertConcreteUri, canonicalJson, createEnvelope, matchesUriProcess, semanticDigest, UrirunProcessClient, WellManifestClient} from "../src/index.js";
 
 test("URI scopes are prefix capabilities, not executable wildcard URIs", () => {
   assert.equal(matchesUriProcess("youtube://channel/video/query/list", ["youtube://*"]), true);
@@ -129,4 +129,16 @@ test("Plesk frontend planner applies protocol defaults to the minimal project re
   assert.equal(plan.steps.length, 10);
   assert.equal(plan.steps.find((step) => step.id === "publish-dry-run").uri, "plesk://host/site/command/sync");
   assert.equal(plan.steps.find((step) => step.id === "publish-verify").uri, "plesk://host/site/command/publish-verify");
+});
+
+
+test("canonical JSON and semantic digest ignore object key order", async () => {
+  const left = {b: 2, a: {z: true, y: [1, 2]}};
+  const right = {a: {y: [1, 2], z: true}, b: 2};
+  assert.equal(canonicalJson(left), canonicalJson(right));
+  assert.equal(await semanticDigest(left), await semanticDigest(right));
+  assert.equal(
+    await semanticDigest({b: 2, a: 1}),
+    "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777",
+  );
 });

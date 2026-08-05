@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/artifact-metadata.schema.json",
+  "title": "Wellm generated artifact metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source",
+    "target",
+    "sourceDialect",
+    "targetProfile",
+    "generator",
+    "sourceSha256",
+    "semanticSha256",
+    "artifactSha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.artifact-metadata/v1"
+    },
+    "source": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "sourceDialect": {
+      "type": "string"
+    },
+    "targetProfile": {
+      "type": "string"
+    },
+    "schemaRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "wellm"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "sourceSha256": {
+      "$ref": "#/$defs/digest"
+    },
+    "schemaSha256": {
+      "$ref": "#/$defs/digest"
+    },
+    "semanticSha256": {
+      "$ref": "#/$defs/digest"
+    },
+    "artifactSha256": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

@@ -53,3 +53,29 @@ await client.execute(
 ```
 
 A wildcard can appear in a permission scope, but never as the executable URI.
+
+
+## Governance formatting and semantic digests
+
+```js
+import {
+  canonicalJson,
+  semanticDigest,
+  WellManifestClient,
+} from "@wellmanifest/wellm-sdk";
+
+const digest = await semanticDigest({b: 2, a: 1});
+// sha256:43258cff...
+
+const client = new WellManifestClient({baseUrl: "http://localhost:8080"});
+const profiles = await client.profiles();
+const formatted = await client.format(
+  {schema: "new-project.intent/v2", ticket: "ticket-002"},
+  {profile: "repo-json@1"},
+);
+const diff = await client.semanticDiff(previousManifest, currentManifest);
+```
+
+`canonicalJson()` and `semanticDigest()` are local helpers for JSON-compatible
+data. Schema-aware repository formatting, source maps and governance
+`build --check` remain server/CLI operations.

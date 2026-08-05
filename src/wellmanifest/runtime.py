@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from .dialects import DialectError, DialectRegistry
 from .eventstore import JsonlEventStore
+from .governance import available_profiles, semantic_diff, semantic_sha256, serialize_profile
 from .models import (
     ConversionRequest,
     ConversionResponse,
@@ -33,6 +34,7 @@ from .security import (
     matches_uri_process,
 )
 from .situation import evaluate_situation_profile
+from .version import __version__
 
 ProcessHandler = Callable[[Any, dict[str, Any]], Any]
 
@@ -46,7 +48,7 @@ class RuntimeExecutionError(RuntimeError):
 
 
 class WellManifestRuntime:
-    version = "0.2.0rc2"
+    version = __version__
 
     def __init__(
         self,
@@ -106,7 +108,12 @@ class WellManifestRuntime:
             )
 
         if request.schema_document is not None and request.projection == "data":
-            diagnostics.extend(self.schema_validator.validate(document.data, request.schema_document, source=request.source_name))
+            diagnostics.extend(self.schema_validator.validate(
+                document.data,
+                request.schema_document,
+                source=request.source_name,
+                source_map=document.source_map,
+            ))
 
         try:
             target = self.registry.get(request.target_dialect)
@@ -161,7 +168,12 @@ class WellManifestRuntime:
             )
             return ValidationResponse(valid=False, diagnostics=[diagnostic])
         diagnostics = [*document.diagnostics]
-        diagnostics.extend(self.schema_validator.validate(document.data, request.schema_document, source=request.source_name))
+        diagnostics.extend(self.schema_validator.validate(
+                document.data,
+                request.schema_document,
+                source=request.source_name,
+                source_map=document.source_map,
+            ))
         valid = not any(item.severity == Severity.ERROR for item in diagnostics)
         return ValidationResponse(valid=valid, diagnostics=diagnostics, normalized=document.data)
 
@@ -324,6 +336,7 @@ class WellManifestRuntime:
             "runtimeVersion": self.version,
             "irVersion": "wellmanifest-ir/v1",
             "schemaDialects": ["json-schema@2020-12"],
+            "formatProfiles": available_profiles(),
             "dialects": self.registry.describe(),
             "transports": ["http", "websocket", "mqtt-v5", "grpc"],
             "processes": sorted(self.processes),
@@ -421,6 +434,8 @@ class WellManifestRuntime:
     def _register_builtin_processes(self) -> None:
         self.register_process("wellmanifest://runtime/convert/execute", self._process_convert)
         self.register_process("wellmanifest://runtime/validate/execute", self._process_validate)
+        self.register_process("wellmanifest://runtime/format/execute", self._process_format)
+        self.register_process("wellmanifest://runtime/semantic-diff/query", self._process_semantic_diff)
         self.register_process("wellmanifest://application/run/execute", self._process_application)
         self.register_process("wellmanifest://events/stream/query", self._process_events_query)
         self.register_process("situation://profile/evaluate/query", self._process_situation)
@@ -437,6 +452,24 @@ class WellManifestRuntime:
 
     def _process_validate(self, payload: Any, _context: dict[str, Any]) -> Any:
         return self.validate(ValidationRequest.model_validate(payload)).model_dump(mode="json")
+
+    @staticmethod
+    def _process_format(payload: Any, _context: dict[str, Any]) -> Any:
+        payload = payload or {}
+        value = payload.get("value")
+        profile = str(payload.get("profile", "repo-json@1"))
+        schema = payload.get("schema")
+        output = serialize_profile(value, profile, schema=schema if isinstance(schema, dict) else None)
+        return {
+            "profile": profile,
+            "semanticSha256": semantic_sha256(value),
+            "output": output,
+        }
+
+    @staticmethod
+    def _process_semantic_diff(payload: Any, _context: dict[str, Any]) -> Any:
+        payload = payload or {}
+        return semantic_diff(payload.get("left"), payload.get("right")).model_dump(mode="json", by_alias=True)
 
     def _process_events_query(self, payload: Any, _context: dict[str, Any]) -> Any:
         payload = payload or {}

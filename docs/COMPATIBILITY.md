@@ -2,7 +2,7 @@
 
 ## Packages, services and runtimes
 
-| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity `0.2.0rc2` |
+| Layer | Package/service | Local | Remote | Browser | Backend | RPi/IoT | Digital twin | Maturity `0.2.0rc3` |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | Protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | yes | yes | specified + schemas |
 | Python distribution | `wellm` | yes | client/server | no | yes | CPython RPi | control | tested reference |
@@ -99,3 +99,16 @@ Every environment must preserve these invariants:
 6. LLM output is untrusted until parsed, schema-validated and policy-checked;
 7. a runtime profile never expands Contract AQL authority;
 8. receipts and diagnostics remain stable across local and remote bindings.
+
+## Governance-formatting matrix
+
+| Capability | Python CLI/API | HTTP/WS | JavaScript SDK | Firmware/thin client |
+|---|---:|---:|---:|---:|
+| list profiles | yes | yes | remote | remote |
+| `repo-json@1` formatting | yes | yes | canonical helper + remote | remote |
+| semantic SHA-256 | yes | service | yes | service |
+| source maps | yes | returned through IR/build artifacts | consume | consume |
+| governance build/check | yes | deployment-side | call service/CI | no |
+| policy Markdown import/lint | yes | runtime/IR | consume IR | no |
+| semantic diff | yes | yes | remote | remote |
+| round-trip report | yes | via conversion API | client orchestration | remote |

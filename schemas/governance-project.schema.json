@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/governance-project.schema.json",
+  "title": "Wellm governance project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sources"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.governance-project/v1"
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1,
+      "default": "."
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "policies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/policy"
+      },
+      "default": []
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:[\\\\/]).+$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "target": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "schema": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sourceDialect": {
+          "type": "string",
+          "minLength": 1,
+          "default": "auto"
+        },
+        "profile": {
+          "enum": [
+            "repo-json@1",
+            "json-data@1",
+            "wire-json@1",
+            "yaml-json@1",
+            "typescript-data@1",
+            "wellm-typed@1",
+            "hcl-static@1"
+          ],
+          "default": "repo-json@1"
+        },
+        "metadata": {
+          "type": "boolean",
+          "default": true
+        },
+        "sourceMap": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "irTarget": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "canonicalFence": {
+          "enum": [
+            "dsl",
+            "policy",
+            "wellm-policy"
+          ],
+          "default": "wellm-policy"
+        },
+        "rewriteFences": {
+          "type": "boolean",
+          "default": false
+        },
+        "undeclaredStates": {
+          "enum": [
+            "error",
+            "warning",
+            "ignore"
+          ],
+          "default": "error"
+        }
+      }
+    }
+  }
+}

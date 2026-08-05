@@ -1,0 +1,211 @@
+{
+  "generated": "generated/diagnostics.json",
+  "mappings": {
+    "/codes": {
+      "endColumn": 6,
+      "endLine": 5,
+      "sourceColumn": 1,
+      "sourceLine": 5
+    },
+    "/codes/GOV-APPROVAL-001": {
+      "endColumn": 85,
+      "endLine": 19,
+      "sourceColumn": 22,
+      "sourceLine": 19
+    },
+    "/codes/GOV-APPROVAL-002": {
+      "endColumn": 62,
+      "endLine": 20,
+      "sourceColumn": 22,
+      "sourceLine": 20
+    },
+    "/codes/GOV-APPROVAL-003": {
+      "endColumn": 100,
+      "endLine": 21,
+      "sourceColumn": 22,
+      "sourceLine": 21
+    },
+    "/codes/GOV-APPROVAL-004": {
+      "endColumn": 97,
+      "endLine": 22,
+      "sourceColumn": 22,
+      "sourceLine": 22
+    },
+    "/codes/GOV-APPROVAL-005": {
+      "endColumn": 100,
+      "endLine": 23,
+      "sourceColumn": 22,
+      "sourceLine": 23
+    },
+    "/codes/GOV-BOOT-001": {
+      "endColumn": 65,
+      "endLine": 9,
+      "sourceColumn": 18,
+      "sourceLine": 9
+    },
+    "/codes/GOV-CONFLICT-001": {
+      "endColumn": 84,
+      "endLine": 31,
+      "sourceColumn": 22,
+      "sourceLine": 31
+    },
+    "/codes/GOV-DEPENDENCY-001": {
+      "endColumn": 97,
+      "endLine": 29,
+      "sourceColumn": 24,
+      "sourceLine": 29
+    },
+    "/codes/GOV-DEPENDENCY-002": {
+      "endColumn": 93,
+      "endLine": 30,
+      "sourceColumn": 24,
+      "sourceLine": 30
+    },
+    "/codes/GOV-DIFF-001": {
+      "endColumn": 90,
+      "endLine": 8,
+      "sourceColumn": 18,
+      "sourceLine": 8
+    },
+    "/codes/GOV-DOCKER-001": {
+      "endColumn": 76,
+      "endLine": 34,
+      "sourceColumn": 20,
+      "sourceLine": 34
+    },
+    "/codes/GOV-INTEGRATION-001": {
+      "endColumn": 100,
+      "endLine": 32,
+      "sourceColumn": 25,
+      "sourceLine": 32
+    },
+    "/codes/GOV-INTENT-001": {
+      "endColumn": 95,
+      "endLine": 16,
+      "sourceColumn": 20,
+      "sourceLine": 16
+    },
+    "/codes/GOV-INTENT-002": {
+      "endColumn": 60,
+      "endLine": 17,
+      "sourceColumn": 20,
+      "sourceLine": 17
+    },
+    "/codes/GOV-INTENT-003": {
+      "endColumn": 93,
+      "endLine": 18,
+      "sourceColumn": 20,
+      "sourceLine": 18
+    },
+    "/codes/GOV-MANIFEST-001": {
+      "endColumn": 80,
+      "endLine": 6,
+      "sourceColumn": 22,
+      "sourceLine": 6
+    },
+    "/codes/GOV-OWNER-001": {
+      "endColumn": 79,
+      "endLine": 33,
+      "sourceColumn": 19,
+      "sourceLine": 33
+    },
+    "/codes/GOV-PATH-001": {
+      "endColumn": 91,
+      "endLine": 37,
+      "sourceColumn": 18,
+      "sourceLine": 37
+    },
+    "/codes/GOV-SCOPE-001": {
+      "endColumn": 88,
+      "endLine": 24,
+      "sourceColumn": 19,
+      "sourceLine": 24
+    },
+    "/codes/GOV-SECRET-001": {
+      "endColumn": 75,
+      "endLine": 36,
+      "sourceColumn": 20,
+      "sourceLine": 36
+    },
+    "/codes/GOV-STACK-001": {
+      "endColumn": 85,
+      "endLine": 35,
+      "sourceColumn": 19,
+      "sourceLine": 35
+    },
+    "/codes/GOV-STATUS-001": {
+      "endColumn": 92,
+      "endLine": 15,
+      "sourceColumn": 20,
+      "sourceLine": 15
+    },
+    "/codes/GOV-SYNC-001": {
+      "endColumn": 87,
+      "endLine": 7,
+      "sourceColumn": 18,
+      "sourceLine": 7
+    },
+    "/codes/GOV-TICKET-001": {
+      "endColumn": 71,
+      "endLine": 10,
+      "sourceColumn": 20,
+      "sourceLine": 10
+    },
+    "/codes/GOV-TICKET-002": {
+      "endColumn": 57,
+      "endLine": 11,
+      "sourceColumn": 20,
+      "sourceLine": 11
+    },
+    "/codes/GOV-TICKET-003": {
+      "endColumn": 90,
+      "endLine": 12,
+      "sourceColumn": 20,
+      "sourceLine": 12
+    },
+    "/codes/GOV-TICKET-004": {
+      "endColumn": 98,
+      "endLine": 13,
+      "sourceColumn": 20,
+      "sourceLine": 13
+    },
+    "/codes/GOV-TICKET-005": {
+      "endColumn": 87,
+      "endLine": 14,
+      "sourceColumn": 20,
+      "sourceLine": 14
+    },
+    "/codes/GOV-WORKSTREAM-001": {
+      "endColumn": 87,
+      "endLine": 25,
+      "sourceColumn": 24,
+      "sourceLine": 25
+    },
+    "/codes/GOV-WORKSTREAM-002": {
+      "endColumn": 71,
+      "endLine": 26,
+      "sourceColumn": 24,
+      "sourceLine": 26
+    },
+    "/codes/GOV-WORKSTREAM-003": {
+      "endColumn": 79,
+      "endLine": 27,
+      "sourceColumn": 24,
+      "sourceLine": 27
+    },
+    "/codes/GOV-WORKSTREAM-004": {
+      "endColumn": 91,
+      "endLine": 28,
+      "sourceColumn": 24,
+      "sourceLine": 28
+    },
+    "/schema": {
+      "endColumn": 38,
+      "endLine": 3,
+      "sourceColumn": 10,
+      "sourceLine": 3
+    }
+  },
+  "schema": "wellm.source-map/v1",
+  "source": "diagnostics.wm"
+}

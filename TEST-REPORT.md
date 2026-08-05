@@ -1,14 +1,19 @@
-# wellm / WellManifest 0.2.0rc2 test report
+# wellm / WellManifest 0.2.0rc3 test report
 
-Generated: 2026-08-04T18:16:16Z
+Generated: 2026-08-04T21:54:48Z
 
 | Suite | Result |
 |---|---|
-| Python reference tests | 38/38 PASS (Python 3.13.5) |
-| JavaScript SDK tests | 7/7 PASS (Node.js 22.16.0) |
-| Local HTTP/Node/RPi E2E | PASS (HTTP, Node, Python/JS Plesk parity, RPi, Plesk plan, offline LLM benchmark, events) |
-| Docker Compose E2E | NOT RUN — Docker CLI/engine unavailable in this environment |
-| Rust/WASM/PyO3/N-API | NOT RUN — cargo/rustc unavailable in this environment |
+| Python reference tests | 54/54 PASS (Python 3.13) |
+| JavaScript SDK tests | 8/8 PASS (Node 22.16.0) |
+| Local HTTP/Node/RPi E2E | PASS: HTTP, Node, RPi, Plesk parity, benchmark, governance build/check |
+| Governance build/check | PASS: 4 generated data artifacts CURRENT; policy IR CURRENT; 2 expected source warnings |
+| Python wheel smoke | PASS: import, compatibility API, profiles and governance --check |
+| npm package smoke | PASS: local tarball install, canonical JSON, semantic digest and client import |
+| Source ZIP smoke | PASS: extracted ZIP governance/policy/format tests and SDK smoke |
+| Ruff lint | NOT RUN: ruff unavailable |
+| Docker Compose E2E | NOT RUN: Docker/Podman CLI unavailable |
+| Rust/WASM/PyO3/N-API | NOT RUN: cargo/rustc unavailable |
 
 Verification commands:
 

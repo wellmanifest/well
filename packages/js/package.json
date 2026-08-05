@@ -1,6 +1,6 @@
 {
   "name": "@wellmanifest/wellm-sdk",
-  "version": "0.2.0-rc.2",
+  "version": "0.2.0-rc.3",
   "description": "Browser, Node.js and thin-device client for the WellManifest protocol",
   "type": "module",
   "main": "./src/index.js",

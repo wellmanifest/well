@@ -1,0 +1,15 @@
+{
+  "artifactSha256": "sha256:a9d238d97d1105c8e260970bc71679c995b5926225941d9168ee87bf1221c95b",
+  "generator": {
+    "name": "wellm",
+    "version": "0.2.0rc3"
+  },
+  "schema": "wellm.artifact-metadata/v1",
+  "schemaRef": null,
+  "semanticSha256": "sha256:8b11d6a95a87fb35d4dea5c5d729828269d718edbeffdbae3ce7d676bbd43867",
+  "source": "diagnostics.wm",
+  "sourceDialect": "typed@1",
+  "sourceSha256": "sha256:ebaf075b72da04de08a0d0e5289589c84a26f9bf21211d039e09926ba04f95f1",
+  "target": "generated/diagnostics.json",
+  "targetProfile": "repo-json@1"
+}

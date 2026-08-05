@@ -1,6 +1,48 @@
 const CONCRETE_URI = /^[a-z][a-z0-9+.-]*:\/\/[^\s*]+$/i;
 const SAFE_RUN_ID = /^[a-z0-9._:-]{1,160}$/i;
 
+export function canonicalizeData(value, path = "$") {
+  if (value === null || typeof value === "boolean" || typeof value === "string") {
+    return typeof value === "string" ? value.normalize("NFC") : value;
+  }
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) throw new Error(`wellmanifest_non_finite_number:${path}`);
+    return Object.is(value, -0) ? 0 : value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item, index) => canonicalizeData(item, `${path}/${index}`));
+  }
+  if (value && typeof value === "object") {
+    const result = {};
+    for (const originalKey of Object.keys(value).sort()) {
+      const key = originalKey.normalize("NFC");
+      if (Object.prototype.hasOwnProperty.call(result, key)) {
+        throw new Error(`wellmanifest_duplicate_normalized_key:${path}/${key}`);
+      }
+      result[key] = canonicalizeData(value[originalKey], `${path}/${key}`);
+    }
+    return result;
+  }
+  throw new Error(`wellmanifest_json_incompatible:${path}`);
+}
+
+export function canonicalJson(value) {
+  return JSON.stringify(canonicalizeData(value));
+}
+
+export async function semanticDigest(value) {
+  const bytes = new TextEncoder().encode(canonicalJson(value));
+  let subtle = globalThis.crypto?.subtle;
+  if (!subtle && typeof process !== "undefined" && process.versions?.node) {
+    const crypto = await import("node:crypto");
+    subtle = crypto.webcrypto.subtle;
+  }
+  if (!subtle) throw new Error("wellmanifest_crypto_subtle_not_available");
+  const digest = await subtle.digest("SHA-256", bytes);
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+  return `sha256:${hex}`;
+}
+
 export function matchesUriProcess(uri, scopes = []) {
   const candidate = String(uri || "");
   return scopes.some((scope) => {
@@ -91,6 +133,10 @@ export class WellManifestClient {
     return this.request("/v1/capabilities", undefined, {method: "GET"});
   }
 
+  profiles() {
+    return this.request("/v1/profiles", undefined, {method: "GET"});
+  }
+
   convert(source, {from = "auto", to = "json", projection = "data", schema = null, pretty = true} = {}) {
     return this.request("/v1/convert", {
       source,
@@ -104,6 +150,14 @@ export class WellManifestClient {
 
   validate(source, schema, {dialect = "auto"} = {}) {
     return this.request("/v1/validate", {source, dialect, schema});
+  }
+
+  format(value, {profile = "repo-json@1", schema = null} = {}) {
+    return this.request("/v1/format", {value, profile, schema});
+  }
+
+  semanticDiff(left, right) {
+    return this.request("/v1/semantic-diff", {left, right});
   }
 
   execute(uri, payload = {}, {

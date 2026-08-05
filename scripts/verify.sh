@@ -5,6 +5,7 @@ cd "$ROOT"
 PYTHONPATH=src python -m compileall -q src tests examples
 PYTHONPATH=src python -m pytest -q
 (cd packages/js && npm test && npm run check)
+PYTHONPATH=src python -m wellmanifest.cli governance build examples/governance/wellm.project.yaml --check >/tmp/wellm-governance-check.json
 python - <<'PY'
 import json
 from pathlib import Path

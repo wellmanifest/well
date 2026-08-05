@@ -639,7 +639,7 @@ dependencies = [
 
 [[package]]
 name = "wellmanifest-cli"
-version = "0.1.7"
+version = "0.2.0-rc.2"
 dependencies = [
  "clap",
  "wellmanifest-core",
@@ -647,7 +647,7 @@ dependencies = [
 
 [[package]]
 name = "wellmanifest-core"
-version = "0.1.7"
+version = "0.2.0-rc.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -657,7 +657,7 @@ dependencies = [
 
 [[package]]
 name = "wellmanifest-node"
-version = "0.1.7"
+version = "0.2.0-rc.2"
 dependencies = [
  "napi",
  "napi-build",
@@ -667,7 +667,7 @@ dependencies = [
 
 [[package]]
 name = "wellmanifest-python"
-version = "0.1.7"
+version = "0.2.0-rc.2"
 dependencies = [
  "pyo3",
  "wellmanifest-core",
@@ -675,7 +675,7 @@ dependencies = [
 
 [[package]]
 name = "wellmanifest-wasm"
-version = "0.1.7"
+version = "0.2.0-rc.2"
 dependencies = [
  "wasm-bindgen",
  "wellmanifest-core",

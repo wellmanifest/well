@@ -1,43 +1,28 @@
 # Changelog
 
-## [Unreleased]
+## 0.2.0rc3 — 2026-08-04
 
-## [0.2.1] - 2026-08-04
-
-### Docs
-- Update CHANGELOG.md
-- Update README.md
-- Update TEST-REPORT.md
-- Update docs/ARCHITECTURE.md
-- Update docs/COMPATIBILITY.md
-- Update docs/DEPLOYMENT.md
-- Update docs/DIALECTS.md
-- Update docs/E2E.md
-- Update docs/HTTP_API.md
-- Update docs/IMPLEMENTATION_STATUS.md
-- ... and 8 more files
-
-### Test
-- Update tests/test_compatibility.py
-- Update tests/test_llmbench.py
-- Update tests/test_plesk.py
-
-### Other
-- Update .env.example
-- Update .gitignore
-- Update VERSION
-- Update compose.e2e.yml
-- Update compose.plesk.example.yml
-- Update compose.yml
-- Update config/contracts.json
-- Update docker/plesk-benchmark-e2e.Dockerfile
-- Update examples/any-language/rust/Cargo.toml
-- Update examples/benchmark/config.live.example.yaml
-- ... and 41 more files
-
-
-## 0.2.0rc2 — 2026-08-04
-
+- Added `wellm-governance-profile@1` and named profiles for repository JSON,
+  wire JSON, YAML JSON-profile, static HCL, typed Wellm, TypeScript data and
+  policy Markdown.
+- Added deterministic `wellm governance build` and `--check` with schema
+  validation, exact-byte drift detection, metadata sidecars and source maps.
+- Added independent `artifactSha256` and `semanticSha256` digests with
+  Python/JavaScript parity tests.
+- Added `wellm fmt`, `wellm profiles`, `wellm semantic-diff`, `wellm roundtrip`
+  and policy `import`, `lint` and `fmt` commands.
+- Added HTTP, WebSocket and URI Process formatting/semantic-diff operations.
+- Policy import now recognizes policy-shaped `bash`/`sh` fences with
+  `WM-POLICY-101`, while ordinary shell blocks remain untouched.
+- Added state-machine lint that reports the supplied undeclared
+  `BLOCKED -> IN_PROGRESS` target instead of guessing a namespace.
+- Added current and legacy governance regression fixtures, conditional approval
+  evidence tests and generated governance examples.
+- Preserved the first normative document header when legend examples contain
+  placeholder `DOCUMENT`, `VERSION` or `MODE` declarations.
+- Added governance checks to CI, local verification, E2E and the landing page.
+- Added JSON Schemas for governance project files, build reports, artifact
+  metadata, source maps, conversion reports and semantic diff.
 - Added exact `subactor.projects/v1` examples for `obslugabiurowa.pl` and
   generated JSON, YAML, typed WellManifest and restricted TypeScript forms.
 - Added deterministic Plesk publication planning using concrete URI Processes

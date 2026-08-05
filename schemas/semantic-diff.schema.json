@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/semantic-diff.schema.json",
+  "title": "Wellm semantic diff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "equivalent",
+    "leftDigest",
+    "rightDigest",
+    "changes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.semantic-diff/v1"
+    },
+    "equivalent": {
+      "type": "boolean"
+    },
+    "leftDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "rightDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "classification",
+          "operation",
+          "path",
+          "message"
+        ],
+        "properties": {
+          "classification": {
+            "enum": [
+              "BREAKING",
+              "NON_BREAKING",
+              "CHANGED",
+              "INFO"
+            ]
+          },
+          "operation": {
+            "enum": [
+              "add",
+              "remove",
+              "replace",
+              "reorder",
+              "type-change"
+            ]
+          },
+          "path": {
+            "type": "string"
+          },
+          "before": {},
+          "after": {},
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

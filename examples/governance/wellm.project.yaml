@@ -1,0 +1,51 @@
+schema: wellm.governance-project/v1
+root: .
+
+sources:
+  - id: governance-manifest
+    source: manifest.wm
+    target: generated/manifest.default.json
+    schema: fixtures/manifest.schema.json
+    sourceDialect: typed
+    profile: repo-json@1
+    metadata: true
+    sourceMap: true
+
+  - id: ticket-intent
+    source: intent.wm
+    target: generated/intent.json
+    schema: fixtures/intent.schema.json
+    sourceDialect: typed
+    profile: repo-json@1
+    metadata: true
+    sourceMap: true
+
+  - id: diagnostics
+    source: diagnostics.wm
+    target: generated/diagnostics.json
+    sourceDialect: typed
+    profile: repo-json@1
+    metadata: true
+    sourceMap: true
+
+  - id: stack-profiles
+    source: stack-profiles.wm
+    target: generated/stack-profiles.json
+    sourceDialect: typed
+    profile: repo-json@1
+    metadata: true
+    sourceMap: true
+
+policies:
+  - source: fixtures/CONTRIBUTING.md
+    irTarget: generated/CONTRIBUTING.policy.ir.json
+    canonicalFence: wellm-policy
+    rewriteFences: false
+    undeclaredStates: warning
+
+checks:
+  semanticRoundtrip: true
+  generatedArtifactsCurrent: true
+  duplicateRuleIds: error
+  undeclaredPolicySymbols: warning
+  undeclaredStates: warning

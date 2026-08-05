@@ -40,6 +40,9 @@ export interface Envelope<T = unknown> {
   metadata: Record<string, unknown>;
 }
 
+export function canonicalizeData<T = unknown>(value: T, path?: string): T;
+export function canonicalJson(value: unknown): string;
+export function semanticDigest(value: unknown): Promise<string>;
 export function matchesUriProcess(uri: string, scopes?: string[]): boolean;
 export function assertConcreteUri(uri: string): string;
 export function createEnvelope<T = unknown>(options: {
@@ -58,8 +61,11 @@ export function createEnvelope<T = unknown>(options: {
 export class WellManifestClient {
   constructor(options: {baseUrl: string; token?: string; timeoutMs?: number; fetchImpl?: typeof fetch});
   capabilities(): Promise<Record<string, unknown>>;
+  profiles(): Promise<Array<Record<string, unknown>>>;
   convert(source: unknown, options?: {from?: Dialect; to?: Dialect; projection?: "data" | "ir"; schema?: object | null; pretty?: boolean}): Promise<Record<string, unknown>>;
   validate(source: unknown, schema: object, options?: {dialect?: Dialect}): Promise<Record<string, unknown>>;
+  format(value: unknown, options?: {profile?: string; schema?: object | null}): Promise<Record<string, unknown>>;
+  semanticDiff(left: unknown, right: unknown): Promise<Record<string, unknown>>;
   execute(uri: string, payload?: unknown, options?: {mode?: string; contractRef?: string; allowedUriProcesses?: string[]; runId?: string; runtime?: RuntimeTarget}): Promise<Record<string, unknown>>;
   exchange(envelope: Envelope): Promise<Envelope>;
   planPlesk(config: ProjectRegistry, options: {projectId: string; sourceRefs?: Record<string, string>}): Promise<PleskPublicationPlan>;

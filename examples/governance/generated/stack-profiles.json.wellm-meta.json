@@ -1,0 +1,15 @@
+{
+  "artifactSha256": "sha256:d770708be29ade21961483e91a84d7beb1034641b25a5df4b171c3dee7121703",
+  "generator": {
+    "name": "wellm",
+    "version": "0.2.0rc3"
+  },
+  "schema": "wellm.artifact-metadata/v1",
+  "schemaRef": null,
+  "semanticSha256": "sha256:d9f58ad3d431b006bd853593b662a3384e933f38a846713984f745b3ad52eb35",
+  "source": "stack-profiles.wm",
+  "sourceDialect": "typed@1",
+  "sourceSha256": "sha256:a6f59fbaaf6d4d51df09a8ef1f7e9ca3e4573613cc6d0383387fd5f4a14146e4",
+  "target": "generated/stack-profiles.json",
+  "targetProfile": "repo-json@1"
+}

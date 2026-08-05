@@ -1,4 +1,4 @@
-.PHONY: install verify test test-python test-js e2e e2e-docker serve proto package clean
+.PHONY: install verify test test-python test-js governance governance-check e2e e2e-docker serve proto package clean
 
 PYTHON ?= python3
 
@@ -15,6 +15,12 @@ test-python:
 
 test-js:
 	cd packages/js && npm test
+
+governance:
+	PYTHONPATH=src $(PYTHON) -m wellmanifest governance build examples/governance/wellm.project.yaml
+
+governance-check:
+	PYTHONPATH=src $(PYTHON) -m wellmanifest governance build examples/governance/wellm.project.yaml --check
 
 serve:
 	PYTHONPATH=src $(PYTHON) -m wellmanifest serve --host 0.0.0.0 --port 8080

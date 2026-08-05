@@ -9,12 +9,23 @@ from __future__ import annotations
 import importlib
 import sys
 
-from wellmanifest import Diagnostic, Document, Envelope, Severity, WellManifestRuntime, __version__
+from wellmanifest import (
+    Diagnostic,
+    Document,
+    Envelope,
+    GovernanceBuilder,
+    Severity,
+    WellManifestRuntime,
+    __version__,
+    semantic_diff,
+    semantic_sha256,
+)
 
 _PUBLIC_SUBMODULES = (
     "benchmark",
     "client",
     "models",
+    "governance",
     "plesk",
     "urirun",
     "llmbench",
@@ -35,7 +46,10 @@ __all__ = [
     "Diagnostic",
     "Document",
     "Envelope",
+    "GovernanceBuilder",
     "Severity",
     "WellManifestRuntime",
+    "semantic_diff",
+    "semantic_sha256",
     "__version__",
 ]

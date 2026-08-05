@@ -5,13 +5,21 @@ from typing import Any
 from jsonschema import Draft202012Validator, FormatChecker, SchemaError
 
 from .dialects.common import json_pointer
-from .models import Diagnostic, Severity
+from .models import Diagnostic, Severity, SourceRange
+from .source_maps import closest_range
 
 
 class SchemaValidator:
     dialect = "json-schema@2020-12"
 
-    def validate(self, instance: Any, schema: dict[str, Any], *, source: str | None = None) -> list[Diagnostic]:
+    def validate(
+        self,
+        instance: Any,
+        schema: dict[str, Any],
+        *,
+        source: str | None = None,
+        source_map: dict[str, SourceRange] | None = None,
+    ) -> list[Diagnostic]:
         diagnostics: list[Diagnostic] = []
         try:
             Draft202012Validator.check_schema(schema)
@@ -31,6 +39,7 @@ class SchemaValidator:
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
         errors = sorted(validator.iter_errors(instance), key=lambda item: (list(item.absolute_path), item.message))
         for error in errors:
+            pointer = json_pointer(list(error.absolute_path))
             diagnostics.append(
                 Diagnostic(
                     code="WM-SCHEMA-100",
@@ -38,8 +47,9 @@ class SchemaValidator:
                     phase="validate",
                     message=error.message,
                     source=source,
-                    path=json_pointer(list(error.absolute_path)),
+                    path=pointer,
                     schema_path=json_pointer(list(error.absolute_schema_path)),
+                    range=closest_range(source_map or {}, pointer),
                     details={"validator": error.validator, "validatorValue": error.validator_value},
                 )
             )

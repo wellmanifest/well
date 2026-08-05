@@ -43,7 +43,7 @@ class DocumentMetadata(BaseModel):
     document_kind: Literal["data", "schema", "policy", "api", "module", "ir"] = "data"
     schema_dialect: str | None = None
     schema_ref: str | None = None
-    runtime_version: str = "0.2.0rc2"
+    runtime_version: str = "0.2.0rc3"
     ir_version: str = "wellmanifest-ir/v1"
     source_name: str | None = None
     directives: dict[str, Any] = Field(default_factory=dict)
@@ -56,6 +56,7 @@ class Document(BaseModel):
     ir: dict[str, Any] = Field(default_factory=dict)
     diagnostics: list[Diagnostic] = Field(default_factory=list)
     source_text: str | None = None
+    source_map: dict[str, SourceRange] = Field(default_factory=dict)
 
     @property
     def ok(self) -> bool:

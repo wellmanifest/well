@@ -151,6 +151,7 @@ class StructuredParser:
         self.pending_types: dict[str, str] = {}
         self.declarations: list[dict[str, Any]] = []
         self.diagnostics: list[Diagnostic] = []
+        self.source_map: dict[str, SourceRange] = {}
 
     def parse(self) -> Document:
         data: dict[str, Any] = {}
@@ -190,6 +191,7 @@ class StructuredParser:
             ir=ir,
             diagnostics=self.diagnostics,
             source_text=self.original_source,
+            source_map=self.source_map,
         )
 
     @property
@@ -292,6 +294,10 @@ class StructuredParser:
 
         current_path = [*path, key]
         path_key = self._path(current_path)
+        self.source_map[path_key] = SourceRange(
+            start=SourcePosition(line=key_token.line, column=key_token.column),
+            end=SourcePosition(line=key_token.line, column=key_token.column + max(1, len(key_token.value))),
+        )
 
         if self._at("SYMBOL", "{"):
             value = self._parse_object(path=current_path)
@@ -448,6 +454,11 @@ class StructuredParser:
 
     def _parse_value(self, *, path: list[str]) -> Any:
         token = self.current
+        pointer = self._path(path)
+        self.source_map[pointer] = SourceRange(
+            start=SourcePosition(line=token.line, column=token.column),
+            end=SourcePosition(line=token.line, column=token.column + max(1, len(token.value))),
+        )
         if self._at("SYMBOL", "{"):
             return self._parse_object(path=path)
         if self._at("SYMBOL", "["):

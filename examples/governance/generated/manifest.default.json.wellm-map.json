@@ -1,0 +1,703 @@
+{
+  "generated": "generated/manifest.default.json",
+  "mappings": {
+    "/$schema": {
+      "endColumn": 35,
+      "endLine": 3,
+      "sourceColumn": 11,
+      "sourceLine": 3
+    },
+    "/approvalEvidence": {
+      "endColumn": 17,
+      "endLine": 18,
+      "sourceColumn": 1,
+      "sourceLine": 18
+    },
+    "/approvalEvidence/requiredBindings": {
+      "endColumn": 23,
+      "endLine": 20,
+      "sourceColumn": 22,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/requiredBindings/0": {
+      "endColumn": 35,
+      "endLine": 20,
+      "sourceColumn": 23,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/requiredBindings/1": {
+      "endColumn": 50,
+      "endLine": 20,
+      "sourceColumn": 37,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/requiredBindings/2": {
+      "endColumn": 61,
+      "endLine": 20,
+      "sourceColumn": 52,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/requiredBindings/3": {
+      "endColumn": 71,
+      "endLine": 20,
+      "sourceColumn": 63,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/requiredBindings/4": {
+      "endColumn": 80,
+      "endLine": 20,
+      "sourceColumn": 73,
+      "sourceLine": 20
+    },
+    "/approvalEvidence/reviewVerificationMethod": {
+      "endColumn": 52,
+      "endLine": 21,
+      "sourceColumn": 30,
+      "sourceLine": 21
+    },
+    "/approvalEvidence/schema": {
+      "endColumn": 46,
+      "endLine": 19,
+      "sourceColumn": 12,
+      "sourceLine": 19
+    },
+    "/approvalEvidence/signedAttestationPredicateType": {
+      "endColumn": 88,
+      "endLine": 22,
+      "sourceColumn": 36,
+      "sourceLine": 22
+    },
+    "/coordination": {
+      "endColumn": 13,
+      "endLine": 43,
+      "sourceColumn": 1,
+      "sourceLine": 43
+    },
+    "/coordination/integration": {
+      "endColumn": 18,
+      "endLine": 64,
+      "sourceColumn": 17,
+      "sourceLine": 64
+    },
+    "/coordination/integration/requiredForPaths": {
+      "endColumn": 25,
+      "endLine": 66,
+      "sourceColumn": 24,
+      "sourceLine": 66
+    },
+    "/coordination/integration/requiredForPaths/0": {
+      "endColumn": 39,
+      "endLine": 66,
+      "sourceColumn": 25,
+      "sourceLine": 66
+    },
+    "/coordination/integration/requiredForPaths/1": {
+      "endColumn": 57,
+      "endLine": 66,
+      "sourceColumn": 41,
+      "sourceLine": 66
+    },
+    "/coordination/integration/requiredForPaths/2": {
+      "endColumn": 67,
+      "endLine": 66,
+      "sourceColumn": 59,
+      "sourceLine": 66
+    },
+    "/coordination/integration/requiredForPaths/3": {
+      "endColumn": 81,
+      "endLine": 66,
+      "sourceColumn": 69,
+      "sourceLine": 66
+    },
+    "/coordination/integration/requiredForPaths/4": {
+      "endColumn": 92,
+      "endLine": 66,
+      "sourceColumn": 83,
+      "sourceLine": 66
+    },
+    "/coordination/integration/workstream": {
+      "endColumn": 31,
+      "endLine": 65,
+      "sourceColumn": 18,
+      "sourceLine": 65
+    },
+    "/coordination/maxActiveTicketsPerWorkstream": {
+      "endColumn": 36,
+      "endLine": 45,
+      "sourceColumn": 35,
+      "sourceLine": 45
+    },
+    "/coordination/mode": {
+      "endColumn": 23,
+      "endLine": 44,
+      "sourceColumn": 10,
+      "sourceLine": 44
+    },
+    "/coordination/rejectActiveScopeOverlap": {
+      "endColumn": 34,
+      "endLine": 46,
+      "sourceColumn": 30,
+      "sourceLine": 46
+    },
+    "/coordination/workstreams": {
+      "endColumn": 18,
+      "endLine": 47,
+      "sourceColumn": 17,
+      "sourceLine": 47
+    },
+    "/coordination/workstreams/application": {
+      "endColumn": 20,
+      "endLine": 48,
+      "sourceColumn": 19,
+      "sourceLine": 48
+    },
+    "/coordination/workstreams/application/ownedPaths": {
+      "endColumn": 21,
+      "endLine": 49,
+      "sourceColumn": 20,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/application/ownedPaths/0": {
+      "endColumn": 29,
+      "endLine": 49,
+      "sourceColumn": 21,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/application/ownedPaths/1": {
+      "endColumn": 39,
+      "endLine": 49,
+      "sourceColumn": 31,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/application/ownedPaths/2": {
+      "endColumn": 49,
+      "endLine": 49,
+      "sourceColumn": 41,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/application/ownedPaths/3": {
+      "endColumn": 60,
+      "endLine": 49,
+      "sourceColumn": 51,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/application/ownedPaths/4": {
+      "endColumn": 72,
+      "endLine": 49,
+      "sourceColumn": 62,
+      "sourceLine": 49
+    },
+    "/coordination/workstreams/governance": {
+      "endColumn": 19,
+      "endLine": 57,
+      "sourceColumn": 18,
+      "sourceLine": 57
+    },
+    "/coordination/workstreams/governance/ownedPaths": {
+      "endColumn": 21,
+      "endLine": 58,
+      "sourceColumn": 20,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/governance/ownedPaths/0": {
+      "endColumn": 37,
+      "endLine": 58,
+      "sourceColumn": 21,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/governance/ownedPaths/1": {
+      "endColumn": 50,
+      "endLine": 58,
+      "sourceColumn": 39,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/governance/ownedPaths/2": {
+      "endColumn": 63,
+      "endLine": 58,
+      "sourceColumn": 52,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/governance/ownedPaths/3": {
+      "endColumn": 74,
+      "endLine": 58,
+      "sourceColumn": 65,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/governance/ownedPaths/4": {
+      "endColumn": 88,
+      "endLine": 58,
+      "sourceColumn": 76,
+      "sourceLine": 58
+    },
+    "/coordination/workstreams/infrastructure": {
+      "endColumn": 23,
+      "endLine": 54,
+      "sourceColumn": 22,
+      "sourceLine": 54
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths": {
+      "endColumn": 21,
+      "endLine": 55,
+      "sourceColumn": 20,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths/0": {
+      "endColumn": 34,
+      "endLine": 55,
+      "sourceColumn": 21,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths/1": {
+      "endColumn": 50,
+      "endLine": 55,
+      "sourceColumn": 36,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths/2": {
+      "endColumn": 67,
+      "endLine": 55,
+      "sourceColumn": 52,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths/3": {
+      "endColumn": 79,
+      "endLine": 55,
+      "sourceColumn": 69,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/infrastructure/ownedPaths/4": {
+      "endColumn": 93,
+      "endLine": 55,
+      "sourceColumn": 81,
+      "sourceLine": 55
+    },
+    "/coordination/workstreams/integration": {
+      "endColumn": 20,
+      "endLine": 60,
+      "sourceColumn": 19,
+      "sourceLine": 60
+    },
+    "/coordination/workstreams/integration/ownedPaths": {
+      "endColumn": 21,
+      "endLine": 61,
+      "sourceColumn": 20,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/0": {
+      "endColumn": 35,
+      "endLine": 61,
+      "sourceColumn": 21,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/1": {
+      "endColumn": 53,
+      "endLine": 61,
+      "sourceColumn": 37,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/2": {
+      "endColumn": 63,
+      "endLine": 61,
+      "sourceColumn": 55,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/3": {
+      "endColumn": 77,
+      "endLine": 61,
+      "sourceColumn": 65,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/4": {
+      "endColumn": 88,
+      "endLine": 61,
+      "sourceColumn": 79,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/integration/ownedPaths/5": {
+      "endColumn": 99,
+      "endLine": 61,
+      "sourceColumn": 90,
+      "sourceLine": 61
+    },
+    "/coordination/workstreams/interfaces": {
+      "endColumn": 19,
+      "endLine": 51,
+      "sourceColumn": 18,
+      "sourceLine": 51
+    },
+    "/coordination/workstreams/interfaces/ownedPaths": {
+      "endColumn": 21,
+      "endLine": 52,
+      "sourceColumn": 20,
+      "sourceLine": 52
+    },
+    "/coordination/workstreams/interfaces/ownedPaths/0": {
+      "endColumn": 29,
+      "endLine": 52,
+      "sourceColumn": 21,
+      "sourceLine": 52
+    },
+    "/coordination/workstreams/interfaces/ownedPaths/1": {
+      "endColumn": 39,
+      "endLine": 52,
+      "sourceColumn": 31,
+      "sourceLine": 52
+    },
+    "/coordination/workstreams/interfaces/ownedPaths/2": {
+      "endColumn": 53,
+      "endLine": 52,
+      "sourceColumn": 41,
+      "sourceLine": 52
+    },
+    "/docker": {
+      "endColumn": 7,
+      "endLine": 37,
+      "sourceColumn": 1,
+      "sourceLine": 37
+    },
+    "/docker/composeFiles": {
+      "endColumn": 19,
+      "endLine": 40,
+      "sourceColumn": 18,
+      "sourceLine": 40
+    },
+    "/docker/composeFiles/0": {
+      "endColumn": 32,
+      "endLine": 40,
+      "sourceColumn": 19,
+      "sourceLine": 40
+    },
+    "/docker/composeFiles/1": {
+      "endColumn": 54,
+      "endLine": 40,
+      "sourceColumn": 34,
+      "sourceLine": 40
+    },
+    "/docker/composeFiles/2": {
+      "endColumn": 73,
+      "endLine": 40,
+      "sourceColumn": 56,
+      "sourceLine": 40
+    },
+    "/docker/dockerfiles": {
+      "endColumn": 18,
+      "endLine": 39,
+      "sourceColumn": 17,
+      "sourceLine": 39
+    },
+    "/docker/dockerfiles/0": {
+      "endColumn": 30,
+      "endLine": 39,
+      "sourceColumn": 18,
+      "sourceLine": 39
+    },
+    "/docker/dockerfiles/1": {
+      "endColumn": 48,
+      "endLine": 39,
+      "sourceColumn": 32,
+      "sourceLine": 39
+    },
+    "/docker/required": {
+      "endColumn": 18,
+      "endLine": 38,
+      "sourceColumn": 14,
+      "sourceLine": 38
+    },
+    "/governancePaths": {
+      "endColumn": 20,
+      "endLine": 14,
+      "sourceColumn": 19,
+      "sourceLine": 14
+    },
+    "/governancePaths/0": {
+      "endColumn": 29,
+      "endLine": 14,
+      "sourceColumn": 20,
+      "sourceLine": 14
+    },
+    "/governancePaths/1": {
+      "endColumn": 51,
+      "endLine": 14,
+      "sourceColumn": 31,
+      "sourceLine": 14
+    },
+    "/governancePaths/2": {
+      "endColumn": 74,
+      "endLine": 14,
+      "sourceColumn": 53,
+      "sourceLine": 14
+    },
+    "/requiredFiles": {
+      "endColumn": 18,
+      "endLine": 12,
+      "sourceColumn": 17,
+      "sourceLine": 12
+    },
+    "/requiredFiles/0": {
+      "endColumn": 29,
+      "endLine": 12,
+      "sourceColumn": 18,
+      "sourceLine": 12
+    },
+    "/requiredFiles/1": {
+      "endColumn": 40,
+      "endLine": 12,
+      "sourceColumn": 31,
+      "sourceLine": 12
+    },
+    "/requiredFiles/2": {
+      "endColumn": 56,
+      "endLine": 12,
+      "sourceColumn": 42,
+      "sourceLine": 12
+    },
+    "/requiredFiles/3": {
+      "endColumn": 67,
+      "endLine": 12,
+      "sourceColumn": 58,
+      "sourceLine": 12
+    },
+    "/requiredFiles/4": {
+      "endColumn": 80,
+      "endLine": 12,
+      "sourceColumn": 69,
+      "sourceLine": 12
+    },
+    "/requiredFiles/5": {
+      "endColumn": 94,
+      "endLine": 12,
+      "sourceColumn": 82,
+      "sourceLine": 12
+    },
+    "/requiredFiles/6": {
+      "endColumn": 116,
+      "endLine": 12,
+      "sourceColumn": 96,
+      "sourceLine": 12
+    },
+    "/requiredFiles/7": {
+      "endColumn": 141,
+      "endLine": 12,
+      "sourceColumn": 118,
+      "sourceLine": 12
+    },
+    "/requiredFiles/8": {
+      "endColumn": 162,
+      "endLine": 12,
+      "sourceColumn": 143,
+      "sourceLine": 12
+    },
+    "/schema": {
+      "endColumn": 37,
+      "endLine": 5,
+      "sourceColumn": 10,
+      "sourceLine": 5
+    },
+    "/stacks": {
+      "endColumn": 11,
+      "endLine": 70,
+      "sourceColumn": 10,
+      "sourceLine": 70
+    },
+    "/stacks/0": {
+      "endColumn": 19,
+      "endLine": 70,
+      "sourceColumn": 11,
+      "sourceLine": 70
+    },
+    "/standard": {
+      "endColumn": 9,
+      "endLine": 7,
+      "sourceColumn": 1,
+      "sourceLine": 7
+    },
+    "/standard/id": {
+      "endColumn": 34,
+      "endLine": 8,
+      "sourceColumn": 8,
+      "sourceLine": 8
+    },
+    "/standard/version": {
+      "endColumn": 20,
+      "endLine": 9,
+      "sourceColumn": 13,
+      "sourceLine": 9
+    },
+    "/ticket": {
+      "endColumn": 7,
+      "endLine": 25,
+      "sourceColumn": 1,
+      "sourceLine": 25
+    },
+    "/ticket/activeStatuses": {
+      "endColumn": 21,
+      "endLine": 30,
+      "sourceColumn": 20,
+      "sourceLine": 30
+    },
+    "/ticket/activeStatuses/0": {
+      "endColumn": 34,
+      "endLine": 30,
+      "sourceColumn": 21,
+      "sourceLine": 30
+    },
+    "/ticket/closedStatuses": {
+      "endColumn": 21,
+      "endLine": 32,
+      "sourceColumn": 20,
+      "sourceLine": 32
+    },
+    "/ticket/closedStatuses/0": {
+      "endColumn": 27,
+      "endLine": 32,
+      "sourceColumn": 21,
+      "sourceLine": 32
+    },
+    "/ticket/closedStatuses/1": {
+      "endColumn": 40,
+      "endLine": 32,
+      "sourceColumn": 29,
+      "sourceLine": 32
+    },
+    "/ticket/directoryPattern": {
+      "endColumn": 41,
+      "endLine": 27,
+      "sourceColumn": 22,
+      "sourceLine": 27
+    },
+    "/ticket/implementationStates": {
+      "endColumn": 27,
+      "endLine": 33,
+      "sourceColumn": 26,
+      "sourceLine": 33
+    },
+    "/ticket/implementationStates/0": {
+      "endColumn": 33,
+      "endLine": 33,
+      "sourceColumn": 27,
+      "sourceLine": 33
+    },
+    "/ticket/implementationStates/1": {
+      "endColumn": 47,
+      "endLine": 33,
+      "sourceColumn": 35,
+      "sourceLine": 33
+    },
+    "/ticket/implementationStates/2": {
+      "endColumn": 62,
+      "endLine": 33,
+      "sourceColumn": 49,
+      "sourceLine": 33
+    },
+    "/ticket/intentFile": {
+      "endColumn": 29,
+      "endLine": 34,
+      "sourceColumn": 16,
+      "sourceLine": 34
+    },
+    "/ticket/nonActiveStatuses": {
+      "endColumn": 24,
+      "endLine": 31,
+      "sourceColumn": 23,
+      "sourceLine": 31
+    },
+    "/ticket/nonActiveStatuses/0": {
+      "endColumn": 33,
+      "endLine": 31,
+      "sourceColumn": 24,
+      "sourceLine": 31
+    },
+    "/ticket/nonActiveStatuses/1": {
+      "endColumn": 41,
+      "endLine": 31,
+      "sourceColumn": 35,
+      "sourceLine": 31
+    },
+    "/ticket/nonActiveStatuses/2": {
+      "endColumn": 52,
+      "endLine": 31,
+      "sourceColumn": 43,
+      "sourceLine": 31
+    },
+    "/ticket/requiredAgentFiles": {
+      "endColumn": 25,
+      "endLine": 29,
+      "sourceColumn": 24,
+      "sourceLine": 29
+    },
+    "/ticket/requiredAgentFiles/0": {
+      "endColumn": 34,
+      "endLine": 29,
+      "sourceColumn": 25,
+      "sourceLine": 29
+    },
+    "/ticket/requiredAgentFiles/1": {
+      "endColumn": 51,
+      "endLine": 29,
+      "sourceColumn": 36,
+      "sourceLine": 29
+    },
+    "/ticket/requiredFiles": {
+      "endColumn": 20,
+      "endLine": 28,
+      "sourceColumn": 19,
+      "sourceLine": 28
+    },
+    "/ticket/requiredFiles/0": {
+      "endColumn": 31,
+      "endLine": 28,
+      "sourceColumn": 20,
+      "sourceLine": 28
+    },
+    "/ticket/requiredFiles/1": {
+      "endColumn": 47,
+      "endLine": 28,
+      "sourceColumn": 33,
+      "sourceLine": 28
+    },
+    "/ticket/requiredFiles/2": {
+      "endColumn": 63,
+      "endLine": 28,
+      "sourceColumn": 49,
+      "sourceLine": 28
+    },
+    "/ticket/requiredFiles/3": {
+      "endColumn": 78,
+      "endLine": 28,
+      "sourceColumn": 65,
+      "sourceLine": 28
+    },
+    "/ticket/root": {
+      "endColumn": 19,
+      "endLine": 26,
+      "sourceColumn": 10,
+      "sourceLine": 26
+    },
+    "/trustedApprovalSources": {
+      "endColumn": 27,
+      "endLine": 16,
+      "sourceColumn": 26,
+      "sourceLine": 16
+    },
+    "/trustedApprovalSources/0": {
+      "endColumn": 42,
+      "endLine": 16,
+      "sourceColumn": 27,
+      "sourceLine": 16
+    },
+    "/trustedApprovalSources/1": {
+      "endColumn": 63,
+      "endLine": 16,
+      "sourceColumn": 44,
+      "sourceLine": 16
+    },
+    "/trustedApprovalSources/2": {
+      "endColumn": 85,
+      "endLine": 16,
+      "sourceColumn": 65,
+      "sourceLine": 16
+    }
+  },
+  "schema": "wellm.source-map/v1",
+  "source": "manifest.wm"
+}

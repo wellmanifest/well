@@ -17,6 +17,7 @@ def split_runtime_prelude(source: str) -> tuple[str, dict[str, Any]]:
         stripped = line.strip()
         if index == 0 and stripped.startswith("#!"):
             directives["shebang"] = stripped
+            kept.append("")
             continue
         match = _DIRECTIVE_RE.match(line)
         if match:
@@ -32,6 +33,7 @@ def split_runtime_prelude(source: str) -> tuple[str, dict[str, Any]]:
                 elif value.lower() in {"true", "false"}:
                     value = value.lower() == "true"
                 directives[key] = value
+            kept.append("")
             continue
         kept.append(line)
     return "\n".join(kept), directives

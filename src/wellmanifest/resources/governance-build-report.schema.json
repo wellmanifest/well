@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/governance-build-report.schema.json",
+  "title": "Wellm governance build report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mode",
+    "ok",
+    "project",
+    "artifacts",
+    "policies",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.governance-build-report/v1"
+    },
+    "mode": {
+      "enum": [
+        "build",
+        "check"
+      ]
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "project": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

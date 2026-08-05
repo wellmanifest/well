@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/wellmanifest/wellm/v0.2.0rc3/schemas/conversion-report.schema.json",
+  "title": "Wellm conversion and round-trip report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_dialect",
+    "source_semantic_sha256",
+    "equivalent",
+    "steps",
+    "preserved",
+    "discarded",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wellm.conversion-report/v1"
+    },
+    "source_dialect": {
+      "type": "string"
+    },
+    "source_semantic_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "equivalent": {
+      "type": "boolean"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "preserved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "discarded": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

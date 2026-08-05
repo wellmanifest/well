@@ -1,0 +1,517 @@
+{
+  "generated": "generated/stack-profiles.json",
+  "mappings": {
+    "/profiles": {
+      "endColumn": 9,
+      "endLine": 5,
+      "sourceColumn": 1,
+      "sourceLine": 5
+    },
+    "/profiles/docker": {
+      "endColumn": 13,
+      "endLine": 26,
+      "sourceColumn": 12,
+      "sourceLine": 26
+    },
+    "/profiles/docker/anyFiles": {
+      "endColumn": 17,
+      "endLine": 27,
+      "sourceColumn": 16,
+      "sourceLine": 27
+    },
+    "/profiles/docker/anyFiles/0": {
+      "endColumn": 29,
+      "endLine": 27,
+      "sourceColumn": 17,
+      "sourceLine": 27
+    },
+    "/profiles/docker/anyFiles/1": {
+      "endColumn": 47,
+      "endLine": 27,
+      "sourceColumn": 31,
+      "sourceLine": 27
+    },
+    "/profiles/docker/recommended": {
+      "endColumn": 20,
+      "endLine": 28,
+      "sourceColumn": 19,
+      "sourceLine": 28
+    },
+    "/profiles/docker/recommended/0": {
+      "endColumn": 30,
+      "endLine": 28,
+      "sourceColumn": 20,
+      "sourceLine": 28
+    },
+    "/profiles/docker/recommended/1": {
+      "endColumn": 55,
+      "endLine": 28,
+      "sourceColumn": 32,
+      "sourceLine": 28
+    },
+    "/profiles/docker/recommended/2": {
+      "endColumn": 64,
+      "endLine": 28,
+      "sourceColumn": 57,
+      "sourceLine": 28
+    },
+    "/profiles/docker/recommended/3": {
+      "endColumn": 73,
+      "endLine": 28,
+      "sourceColumn": 66,
+      "sourceLine": 28
+    },
+    "/profiles/docker/recommended/4": {
+      "endColumn": 81,
+      "endLine": 28,
+      "sourceColumn": 75,
+      "sourceLine": 28
+    },
+    "/profiles/frontend": {
+      "endColumn": 15,
+      "endLine": 30,
+      "sourceColumn": 14,
+      "sourceLine": 30
+    },
+    "/profiles/frontend/anyFiles": {
+      "endColumn": 17,
+      "endLine": 31,
+      "sourceColumn": 16,
+      "sourceLine": 31
+    },
+    "/profiles/frontend/anyFiles/0": {
+      "endColumn": 39,
+      "endLine": 31,
+      "sourceColumn": 17,
+      "sourceLine": 31
+    },
+    "/profiles/frontend/anyFiles/1": {
+      "endColumn": 63,
+      "endLine": 31,
+      "sourceColumn": 41,
+      "sourceLine": 31
+    },
+    "/profiles/frontend/anyFiles/2": {
+      "endColumn": 84,
+      "endLine": 31,
+      "sourceColumn": 65,
+      "sourceLine": 31
+    },
+    "/profiles/frontend/anyFiles/3": {
+      "endColumn": 105,
+      "endLine": 31,
+      "sourceColumn": 86,
+      "sourceLine": 31
+    },
+    "/profiles/frontend/recommended": {
+      "endColumn": 20,
+      "endLine": 32,
+      "sourceColumn": 19,
+      "sourceLine": 32
+    },
+    "/profiles/frontend/recommended/0": {
+      "endColumn": 33,
+      "endLine": 32,
+      "sourceColumn": 20,
+      "sourceLine": 32
+    },
+    "/profiles/frontend/recommended/1": {
+      "endColumn": 50,
+      "endLine": 32,
+      "sourceColumn": 35,
+      "sourceLine": 32
+    },
+    "/profiles/frontend/recommended/2": {
+      "endColumn": 74,
+      "endLine": 32,
+      "sourceColumn": 52,
+      "sourceLine": 32
+    },
+    "/profiles/go": {
+      "endColumn": 9,
+      "endLine": 14,
+      "sourceColumn": 8,
+      "sourceLine": 14
+    },
+    "/profiles/go/anyFiles": {
+      "endColumn": 17,
+      "endLine": 15,
+      "sourceColumn": 16,
+      "sourceLine": 15
+    },
+    "/profiles/go/anyFiles/0": {
+      "endColumn": 25,
+      "endLine": 15,
+      "sourceColumn": 17,
+      "sourceLine": 15
+    },
+    "/profiles/go/recommended": {
+      "endColumn": 20,
+      "endLine": 16,
+      "sourceColumn": 19,
+      "sourceLine": 16
+    },
+    "/profiles/go/recommended/0": {
+      "endColumn": 27,
+      "endLine": 16,
+      "sourceColumn": 20,
+      "sourceLine": 16
+    },
+    "/profiles/go/recommended/1": {
+      "endColumn": 37,
+      "endLine": 16,
+      "sourceColumn": 29,
+      "sourceLine": 16
+    },
+    "/profiles/go/recommended/2": {
+      "endColumn": 54,
+      "endLine": 16,
+      "sourceColumn": 39,
+      "sourceLine": 16
+    },
+    "/profiles/go/recommended/3": {
+      "endColumn": 69,
+      "endLine": 16,
+      "sourceColumn": 56,
+      "sourceLine": 16
+    },
+    "/profiles/go/recommended/4": {
+      "endColumn": 84,
+      "endLine": 16,
+      "sourceColumn": 71,
+      "sourceLine": 16
+    },
+    "/profiles/java": {
+      "endColumn": 11,
+      "endLine": 22,
+      "sourceColumn": 10,
+      "sourceLine": 22
+    },
+    "/profiles/java/anyFiles": {
+      "endColumn": 17,
+      "endLine": 23,
+      "sourceColumn": 16,
+      "sourceLine": 23
+    },
+    "/profiles/java/anyFiles/0": {
+      "endColumn": 26,
+      "endLine": 23,
+      "sourceColumn": 17,
+      "sourceLine": 23
+    },
+    "/profiles/java/anyFiles/1": {
+      "endColumn": 42,
+      "endLine": 23,
+      "sourceColumn": 28,
+      "sourceLine": 23
+    },
+    "/profiles/java/anyFiles/2": {
+      "endColumn": 62,
+      "endLine": 23,
+      "sourceColumn": 44,
+      "sourceLine": 23
+    },
+    "/profiles/java/recommended": {
+      "endColumn": 20,
+      "endLine": 24,
+      "sourceColumn": 19,
+      "sourceLine": 24
+    },
+    "/profiles/java/recommended/0": {
+      "endColumn": 36,
+      "endLine": 24,
+      "sourceColumn": 20,
+      "sourceLine": 24
+    },
+    "/profiles/java/recommended/1": {
+      "endColumn": 45,
+      "endLine": 24,
+      "sourceColumn": 38,
+      "sourceLine": 24
+    },
+    "/profiles/java/recommended/2": {
+      "endColumn": 71,
+      "endLine": 24,
+      "sourceColumn": 47,
+      "sourceLine": 24
+    },
+    "/profiles/java/recommended/3": {
+      "endColumn": 91,
+      "endLine": 24,
+      "sourceColumn": 73,
+      "sourceLine": 24
+    },
+    "/profiles/kubernetes": {
+      "endColumn": 17,
+      "endLine": 38,
+      "sourceColumn": 16,
+      "sourceLine": 38
+    },
+    "/profiles/kubernetes/anyFiles": {
+      "endColumn": 17,
+      "endLine": 39,
+      "sourceColumn": 16,
+      "sourceLine": 39
+    },
+    "/profiles/kubernetes/anyFiles/0": {
+      "endColumn": 29,
+      "endLine": 39,
+      "sourceColumn": 17,
+      "sourceLine": 39
+    },
+    "/profiles/kubernetes/anyFiles/1": {
+      "endColumn": 51,
+      "endLine": 39,
+      "sourceColumn": 31,
+      "sourceLine": 39
+    },
+    "/profiles/kubernetes/recommended": {
+      "endColumn": 20,
+      "endLine": 40,
+      "sourceColumn": 19,
+      "sourceLine": 40
+    },
+    "/profiles/kubernetes/recommended/0": {
+      "endColumn": 31,
+      "endLine": 40,
+      "sourceColumn": 20,
+      "sourceLine": 40
+    },
+    "/profiles/kubernetes/recommended/1": {
+      "endColumn": 46,
+      "endLine": 40,
+      "sourceColumn": 33,
+      "sourceLine": 40
+    },
+    "/profiles/kubernetes/recommended/2": {
+      "endColumn": 62,
+      "endLine": 40,
+      "sourceColumn": 48,
+      "sourceLine": 40
+    },
+    "/profiles/node": {
+      "endColumn": 11,
+      "endLine": 6,
+      "sourceColumn": 10,
+      "sourceLine": 6
+    },
+    "/profiles/node/anyFiles": {
+      "endColumn": 17,
+      "endLine": 7,
+      "sourceColumn": 16,
+      "sourceLine": 7
+    },
+    "/profiles/node/anyFiles/0": {
+      "endColumn": 31,
+      "endLine": 7,
+      "sourceColumn": 17,
+      "sourceLine": 7
+    },
+    "/profiles/node/recommended": {
+      "endColumn": 20,
+      "endLine": 8,
+      "sourceColumn": 19,
+      "sourceLine": 8
+    },
+    "/profiles/node/recommended/0": {
+      "endColumn": 28,
+      "endLine": 8,
+      "sourceColumn": 20,
+      "sourceLine": 8
+    },
+    "/profiles/node/recommended/1": {
+      "endColumn": 36,
+      "endLine": 8,
+      "sourceColumn": 30,
+      "sourceLine": 8
+    },
+    "/profiles/node/recommended/2": {
+      "endColumn": 49,
+      "endLine": 8,
+      "sourceColumn": 38,
+      "sourceLine": 8
+    },
+    "/profiles/node/recommended/3": {
+      "endColumn": 57,
+      "endLine": 8,
+      "sourceColumn": 51,
+      "sourceLine": 8
+    },
+    "/profiles/node/recommended/4": {
+      "endColumn": 77,
+      "endLine": 8,
+      "sourceColumn": 59,
+      "sourceLine": 8
+    },
+    "/profiles/python": {
+      "endColumn": 13,
+      "endLine": 10,
+      "sourceColumn": 12,
+      "sourceLine": 10
+    },
+    "/profiles/python/anyFiles": {
+      "endColumn": 17,
+      "endLine": 11,
+      "sourceColumn": 16,
+      "sourceLine": 11
+    },
+    "/profiles/python/anyFiles/0": {
+      "endColumn": 33,
+      "endLine": 11,
+      "sourceColumn": 17,
+      "sourceLine": 11
+    },
+    "/profiles/python/anyFiles/1": {
+      "endColumn": 53,
+      "endLine": 11,
+      "sourceColumn": 35,
+      "sourceLine": 11
+    },
+    "/profiles/python/recommended": {
+      "endColumn": 20,
+      "endLine": 12,
+      "sourceColumn": 19,
+      "sourceLine": 12
+    },
+    "/profiles/python/recommended/0": {
+      "endColumn": 26,
+      "endLine": 12,
+      "sourceColumn": 20,
+      "sourceLine": 12
+    },
+    "/profiles/python/recommended/1": {
+      "endColumn": 34,
+      "endLine": 12,
+      "sourceColumn": 28,
+      "sourceLine": 12
+    },
+    "/profiles/python/recommended/2": {
+      "endColumn": 44,
+      "endLine": 12,
+      "sourceColumn": 36,
+      "sourceLine": 12
+    },
+    "/profiles/python/recommended/3": {
+      "endColumn": 54,
+      "endLine": 12,
+      "sourceColumn": 46,
+      "sourceLine": 12
+    },
+    "/profiles/python/recommended/4": {
+      "endColumn": 67,
+      "endLine": 12,
+      "sourceColumn": 56,
+      "sourceLine": 12
+    },
+    "/profiles/rust": {
+      "endColumn": 11,
+      "endLine": 18,
+      "sourceColumn": 10,
+      "sourceLine": 18
+    },
+    "/profiles/rust/anyFiles": {
+      "endColumn": 17,
+      "endLine": 19,
+      "sourceColumn": 16,
+      "sourceLine": 19
+    },
+    "/profiles/rust/anyFiles/0": {
+      "endColumn": 29,
+      "endLine": 19,
+      "sourceColumn": 17,
+      "sourceLine": 19
+    },
+    "/profiles/rust/recommended": {
+      "endColumn": 20,
+      "endLine": 20,
+      "sourceColumn": 19,
+      "sourceLine": 20
+    },
+    "/profiles/rust/recommended/0": {
+      "endColumn": 39,
+      "endLine": 20,
+      "sourceColumn": 20,
+      "sourceLine": 20
+    },
+    "/profiles/rust/recommended/1": {
+      "endColumn": 70,
+      "endLine": 20,
+      "sourceColumn": 41,
+      "sourceLine": 20
+    },
+    "/profiles/rust/recommended/2": {
+      "endColumn": 84,
+      "endLine": 20,
+      "sourceColumn": 72,
+      "sourceLine": 20
+    },
+    "/profiles/rust/recommended/3": {
+      "endColumn": 98,
+      "endLine": 20,
+      "sourceColumn": 86,
+      "sourceLine": 20
+    },
+    "/profiles/terraform": {
+      "endColumn": 16,
+      "endLine": 34,
+      "sourceColumn": 15,
+      "sourceLine": 34
+    },
+    "/profiles/terraform/anyFiles": {
+      "endColumn": 17,
+      "endLine": 35,
+      "sourceColumn": 16,
+      "sourceLine": 35
+    },
+    "/profiles/terraform/anyFiles/0": {
+      "endColumn": 26,
+      "endLine": 35,
+      "sourceColumn": 17,
+      "sourceLine": 35
+    },
+    "/profiles/terraform/anyFiles/1": {
+      "endColumn": 41,
+      "endLine": 35,
+      "sourceColumn": 28,
+      "sourceLine": 35
+    },
+    "/profiles/terraform/recommended": {
+      "endColumn": 20,
+      "endLine": 36,
+      "sourceColumn": 19,
+      "sourceLine": 36
+    },
+    "/profiles/terraform/recommended/0": {
+      "endColumn": 42,
+      "endLine": 36,
+      "sourceColumn": 20,
+      "sourceLine": 36
+    },
+    "/profiles/terraform/recommended/1": {
+      "endColumn": 64,
+      "endLine": 36,
+      "sourceColumn": 44,
+      "sourceLine": 36
+    },
+    "/profiles/terraform/recommended/2": {
+      "endColumn": 74,
+      "endLine": 36,
+      "sourceColumn": 66,
+      "sourceLine": 36
+    },
+    "/profiles/terraform/recommended/3": {
+      "endColumn": 85,
+      "endLine": 36,
+      "sourceColumn": 76,
+      "sourceLine": 36
+    },
+    "/schema": {
+      "endColumn": 41,
+      "endLine": 3,
+      "sourceColumn": 10,
+      "sourceLine": 3
+    }
+  },
+  "schema": "wellm.source-map/v1",
+  "source": "stack-profiles.wm"
+}

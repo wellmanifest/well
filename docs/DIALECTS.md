@@ -15,7 +15,7 @@ common document model; they are not forced into one ambiguous grammar.
 | `policy-sh@1` | yes | no | yes | `RULE/WHEN/DO/FORBID/ASSERT/NEXT`; never executed by Bash. |
 | `proto3-ir@1` | yes | limited | yes | Basic parser in Python; `protoc` remains build authority. |
 
-The `-lite` and `-ir` names are deliberate: version 0.2.0rc2 does not claim full
+The `-lite` and `-ir` names are deliberate: version 0.2.0rc3 does not claim full
 semantic compatibility with every HCL evaluator or every `protoc` nuance.
 Original source can be retained in IR and production builds can delegate to the
 official compiler.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="wellm — WellManifest protocol, typed DSL runtime, guarded Plesk publication and adaptive LLM format benchmark.">
+  <meta name="description" content="wellm — WellManifest protocol, deterministic governance formatting, typed DSL runtime, guarded Plesk publication and adaptive LLM format benchmark.">
   <title>wellm — one protocol, many dialects</title>
   <link rel="stylesheet" href="/assets/styles.css">
 </head>
@@ -15,6 +15,7 @@
     </a>
     <nav aria-label="Main navigation">
       <a href="#architecture">Architecture</a>
+      <a href="#governance">Governance</a>
       <a href="#plesk">Plesk</a>
       <a href="#benchmark">LLM benchmark</a>
       <a href="#playground">Playground</a>
@@ -26,12 +27,12 @@
   <main id="top">
     <section class="hero shell">
       <div class="hero-copy">
-        <div class="eyebrow">PROTOCOL · TYPED DSL · URI PROCESS · 0.2.0rc2</div>
+        <div class="eyebrow">PROTOCOL · TYPED DSL · URI PROCESS · 0.2.0rc3</div>
         <h1>One manifest.<br><span>Every environment.</span></h1>
-        <p class="lede">Exchange typed configuration, publish through guarded URI Processes, select an LLM by deterministic format capability, and serve browsers, services, Raspberry Pi devices, queues and digital twins in the format each side prefers.</p>
+        <p class="lede">Author typed configuration, generate byte-stable governance artifacts, publish through guarded URI Processes, select an LLM by deterministic format capability, and serve browsers, services, Raspberry Pi devices, queues and digital twins in the format each side prefers.</p>
         <div class="hero-actions">
           <a class="button primary" href="#playground">Try conversion</a>
-          <a class="button secondary" href="#plesk">Plan a publication</a>
+          <a class="button secondary" href="#governance">Check governance</a>
         </div>
         <div class="protocol-strip" aria-label="Supported layers">
           <span>JSON</span><span>YAML</span><span>HCL</span><span>typed@1</span><span>TypeScript</span><span>proto3</span><span>policy-sh</span>
@@ -52,7 +53,7 @@
     </section>
 
     <section class="metrics shell" aria-label="Core properties">
-      <article><b>8</b><span>dialect frontends</span></article>
+      <article><b>8</b><span>format profiles</span></article>
       <article><b>7</b><span>exact Plesk URI routes</span></article>
       <article><b>3</b><span>diagnostic severities</span></article>
       <article><b>0</b><span>implicit authority grants</span></article>
@@ -87,6 +88,25 @@
         </div>
       </div>
       <div class="transport-line"><span>HTTP</span><span>WebSocket</span><span>MQTT v5</span><span>protobuf / gRPC</span><span>CQRS / Events</span></div>
+    </section>
+
+    <section id="governance" class="section shell">
+      <div class="section-heading">
+        <div><span class="eyebrow">DETERMINISTIC GOVERNANCE</span><h2>Author once. Validate, hash and publish exact artifacts.</h2></div>
+        <p><code>wellm-governance-profile@1</code> keeps editable WellManifest sources separate from canonical JSON, schemas, lock digests and Markdown policy IR.</p>
+      </div>
+      <div class="runtime-cards">
+        <article><div class="icon">{ }</div><h3>Canonical profiles</h3><p>Schema-aware field order, UTF-8/LF output, duplicate-key rejection and stable JSON/YAML/TypeScript projections.</p><code>repo-json@1</code></article>
+        <article><div class="icon">#</div><h3>Dual digests</h3><p>Track both the exact artifact bytes and normalized semantic meaning without confusing formatting drift with policy drift.</p><code>artifactSha256 · semanticSha256</code></article>
+        <article><div class="icon">↦</div><h3>Source maps</h3><p>JSON Schema diagnostics from generated files point back to the original <code>.wm</code>, JSON or YAML source line.</p><code>*.wellm-map.json</code></article>
+        <article><div class="icon">Δ</div><h3>Policy and semantic lint</h3><p>Import Markdown fences, warn on policy-shaped Bash blocks, detect duplicate rules and undeclared state transitions.</p><code>wellm governance build --check</code></article>
+      </div>
+      <div class="cta">
+        <div><span class="eyebrow">REPOSITORY GATE</span><h2>Fail CI when generated governance drifts.</h2></div>
+        <pre><code>wellm governance build examples/governance/wellm.project.yaml
+wellm governance build examples/governance/wellm.project.yaml --check
+wellm semantic-diff current.json previous.json</code></pre>
+      </div>
     </section>
 
     <section id="runtimes" class="section runtimes-section">
@@ -186,6 +206,7 @@
         <table>
           <thead><tr><th>Use</th><th>Package / service</th><th>Preferred runtime</th><th>Boundary</th><th>Status</th></tr></thead>
           <tbody>
+            <tr><td>Governance authoring</td><td><code>wellm governance</code></td><td>Python / remote service</td><td>schema · source map · digest</td><td><span class="tag working">working RC</span></td></tr>
             <tr><td>Browser configuration</td><td><code>@wellmanifest/wellm-sdk</code></td><td>JS / WASM</td><td>HTTP · WS</td><td><span class="tag working">working</span></td></tr>
             <tr><td>Backend orchestration</td><td><code>wellm-server</code></td><td>Python / Rust path</td><td>HTTP · gRPC</td><td><span class="tag working">working RC</span></td></tr>
             <tr><td>Plesk publication</td><td><code>wellm.plesk</code></td><td>Control / bridge</td><td>concrete URI · receipt</td><td><span class="tag working">tested planner</span></td></tr>
@@ -202,6 +223,7 @@
       <div><span class="eyebrow">START WITH A SIDECAR</span><h2>Give every language one manifest gateway.</h2></div>
       <pre><code>docker compose up --build runtime
 curl http://localhost:8080/v1/capabilities
+wellm governance build examples/governance/wellm.project.yaml --check
 wellm benchmark-llm examples/benchmark/config.yaml --mock</code></pre>
     </section>
   </main>

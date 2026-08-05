@@ -6,6 +6,7 @@ from typing import Any
 import yaml
 
 from wellmanifest.models import Document, DocumentMetadata
+from wellmanifest.source_maps import node_source_map
 
 from .base import Dialect
 from .common import split_runtime_prelude
@@ -55,7 +56,13 @@ class YamlDialect(Dialect):
             source_name=source_name,
             directives=directives,
         )
-        return Document(metadata=metadata, data=data, ir={"kind": "data", "value": data}, source_text=source)
+        return Document(
+            metadata=metadata,
+            data=data,
+            ir={"kind": "data", "value": data},
+            source_text=source,
+            source_map=node_source_map(cleaned),
+        )
 
     def emit(self, document: Document, *, projection: str = "data", pretty: bool = True) -> str:
         value: Any

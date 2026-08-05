@@ -1,31 +1,17 @@
 # wellm — WellManifest protocol and runtime
 
-
-## AI Cost Tracking
-
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.2.1rc2-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.97-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-2.7h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
-
-- 🤖 **LLM usage:** $0.9738 (11 commits)
-- 👤 **Human dev:** ~$272 (2.7h @ $100/h, 30min dedup)
-
-Generated on 2026-08-04 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
-
----
-
-
-
 **wellm** is a polyglot manifest protocol, typed DSL runtime and URI Process
 control layer. It normalizes JSON, YAML, TOML, HCL-shaped data, strongly typed
 WellManifest, procedural policy, restricted TypeScript data modules and proto3
 IR into one document/envelope model with schema validation and structured
 `ERROR`, `WARNING` and `INFO` diagnostics.
 
-Release candidate `0.2.0rc2` adds a fail-closed Plesk publication workflow based
-on `subactor.projects/v1`, `urirun-connector-plesk` and the read-only
-`@uri-twin/plesk` baseline. It also adds an optional LiteLLM benchmark that
-selects the cheapest candidate able to preserve the required formats and
-publication logic.
+Release candidate `0.2.0rc3` adds `wellm-governance-profile@1`: named
+formatting profiles, deterministic repository JSON, semantic and exact-byte
+hashes, source maps, governance `build --check`, policy Markdown linting,
+semantic diff and round-trip reports. It retains the fail-closed Plesk
+publication workflow and optional LiteLLM benchmark introduced in the previous
+candidate.
 
 > This repository is a reference implementation and release candidate, not a
 > hosted production control plane. The Python runtime, CLI, HTTP/WebSocket API,
@@ -165,6 +151,42 @@ status {
 The comment form emits `WM-TYPE-102`. A comment is never the normative source of
 a type; the typed declaration or schema is.
 
+## Governance authoring and deterministic JSON
+
+Wellm can now be the authoring layer while existing scripts continue consuming
+JSON and JSON Schema:
+
+```bash
+wellm governance build examples/governance/wellm.project.yaml
+wellm governance build examples/governance/wellm.project.yaml --check
+```
+
+The example generates manifest, ticket intent, diagnostics, stack profiles,
+metadata sidecars, source maps and policy IR. The generated JSON is validated
+against the supplied Draft 2020-12 schemas.
+
+Useful commands:
+
+```bash
+wellm profiles
+wellm fmt examples/governance/manifest.wm \
+  --profile repo-json@1 \
+  --schema examples/governance/fixtures/manifest.schema.json
+wellm policy lint examples/governance/fixtures/CONTRIBUTING.md
+wellm semantic-diff \
+  tests/fixtures/governance-current/manifest.default.json \
+  tests/fixtures/governance-legacy/manifest.default.json
+wellm roundtrip examples/governance/generated/manifest.default.json \
+  --via yaml,typescript,json \
+  --schema examples/governance/fixtures/manifest.schema.json
+```
+
+`artifactSha256` tracks exact bytes used by lock/adoption tooling;
+`semanticSha256` tracks normalized meaning. Metadata is stored in sidecars, so
+closed JSON Schemas are not modified.
+
+Full guide: [docs/GOVERNANCE_FORMATTING.md](docs/GOVERNANCE_FORMATTING.md).
+
 ## Plesk publication from `subactor.projects/v1`
 
 The exact project registry in
@@ -292,11 +314,11 @@ independently resolve authority from the active contract.
 
 ## Package, service and runtime matrix
 
-| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc2` |
+| Layer | Package/service | Frontend | Backend | RPi/IoT | Digital twin | Main role | Maturity in `0.2.0rc3` |
 |---|---|---:|---:|---:|---:|---|---|
 | protocol | `wellmanifest.protocol/v1` | yes | yes | yes | yes | envelope, negotiation, diagnostics | specified + schemas |
 | Python | `wellm` / `wellmanifest` alias | remote client | local/service | RPi | control | parsers, validation, planner, benchmark | **working/tested** |
-| CLI | `wellm` | dev tooling | ops | Linux RPi | admin | convert, validate, execute, Plesk, benchmark | **working/tested** |
+| CLI | `wellm` | dev tooling | ops | Linux RPi | admin | convert, validate, format, governance, diff, Plesk, benchmark | **working/tested** |
 | HTTP/WS | `wellm-server` | fetch/WS | any language | thin client | queries | shared remote runtime | **working/tested** |
 | JavaScript | `@wellmanifest/wellm-sdk` | local client | Node | gateway | queries | URI client and Plesk plan helper | **working/tested** |
 | Plesk planner | `wellm.plesk` | call service | local/service | remote only | consumes facts | plan, dry-run, guarded apply, verify | **working/tested with fake connector** |
@@ -328,7 +350,7 @@ examples/benchmark/        offline/live model selection examples
 www/                       landing page
 compose*.yml               runtime and E2E environments
 docs/                      protocol, deployment and integration guides
-tests/                     parser, schema, Plesk and benchmark tests
+tests/                     parser, schema, governance, Plesk and benchmark tests
 ```
 
 ## Development and verification
@@ -374,6 +396,7 @@ See [docs/SECURITY.md](docs/SECURITY.md),
 - [Architecture](docs/ARCHITECTURE.md)
 - [Protocol and negotiation](docs/PROTOCOL.md)
 - [Dialects](docs/DIALECTS.md)
+- [Governance formatting](docs/GOVERNANCE_FORMATTING.md)
 - [Plesk publication](docs/PLESK_PUBLICATION.md)
 - [LLM benchmark](docs/LLM_BENCHMARK.md)
 - [HTTP API](docs/HTTP_API.md)
@@ -391,9 +414,11 @@ See [docs/SECURITY.md](docs/SECURITY.md),
 ## Governance compatibility
 
 The supplied `wellmanifest/new-project` manifest, intent, schemas, diagnostics,
-stack profiles and procedural `CONTRIBUTING.md` are retained as regression
-fixtures. JSON Schema remains the deterministic data contract, and policy DSL
-imports remain independent of any LLM provider.
+stack profiles, approval evidence schema and procedural `CONTRIBUTING.md` are
+retained as current and legacy regression fixtures. JSON Schema remains the
+deterministic data contract. Wellm can generate instance JSON without adding
+metadata fields to closed records, and policy imports remain independent of any
+LLM provider.
 
 The external PyPI project named `well` is not a hard dependency. The integration
 adapter only detects it when a compatible installation is present; wellm does
@@ -401,4 +426,4 @@ not invent or bind to an undocumented API.
 
 ## License
 
-Licensed under Apache-2.0.
+Apache-2.0.

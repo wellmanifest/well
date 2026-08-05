@@ -3,7 +3,7 @@
   "info": {
     "title": "wellm — WellManifest Runtime Gateway",
     "description": "Polyglot dialect conversion, schema validation and capability-scoped URI Process execution.",
-    "version": "0.2.0rc2"
+    "version": "0.2.0rc3"
   },
   "paths": {
     "/healthz": {
@@ -224,6 +224,73 @@
         }
       }
     },
+    "/v1/profiles": {
+      "get": {
+        "summary": "Profiles",
+        "operationId": "profiles_v1_profiles_get",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Profiles V1 Profiles Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/convert": {
       "post": {
         "summary": "Convert",
@@ -355,6 +422,154 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Validate V1 Validate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/format": {
+      "post": {
+        "summary": "Format Document",
+        "operationId": "format_document_v1_format_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormatApiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Format Document V1 Format Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/semantic-diff": {
+      "post": {
+        "summary": "Compare Semantics",
+        "operationId": "compare_semantics_v1_semantic_diff_post",
+        "parameters": [
+          {
+            "name": "x-wellmanifest-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wellmanifest-Token"
+            }
+          },
+          {
+            "name": "x-urirun-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Urirun-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemanticDiffApiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Compare Semantics V1 Semantic Diff Post"
                 }
               }
             }
@@ -1323,6 +1538,36 @@
         ],
         "title": "ExecuteRequest"
       },
+      "FormatApiRequest": {
+        "properties": {
+          "value": {
+            "title": "Value"
+          },
+          "profile": {
+            "type": "string",
+            "title": "Profile",
+            "default": "repo-json@1"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "FormatApiRequest"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1462,6 +1707,23 @@
         },
         "type": "object",
         "title": "RuntimeTarget"
+      },
+      "SemanticDiffApiRequest": {
+        "properties": {
+          "left": {
+            "title": "Left"
+          },
+          "right": {
+            "title": "Right"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "left",
+          "right"
+        ],
+        "title": "SemanticDiffApiRequest"
       },
       "Severity": {
         "type": "string",

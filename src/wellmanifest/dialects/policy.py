@@ -4,7 +4,7 @@ import json
 import re
 from typing import Any
 
-from wellmanifest.models import Document, DocumentMetadata
+from wellmanifest.models import Diagnostic, Document, DocumentMetadata, Severity, SourcePosition, SourceRange
 
 from .base import Dialect
 from .common import split_runtime_prelude
@@ -13,17 +13,21 @@ from .json_dialect import JsonDialect
 
 class PolicyDialect(Dialect):
     name = "policy-sh@1"
-    aliases = ("policy", "policy-sh", "dsl-policy", "application/wellmanifest+policy")
+    aliases = ("policy", "policy-sh", "dsl-policy", "wellm-policy", "application/wellmanifest+policy")
     media_types = ("application/wellmanifest+policy",)
     extensions = (".policy", ".policy.dsl", ".dsl")
     document_kind = "policy"
 
+    canonical_fences = ("dsl", "policy", "wellm-policy")
+    compatibility_fences = ("bash", "sh", "shell")
+
     _rule_re = re.compile(r"^RULE\s+(\S+)(?:\s+TYPE\s+(\S+))?\s*$", re.IGNORECASE)
     _transition_re = re.compile(r"^TRANSITION\s+(\S+)\s*->\s*(\S+)(?:\s+WHEN\s+(.+))?$", re.IGNORECASE)
+    _fence_re = re.compile(r"^```([^\n`]*)\n(.*?)^```\s*$", re.MULTILINE | re.DOTALL)
 
     def parse(self, source: str, *, source_name: str | None = None) -> Document:
         cleaned, directives = split_runtime_prelude(source)
-        cleaned = self._extract_dsl(cleaned)
+        cleaned, fence_diagnostics = self._extract_dsl(cleaned, source_name=source_name)
         metadata_values: dict[str, Any] = {}
         rules: list[dict[str, Any]] = []
         states: list[str] = []
@@ -69,6 +73,7 @@ class PolicyDialect(Dialect):
                         "from": transition_match.group(1),
                         "to": transition_match.group(2),
                         "when": transition_match.group(3),
+                        "sourceLine": index,
                     }
                 )
                 continue
@@ -89,9 +94,13 @@ class PolicyDialect(Dialect):
                     current_rule.setdefault("raw", []).append(line)
                 continue
 
-            assignment = re.match(r"^(DOCUMENT|VERSION|LANGUAGE|MODE|PURPOSE|POLICY)\s+(.+)$", line, re.IGNORECASE)
+            assignment = re.match(
+                r"^(DOCUMENT|VERSION|LANGUAGE|MODE|PURPOSE|POLICY)\s+(.+)$",
+                line,
+                re.IGNORECASE,
+            )
             if assignment:
-                metadata_values[assignment.group(1).lower()] = self._literal_or_text(assignment.group(2))
+                metadata_values.setdefault(assignment.group(1).lower(), self._literal_or_text(assignment.group(2)))
                 continue
 
             statements.append(line)
@@ -116,7 +125,13 @@ class PolicyDialect(Dialect):
             source_name=source_name,
             directives=directives,
         )
-        return Document(metadata=metadata, data=data, ir=ir, source_text=source)
+        return Document(
+            metadata=metadata,
+            data=data,
+            ir=ir,
+            diagnostics=fence_diagnostics,
+            source_text=source,
+        )
 
     def emit(self, document: Document, *, projection: str = "data", pretty: bool = True) -> str:
         if projection == "ir":
@@ -164,14 +179,88 @@ class PolicyDialect(Dialect):
             r"^(WHEN|DO|FORBID|ASSERT)\s+", source, re.MULTILINE
         ):
             return 0.98
-        if "```dsl" in source and "RULE " in source:
+        if re.search(r"```(?:dsl|policy|wellm-policy)\b", source, re.IGNORECASE) and "RULE " in source:
             return 0.9
+        if re.search(r"```(?:bash|sh|shell)\b", source, re.IGNORECASE) and "RULE " in source:
+            return 0.75
         return 0.0
 
+    @classmethod
+    def _extract_dsl(
+        cls,
+        source: str,
+        *,
+        source_name: str | None,
+    ) -> tuple[str, list[Diagnostic]]:
+        matches = list(cls._fence_re.finditer(source))
+        if not matches:
+            return source, []
+
+        output = ["" for _ in source.splitlines()]
+        diagnostics: list[Diagnostic] = []
+        recognized = 0
+        for match in matches:
+            info = match.group(1).strip()
+            language = (info.split()[0] if info else "").lower()
+            body = match.group(2)
+            canonical = language in cls.canonical_fences
+            compatibility = language in cls.compatibility_fences and cls.looks_like_policy(body)
+            if not canonical and not compatibility:
+                continue
+            recognized += 1
+            body_start_line = source[: match.start(2)].count("\n")
+            for offset, line in enumerate(body.splitlines()):
+                target = body_start_line + offset
+                if target < len(output):
+                    output[target] = line
+            if compatibility:
+                opening_line = source[: match.start()].count("\n") + 1
+                diagnostics.append(
+                    Diagnostic(
+                        code="WM-POLICY-101",
+                        severity=Severity.WARNING,
+                        phase="parse",
+                        dialect=cls.name,
+                        source=source_name,
+                        message=(
+                            f"Policy-shaped fenced block uses `{language}`. "
+                            "Canonical fences are `dsl`, `policy`, or `wellm-policy`."
+                        ),
+                        hint="Run `wellm policy fmt <file> --rewrite-fences`.",
+                        range=SourceRange(
+                            start=SourcePosition(line=opening_line, column=1),
+                            end=SourcePosition(line=opening_line, column=max(4, len(match.group(1)) + 4)),
+                        ),
+                    )
+                )
+        return ("\n".join(output) if recognized else source), diagnostics
+
     @staticmethod
-    def _extract_dsl(source: str) -> str:
-        blocks = re.findall(r"```(?:dsl|policy)\s*\n(.*?)```", source, flags=re.DOTALL | re.IGNORECASE)
-        return "\n\n".join(blocks) if blocks else source
+    def looks_like_policy(body: str) -> bool:
+        first = next((line.strip() for line in body.splitlines() if line.strip()), "")
+        return bool(
+            re.match(
+                r"^(?:RULE|STATE|TRANSITION|DOCUMENT|VERSION|LANGUAGE|MODE|PURPOSE|POLICY|DONE|REPORT)\b",
+                first,
+                re.IGNORECASE,
+            )
+        )
+
+    @classmethod
+    def rewrite_fences(cls, source: str, *, target: str = "wellm-policy") -> tuple[str, int]:
+        replacements = 0
+
+        def replace(match: re.Match[str]) -> str:
+            nonlocal replacements
+            info = match.group(1).strip()
+            language = (info.split()[0] if info else "").lower()
+            body = match.group(2)
+            if language in cls.compatibility_fences and cls.looks_like_policy(body):
+                replacements += 1
+                return f"```{target}\n{body}```"
+            return match.group(0)
+
+        return cls._fence_re.sub(replace, source), replacements
 
     @staticmethod
     def _strip_comment(line: str) -> str:

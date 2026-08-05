@@ -12,8 +12,26 @@ from fastapi import Depends, FastAPI, Header, HTTPException, WebSocket, WebSocke
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .governance import available_profiles, semantic_diff, semantic_sha256, serialize_profile
 from .models import ConversionRequest, Envelope, ExecuteRequest, ValidationRequest
 from .runtime import WellManifestRuntime
+
+
+
+
+class FormatApiRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    value: Any
+    profile: str = "repo-json@1"
+    schema_document: dict[str, Any] | None = Field(default=None, alias="schema", serialization_alias="schema")
+
+
+class SemanticDiffApiRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    left: Any
+    right: Any
 
 
 class PleskPlanApiRequest(BaseModel):
@@ -66,6 +84,10 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
     def runtimes() -> list[dict[str, Any]]:
         return runtime.runtime_descriptors()
 
+    @app.get("/v1/profiles", dependencies=[Depends(authorize)])
+    def profiles() -> list[dict[str, Any]]:
+        return available_profiles()
+
     @app.post("/v1/convert", dependencies=[Depends(authorize)])
     def convert(request: ConversionRequest) -> dict[str, Any]:
         return runtime.convert(request).model_dump(mode="json")
@@ -73,6 +95,25 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
     @app.post("/v1/validate", dependencies=[Depends(authorize)])
     def validate(request: ValidationRequest) -> dict[str, Any]:
         return runtime.validate(request).model_dump(mode="json")
+
+    @app.post("/v1/format", dependencies=[Depends(authorize)])
+    def format_document(request: FormatApiRequest) -> dict[str, Any]:
+        try:
+            output = serialize_profile(request.value, request.profile, schema=request.schema_document)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "WM-FORMAT-HTTP-001", "message": str(exc)},
+            ) from exc
+        return {
+            "profile": request.profile,
+            "semanticSha256": semantic_sha256(request.value),
+            "output": output,
+        }
+
+    @app.post("/v1/semantic-diff", dependencies=[Depends(authorize)])
+    def compare_semantics(request: SemanticDiffApiRequest) -> dict[str, Any]:
+        return semantic_diff(request.left, request.right).model_dump(mode="json", by_alias=True)
 
     @app.post("/v1/negotiate", dependencies=[Depends(authorize)])
     def negotiate(payload: dict[str, Any]) -> dict[str, Any]:
@@ -222,6 +263,16 @@ def create_app(runtime: WellManifestRuntime | None = None) -> FastAPI:
                     result = runtime.convert(message.get("request", {})).model_dump(mode="json")
                 elif operation == "validate":
                     result = runtime.validate(message.get("request", {})).model_dump(mode="json")
+                elif operation == "format":
+                    request = FormatApiRequest.model_validate(message.get("request", {}))
+                    result = {
+                        "profile": request.profile,
+                        "semanticSha256": semantic_sha256(request.value),
+                        "output": serialize_profile(request.value, request.profile, schema=request.schema_document),
+                    }
+                elif operation == "semantic-diff":
+                    request = SemanticDiffApiRequest.model_validate(message.get("request", {}))
+                    result = semantic_diff(request.left, request.right).model_dump(mode="json", by_alias=True)
                 elif operation == "execute":
                     request = ExecuteRequest.model_validate(message.get("request", {}))
                     if not request.contract_ref and not request.allowed_uri_processes:

@@ -9,8 +9,19 @@ from typing import Any
 
 import yaml
 
+from .governance import (
+    FORMAT_PROFILES,
+    GovernanceBuilder,
+    available_profiles,
+    format_semantic_diff,
+    lint_policy_document,
+    roundtrip_document,
+    semantic_diff,
+    serialize_profile,
+)
 from .models import ConversionRequest, Document, DocumentMetadata, ExecuteRequest, RuntimeTarget, ValidationRequest
 from .runtime import WellManifestRuntime
+from .version import __version__
 
 
 def _read(path: str) -> str:
@@ -66,12 +77,30 @@ def _source_mappings(values: list[str]) -> dict[str, str]:
 def _print_diagnostics(items: list[Any]) -> None:
     for item in items:
         diagnostic = item.model_dump(mode="json") if hasattr(item, "model_dump") else item
-        print(f"{diagnostic['severity']} {diagnostic['code']}: {diagnostic['message']}", file=sys.stderr)
+        location = ""
+        if diagnostic.get("source"):
+            location = str(diagnostic["source"])
+            source_range = diagnostic.get("range")
+            if source_range:
+                location += f":{source_range['start']['line']}:{source_range['start']['column']}"
+            location += ": "
+        print(
+            f"{location}{diagnostic['severity']} {diagnostic['code']}: {diagnostic['message']}",
+            file=sys.stderr,
+        )
+
+
+def _has_errors(items: list[Any]) -> bool:
+    for item in items:
+        severity = item.severity.value if hasattr(item, "severity") else item.get("severity")
+        if severity == "ERROR":
+            return True
+    return False
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="wellm", description="WellManifest protocol and dialect runtime")
-    parser.add_argument("--version", action="version", version="wellm 0.2.0rc2")
+    parser.add_argument("--version", action="version", version=f"wellm {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     inspect_parser = subparsers.add_parser("inspect", help="Parse a document and emit full WellManifest IR")
@@ -102,6 +131,52 @@ def build_parser() -> argparse.ArgumentParser:
     validate_parser.add_argument("file")
     validate_parser.add_argument("--dialect", default="auto")
     validate_parser.add_argument("--schema", required=True)
+
+    fmt_parser = subparsers.add_parser("fmt", help="Format data using a named Wellm format profile")
+    fmt_parser.add_argument("file")
+    fmt_parser.add_argument("--dialect", default="auto")
+    fmt_parser.add_argument("--profile", default="repo-json@1", choices=sorted(FORMAT_PROFILES))
+    fmt_parser.add_argument("--schema")
+    fmt_parser.add_argument("--output", "-o", default="-")
+    fmt_parser.add_argument("--check", action="store_true")
+
+    diff_parser = subparsers.add_parser("semantic-diff", help="Compare two documents by normalized meaning")
+    diff_parser.add_argument("left")
+    diff_parser.add_argument("right")
+    diff_parser.add_argument("--left-dialect", default="auto")
+    diff_parser.add_argument("--right-dialect", default="auto")
+    diff_parser.add_argument("--format", choices=["text", "json"], default="text")
+    diff_parser.add_argument("--output", "-o", default="-")
+
+    roundtrip_parser = subparsers.add_parser("roundtrip", help="Test semantic round-trips through dialects")
+    roundtrip_parser.add_argument("file")
+    roundtrip_parser.add_argument("--dialect", default="auto")
+    roundtrip_parser.add_argument("--via", required=True, help="Comma-separated dialect list, e.g. yaml,json,typescript")
+    roundtrip_parser.add_argument("--schema")
+    roundtrip_parser.add_argument("--output", "-o", default="-")
+
+    governance_parser = subparsers.add_parser("governance", help="Build deterministic governance artifacts")
+    governance_sub = governance_parser.add_subparsers(dest="governance_command", required=True)
+    governance_build = governance_sub.add_parser("build", help="Build or check a wellm.governance-project/v1 file")
+    governance_build.add_argument("project")
+    governance_build.add_argument("--check", action="store_true")
+    governance_build.add_argument("--report")
+
+    policy_parser = subparsers.add_parser("policy", help="Import, lint and format policy DSL in Markdown")
+    policy_sub = policy_parser.add_subparsers(dest="policy_command", required=True)
+    policy_import = policy_sub.add_parser("import", help="Import policy or Markdown fenced blocks to policy IR")
+    policy_import.add_argument("file")
+    policy_import.add_argument("--output", "-o", default="-")
+    policy_lint = policy_sub.add_parser("lint", help="Lint rule identifiers and state-machine references")
+    policy_lint.add_argument("file")
+    policy_lint.add_argument("--undeclared-states", choices=["error", "warning", "ignore"], default="error")
+    policy_lint.add_argument("--format", choices=["text", "json"], default="text")
+    policy_fmt = policy_sub.add_parser("fmt", help="Rewrite policy-shaped compatibility fences")
+    policy_fmt.add_argument("file")
+    policy_fmt.add_argument("--rewrite-fences", action="store_true")
+    policy_fmt.add_argument("--target-fence", choices=["dsl", "policy", "wellm-policy"], default="wellm-policy")
+    policy_fmt.add_argument("--check", action="store_true")
+    policy_fmt.add_argument("--output", "-o")
 
     execute_parser = subparsers.add_parser("execute", help="Execute a registered URI Process")
     execute_parser.add_argument("uri")
@@ -145,6 +220,7 @@ def build_parser() -> argparse.ArgumentParser:
     benchmark.add_argument("--output-dir", default=".wellm/benchmark")
 
     subparsers.add_parser("capabilities", help="Print runtime capabilities")
+    subparsers.add_parser("profiles", help="Print named data-formatting profiles")
 
     serve_parser = subparsers.add_parser("serve", help="Run HTTP/WebSocket runtime gateway")
     serve_parser.add_argument("--host", default="0.0.0.0")
@@ -174,7 +250,14 @@ def main(argv: list[str] | None = None) -> None:
             projection = "data" if document.metadata.document_kind == "data" else "ir"
         diagnostics = list(document.diagnostics)
         if args.schema and projection == "data":
-            diagnostics.extend(runtime.schema_validator.validate(document.data, _load_json(args.schema), source=args.file))
+            diagnostics.extend(
+                runtime.schema_validator.validate(
+                    document.data,
+                    _load_json(args.schema),
+                    source=args.file,
+                    source_map=document.source_map,
+                )
+            )
         target = runtime.registry.get(args.target_dialect)
         try:
             output = target.emit(document, projection=projection, pretty=not args.compact)
@@ -183,7 +266,7 @@ def main(argv: list[str] | None = None) -> None:
             raise SystemExit(2) from exc
         _print_diagnostics(diagnostics)
         print(output, end="" if output.endswith("\n") else "\n")
-        raise SystemExit(1 if any(item.severity.value == "ERROR" for item in diagnostics) else 0)
+        raise SystemExit(1 if _has_errors(diagnostics) else 0)
 
     if args.command == "convert":
         schema = _load_json(args.schema) if args.schema else None
@@ -203,7 +286,7 @@ def main(argv: list[str] | None = None) -> None:
             raise SystemExit(2)
         output = result.output if isinstance(result.output, str) else json.dumps(result.output, ensure_ascii=False, indent=2)
         _write_output(output, args.output)
-        raise SystemExit(1 if any(item.severity.value == "ERROR" for item in result.diagnostics) else 0)
+        raise SystemExit(1 if _has_errors(result.diagnostics) else 0)
 
     if args.command == "validate":
         result = runtime.validate(
@@ -217,6 +300,127 @@ def main(argv: list[str] | None = None) -> None:
         _print_diagnostics(result.diagnostics)
         print(json.dumps({"valid": result.valid}, ensure_ascii=False))
         raise SystemExit(0 if result.valid else 1)
+
+    if args.command == "fmt":
+        source = _read(args.file)
+        document = runtime.parse(source, dialect=args.dialect, source_name=args.file)
+        schema = _load_json(args.schema) if args.schema else None
+        diagnostics = list(document.diagnostics)
+        if schema is not None:
+            diagnostics.extend(
+                runtime.schema_validator.validate(
+                    document.data,
+                    schema,
+                    source=args.file,
+                    source_map=document.source_map,
+                )
+            )
+        if args.profile in {"repo-json@1", "json-data@1", "wire-json@1", "yaml-json@1", "typescript-data@1"}:
+            rendered = serialize_profile(document.data, args.profile, schema=schema)
+        elif args.profile == "wellm-typed@1":
+            rendered = runtime.registry.get("typed").emit(document, projection="data", pretty=True)
+        elif args.profile == "hcl-static@1":
+            rendered = runtime.registry.get("hcl").emit(document, projection="data", pretty=True)
+        elif args.profile == "policy-md@1":
+            from .dialects.policy import PolicyDialect
+
+            rendered, _ = PolicyDialect.rewrite_fences(source)
+        else:
+            parser.error(f"Profile {args.profile} is not supported by fmt")
+        _print_diagnostics(diagnostics)
+        compare_path = Path(args.output) if args.output != "-" else (Path(args.file) if args.file != "-" else None)
+        if args.check:
+            current = compare_path.read_text(encoding="utf-8") if compare_path and compare_path.exists() else None
+            if current != rendered or _has_errors(diagnostics):
+                raise SystemExit(1)
+            return
+        _write_output(rendered, args.output)
+        raise SystemExit(1 if _has_errors(diagnostics) else 0)
+
+    if args.command == "semantic-diff":
+        left = runtime.parse(_read(args.left), dialect=args.left_dialect, source_name=args.left)
+        right = runtime.parse(_read(args.right), dialect=args.right_dialect, source_name=args.right)
+        report = semantic_diff(left.data, right.data)
+        rendered = (
+            json.dumps(report.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n"
+            if args.format == "json"
+            else format_semantic_diff(report)
+        )
+        _write_output(rendered, args.output)
+        raise SystemExit(0 if report.equivalent else 1)
+
+    if args.command == "roundtrip":
+        document = runtime.parse(_read(args.file), dialect=args.dialect, source_name=args.file)
+        schema = _load_json(args.schema) if args.schema else None
+        report = roundtrip_document(
+            runtime,
+            document,
+            [item.strip() for item in args.via.split(",") if item.strip()],
+            schema=schema,
+        )
+        _write_output(
+            json.dumps(report.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n",
+            args.output,
+        )
+        _print_diagnostics(report.diagnostics)
+        raise SystemExit(0 if report.equivalent and not _has_errors(report.diagnostics) else 1)
+
+    if args.command == "governance":
+        if args.governance_command == "build":
+            report = GovernanceBuilder(runtime).build(args.project, check=args.check)
+            rendered = json.dumps(report.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n"
+            if args.report:
+                _write_output(rendered, args.report)
+            else:
+                print(rendered, end="")
+            _print_diagnostics(report.diagnostics)
+            raise SystemExit(0 if report.ok else 1)
+
+    if args.command == "policy":
+        from .dialects.policy import PolicyDialect
+
+        source = _read(args.file)
+        if args.policy_command == "import":
+            document = runtime.parse(source, dialect="policy", source_name=args.file)
+            output = runtime.registry.get("json").emit(document, projection="ir")
+            _write_output(output, args.output)
+            _print_diagnostics(document.diagnostics)
+            raise SystemExit(1 if _has_errors(document.diagnostics) else 0)
+        if args.policy_command == "lint":
+            document = runtime.parse(source, dialect="policy", source_name=args.file)
+            diagnostics = [
+                *document.diagnostics,
+                *lint_policy_document(document, undeclared_states=args.undeclared_states),
+            ]
+            if args.format == "json":
+                print(
+                    json.dumps(
+                        {
+                            "valid": not _has_errors(diagnostics),
+                            "ruleCount": len(document.ir.get("rules", [])),
+                            "stateCount": len(document.ir.get("states", [])),
+                            "diagnostics": [item.model_dump(mode="json") for item in diagnostics],
+                        },
+                        ensure_ascii=False,
+                        indent=2,
+                    )
+                )
+            else:
+                _print_diagnostics(diagnostics)
+            raise SystemExit(1 if _has_errors(diagnostics) else 0)
+        if args.policy_command == "fmt":
+            rendered = source
+            replacements = 0
+            if args.rewrite_fences:
+                rendered, replacements = PolicyDialect.rewrite_fences(source, target=args.target_fence)
+            output_path = args.output or args.file
+            if args.check:
+                if replacements or rendered != source:
+                    raise SystemExit(1)
+                return
+            _write_output(rendered, output_path)
+            print(json.dumps({"rewrittenFences": replacements, "output": output_path}))
+            return
 
     if args.command == "execute":
         if args.payload.startswith("@"):
@@ -258,7 +462,7 @@ def main(argv: list[str] | None = None) -> None:
         if args.command == "plesk-plan":
             output = _emit_data(runtime, plan.model_dump(mode="json", by_alias=True), args.to)
             _write_output(output, args.output)
-            raise SystemExit(1 if any(item.severity.value == "ERROR" for item in plan.diagnostics) else 0)
+            raise SystemExit(1 if _has_errors(plan.diagnostics) else 0)
 
         node_url = args.node_url or registry.connector.node_url
         if not node_url:
@@ -277,7 +481,10 @@ def main(argv: list[str] | None = None) -> None:
                 apply_grant=grant,
                 dry_run_receipt=dry,
             )
-        _write_output(json.dumps(receipt.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n", args.output)
+        _write_output(
+            json.dumps(receipt.model_dump(mode="json", by_alias=True), ensure_ascii=False, indent=2) + "\n",
+            args.output,
+        )
         raise SystemExit(0 if receipt.ok else 1)
 
     if args.command == "benchmark-llm":
@@ -317,6 +524,10 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.command == "capabilities":
         print(json.dumps(runtime.capabilities(), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "profiles":
+        print(json.dumps(available_profiles(), ensure_ascii=False, indent=2))
         return
 
     if args.command == "serve":

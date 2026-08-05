@@ -1,0 +1,127 @@
+{
+  "generated": "generated/intent.json",
+  "mappings": {
+    "/allowedPaths": {
+      "endColumn": 17,
+      "endLine": 11,
+      "sourceColumn": 16,
+      "sourceLine": 11
+    },
+    "/allowedPaths/0": {
+      "endColumn": 50,
+      "endLine": 11,
+      "sourceColumn": 17,
+      "sourceLine": 11
+    },
+    "/allowedPaths/1": {
+      "endColumn": 81,
+      "endLine": 11,
+      "sourceColumn": 52,
+      "sourceLine": 11
+    },
+    "/allowedPaths/2": {
+      "endColumn": 106,
+      "endLine": 11,
+      "sourceColumn": 83,
+      "sourceLine": 11
+    },
+    "/allowedPaths/3": {
+      "endColumn": 137,
+      "endLine": 11,
+      "sourceColumn": 108,
+      "sourceLine": 11
+    },
+    "/allowedPaths/4": {
+      "endColumn": 150,
+      "endLine": 11,
+      "sourceColumn": 139,
+      "sourceLine": 11
+    },
+    "/allowedPaths/5": {
+      "endColumn": 175,
+      "endLine": 11,
+      "sourceColumn": 152,
+      "sourceLine": 11
+    },
+    "/allowedPaths/6": {
+      "endColumn": 186,
+      "endLine": 11,
+      "sourceColumn": 177,
+      "sourceLine": 11
+    },
+    "/allowedPaths/7": {
+      "endColumn": 208,
+      "endLine": 11,
+      "sourceColumn": 188,
+      "sourceLine": 11
+    },
+    "/conflictsWith": {
+      "endColumn": 18,
+      "endLine": 19,
+      "sourceColumn": 17,
+      "sourceLine": 19
+    },
+    "/dependsOn": {
+      "endColumn": 14,
+      "endLine": 17,
+      "sourceColumn": 13,
+      "sourceLine": 17
+    },
+    "/forbiddenPaths": {
+      "endColumn": 19,
+      "endLine": 13,
+      "sourceColumn": 18,
+      "sourceLine": 13
+    },
+    "/forbiddenPaths/0": {
+      "endColumn": 47,
+      "endLine": 13,
+      "sourceColumn": 19,
+      "sourceLine": 13
+    },
+    "/integrationTicket": {
+      "endColumn": 25,
+      "endLine": 21,
+      "sourceColumn": 21,
+      "sourceLine": 21
+    },
+    "/schema": {
+      "endColumn": 33,
+      "endLine": 3,
+      "sourceColumn": 10,
+      "sourceLine": 3
+    },
+    "/stacks": {
+      "endColumn": 11,
+      "endLine": 15,
+      "sourceColumn": 10,
+      "sourceLine": 15
+    },
+    "/stacks/0": {
+      "endColumn": 19,
+      "endLine": 15,
+      "sourceColumn": 11,
+      "sourceLine": 15
+    },
+    "/summary": {
+      "endColumn": 48,
+      "endLine": 7,
+      "sourceColumn": 11,
+      "sourceLine": 7
+    },
+    "/ticket": {
+      "endColumn": 22,
+      "endLine": 5,
+      "sourceColumn": 10,
+      "sourceLine": 5
+    },
+    "/workstream": {
+      "endColumn": 27,
+      "endLine": 9,
+      "sourceColumn": 14,
+      "sourceLine": 9
+    }
+  },
+  "schema": "wellm.source-map/v1",
+  "source": "intent.wm"
+}

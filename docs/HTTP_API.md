@@ -213,3 +213,27 @@ WS  /v1/ws?token=<optional>
 
 The WebSocket subprotocol is `wellmanifest.v1`. Supported operations are
 `convert`, `validate`, `execute` and `exchange`.
+
+## Format profiles
+
+```text
+GET /v1/profiles
+POST /v1/format
+POST /v1/semantic-diff
+```
+
+Format request:
+
+```json
+{
+  "value": {"b": 2, "a": 1},
+  "profile": "wire-json@1",
+  "schema": null
+}
+```
+
+The response includes the selected profile, `semanticSha256` and formatted
+output. `semantic-diff` accepts `left` and `right` JSON-compatible values and
+returns `wellm.semantic-diff/v1`.
+
+WebSocket operations additionally include `format` and `semantic-diff`.
