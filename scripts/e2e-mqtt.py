@@ -18,7 +18,7 @@ client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
 
 
 def on_connect(client, _userdata, _flags, reason_code, _properties):
-    if int(reason_code) != 0:
+    if reason_code.is_failure:
         raise RuntimeError(f"mqtt connect: {reason_code}")
     client.subscribe(response_topic, qos=1)
 

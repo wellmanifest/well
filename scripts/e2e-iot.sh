@@ -2,7 +2,7 @@
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$ROOT"
-PYTHONPATH=src python3 scripts/docker_network_preflight.py --scope iot
+PYTHONPATH=src python3 scripts/docker_network_preflight.py --scope iot --repair
 cleanup() {
   docker compose --env-file .env -f compose.iot.yml --profile e2e down -v --remove-orphans >/dev/null 2>&1 || true
 }

@@ -48,6 +48,6 @@ exit 3
     args = args_file.read_text(encoding="utf-8").splitlines()
     assert args[:3] == ["extract", "config", str(out / "input")]
     assert args[3:] == ["--out", str(out / "configuration.intent.jsonl")]
-    assert (out / "input" / "wellm-format-evidence.json").is_file()
+    assert (out / "input" / "wellm-format-evidence.config.json").is_file()
     assert (out / "wellm-format-analysis.json").is_file()
     assert (out / "configuration.intent.jsonl").is_file()

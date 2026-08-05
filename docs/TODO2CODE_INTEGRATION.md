@@ -42,7 +42,7 @@ The direct bridge additionally creates:
 
 ```text
 .intent/wellm-formats/wellm-format-analysis.json
-.intent/wellm-formats/input/wellm-format-evidence.json
+.intent/wellm-formats/input/wellm-format-evidence.config.json
 .intent/wellm-formats/configuration.intent.jsonl
 ```
 

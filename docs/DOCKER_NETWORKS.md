@@ -11,15 +11,23 @@ WELLMANIFEST_E2E_SUBNET=172.30.242.0/24
 WELLMANIFEST_IOT_SUBNET=172.30.243.0/24
 ```
 
-Before Compose starts, run:
+Before Compose starts, inspect or repair the allocation:
 
 ```bash
 make docker-network-doctor
+make docker-network-repair
 ```
 
-The preflight inspects existing Docker networks and fails with a collision
-report. Change only the corresponding `.env` CIDR; the same value is consumed
-by Compose and the preflight.
+The preflight and Compose read the same `.env`. `make up`, Docker E2E and IoT
+E2E automatically run `--repair`: colliding default or `.env` values are
+replaced atomically with free `/24` networks and host ports. Existing Wellm
+containers are recognized as valid owners of their published ports. A
+process-level override is never rewritten and remains fail-closed. Use
+`docker-network-doctor` for a read-only report and `docker-network-repair` for
+an explicit repair of all scopes.
+
+If an existing Wellm network has a different subnet, stop its Compose project
+before repair. The preflight does not remove Docker networks or containers.
 
 ```bash
 make up          # standard HTTP/WS/MQTT/gRPC stack

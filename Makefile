@@ -1,6 +1,6 @@
 .PHONY: help setup setup-lite install install-js env-setup env-sync env-check versions versions-sync versions-check \
 	verify test test-python test-js governance governance-check schema-demo intent-demo todo2code-intent serve proto \
-	up down logs iot-up iot-down iot-e2e docker-network-doctor compose-check \
+	up down logs iot-up iot-down iot-e2e docker-network-doctor docker-network-repair compose-check \
 	e2e e2e-local e2e-docker package clean
 
 PYTHON ?= python3
@@ -15,6 +15,7 @@ help:
 	  'make up/down        start or stop the standard HTTP/WS/MQTT/gRPC stack' \
 	  'make iot-up/down    start or stop the frontend/backend/firmware IoT example' \
 	  'make e2e            run local, Docker and three-layer IoT E2E suites' \
+	  'make docker-network-repair select free Docker CIDRs and persist them in .env' \
 	  'make verify         run deterministic source, env, version and test checks' \
 	  'make todo2code-intent analyze six formats and invoke t2c extract config' \
 	  'make package        create source, wheel and npm release artifacts'
@@ -95,13 +96,16 @@ proto:
 docker-network-doctor:
 	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope all
 
+docker-network-repair: env-setup
+	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope all --repair
+
 compose-check: env-setup
 	$(COMPOSE) --env-file .env -f compose.yml config >/dev/null
 	$(COMPOSE) --env-file .env -f compose.iot.yml config >/dev/null
 	$(COMPOSE) --env-file .env -f compose.e2e.yml config >/dev/null
 
 up: env-setup
-	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope main
+	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope main --repair
 	$(COMPOSE) --env-file .env -f compose.yml up -d --build
 
 down: env-setup
@@ -111,7 +115,7 @@ logs: env-setup
 	$(COMPOSE) --env-file .env -f compose.yml logs -f --tail=200
 
 iot-up: env-setup
-	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope iot
+	PYTHONPATH=src $(PYTHON) scripts/docker_network_preflight.py --scope iot --repair
 	$(COMPOSE) --env-file .env -f compose.iot.yml up -d --build frontend backend broker bridge firmware
 
 iot-down: env-setup

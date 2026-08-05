@@ -33,8 +33,8 @@ make e2e-docker
 Equivalent Compose command:
 
 ```bash
-docker compose --env-file .env -f compose.e2e.yml up \
-  --build --abort-on-container-exit --exit-code-from e2e
+docker compose --env-file .env -f compose.e2e.yml up -d --build
+docker compose --env-file .env -f compose.e2e.yml wait e2e
 ```
 
 | Service | Environment | Test |
@@ -88,9 +88,12 @@ WELLMANIFEST_IOT_SUBNET      172.30.243.0/24
 make docker-network-doctor
 ```
 
-The preflight checks a running Docker Engine and reports overlaps before
-Compose attempts network creation. Change the relevant `.env` CIDR when the
-host already uses one of the defaults.
+The preflight checks a running Docker Engine and resolves values from the same
+`.env` passed to Compose. Docker E2E runs it with `--repair`, selecting and
+persisting a free `/24` or host port when a default or dotenv value conflicts
+with an existing network or listener. Process-level overrides are never rewritten. Use
+`make docker-network-doctor` for read-only diagnostics or
+`make docker-network-repair` to repair every scope before a full run.
 
 ## Cross-platform CI
 

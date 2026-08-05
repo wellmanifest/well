@@ -10,6 +10,18 @@ from .models import Envelope
 from .runtime import WellManifestRuntime
 
 
+def _mqtt_connect_failed(reason_code: Any) -> bool:
+    """Normalize Paho v2 ReasonCode objects and legacy integer codes."""
+    is_failure = getattr(reason_code, "is_failure", None)
+    if is_failure is not None:
+        return bool(is_failure)
+    value = getattr(reason_code, "value", reason_code)
+    try:
+        return int(value) != 0
+    except (TypeError, ValueError):
+        return True
+
+
 def main() -> None:
     try:
         import paho.mqtt.client as mqtt
@@ -29,7 +41,7 @@ def main() -> None:
         client.username_pw_set(username, password)
 
     def on_connect(client: Any, _userdata: Any, _flags: Any, reason_code: Any, _properties: Any) -> None:
-        if int(reason_code) != 0:
+        if _mqtt_connect_failed(reason_code):
             print(f"MQTT connect failed: {reason_code}", file=sys.stderr)
             return
         client.subscribe(request_topic, qos=1)

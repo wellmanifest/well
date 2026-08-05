@@ -21,7 +21,7 @@ changelogu i dokumentacji.
 ```bash
 # w repozytorium analizowanym przez todo2code
 mkdir -p .intent/input
-cp .wellm/intent-demo/todo2code-evidence.json .intent/input/
+cp .wellm/intent-demo/todo2code-evidence.json .intent/input/wellm-format-evidence.config.json
 t2c extract config .intent/input --out .intent/format.intent.jsonl
 t2c link .intent/format.intent.jsonl other.intent.jsonl --out .intent/intent.graph.json
 ```
