@@ -26,3 +26,16 @@
 - [ ] Tests pass
 - [ ] Code quality/guardrails improved or kept
 - [ ] Documentation updated where needed
+
+## Breaking-change check
+- [ ] This PR is **not** a breaking change
+  - If it is a breaking change, provide:
+    - [ ] **Impact summary**
+    - [ ] **Rollback plan**
+    - [ ] **Rollback trigger/criteria**
+    - [ ] **Compatibility validation** done (consumers and contracts)
+
+## Runtime policy (for network/port changes)
+- [ ] If `.env` network CIDRs were changed, this PR includes migration notes
+- [ ] If `.env` host ports were changed, this PR includes verification of local and CI impact
+- [ ] Any host-level process overrides remain non-overriding (explicit env > .env > defaults) with documented intent
