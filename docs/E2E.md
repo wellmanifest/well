@@ -120,3 +120,16 @@ WASM             <-> Rust native core
 
 Until those pass, these remain compatibility frontends rather than claims of
 complete language equivalence.
+
+## Operational check sequence
+
+Before creating/merging PRs affecting runtime or contract wiring, run:
+
+1. `make up` (main compose + preflight auto-repair if needed)
+2. `make e2e-docker`
+3. `docker compose -f compose.e2e.yml --env-file .env ps --all` (empty output means clean shutdown)
+4. `make down` (if local environment is done with, to stop main stack)
+
+Required policy:
+- Keep `scripts/docker_network_preflight.py` as the source-of-truth for `.env` subnet and host-port validation.
+- Keep `--repair` during setup/start commands for predictable recovery from local collisions.

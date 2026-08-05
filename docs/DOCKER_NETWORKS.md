@@ -38,3 +38,14 @@ make e2e         # local suite + Compose E2E + IoT E2E
 `make e2e-local` is intentionally separate. `make e2e` is fail-closed when
 Docker is unavailable unless `WELLMANIFEST_E2E_ALLOW_LOCAL_FALLBACK=1` is set
 explicitly.
+
+## Known non-blocking warning
+
+`make e2e-docker` may print `StarletteDeprecationWarning` in `plesk-benchmark-e2e`:
+`StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.`
+
+This is non-blocking for current E2E pipeline and can be treated as dependency refresh technical debt.
+
+Recommended action:
+1. Add `httpx2` (or aligned FastAPI/Starlette versions) in `plesk-benchmark-e2e` dependency set.
+2. Keep warning in CI as allowed, but fail build only on test failures/errors.
